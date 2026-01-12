@@ -26,12 +26,14 @@
 
 ## Multiplexage I/O
 
-- [ ] Implémenter `poll()` (ou équivalent : select, kqueue, epoll)
+- [ ] Implémenter `select()` (ou équivalent : poll, kqueue, epoll)
 - [ ] Gérer multiple clients simultanément sans blocage
-- [ ] UN SEUL `poll()` pour toutes les opérations (read, write, listen)
-- [ ] Gérer les événements POLLIN (données disponibles)
-- [ ] Gérer les événements POLLOUT (prêt à écrire)
-- [ ] Gérer les événements POLLERR/POLLHUP (erreurs/déconnexions)
+- [ ] UN SEUL `select()` pour toutes les opérations (read, write, listen)
+- [ ] Préparer les fd_set avec FD_ZERO et FD_SET avant chaque appel
+- [ ] Calculer max_fd (plus grand descripteur + 1) pour nfds
+- [ ] Vérifier les descripteurs prêts avec FD_ISSET après select()
+- [ ] Gérer les timeout avec struct timeval
+- [ ] Reconstruire les fd_set à chaque itération (modifiés par select)
 
 ## Gestion des messages
 
