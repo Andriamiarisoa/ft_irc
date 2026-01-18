@@ -65,6 +65,26 @@
 - MessageParser parse les commandes de base
 - Infrastructure prête pour les commandes
 
+### 📚 Apprentissage Design Patterns (Jour 1 - 30min après standup)
+
+#### 👤 NERO : Singleton Pattern
+- **Fichier** : [docs/patterns/singleton.md](docs/patterns/singleton.md)
+- **Pourquoi** : Server doit être unique dans l'application
+- **Application** : Rendre Server singleton si nécessaire
+- **Durée** : 30 min (lecture + compréhension)
+
+#### 👤 YASSER : Command Pattern
+- **Fichier** : [docs/patterns/command.md](docs/patterns/command.md)
+- **Pourquoi** : Base de toute l'architecture des commandes IRC
+- **Application** : Comprendre Command, Client et leur relation
+- **Durée** : 30 min
+
+#### 👤 BAHOLY : Factory Method Pattern
+- **Fichier** : [docs/patterns/factory.md](docs/patterns/factory.md)
+- **Pourquoi** : MessageParser utilise Factory pour créer les commandes
+- **Application** : Implémenter CommandFactory dans MessageParser
+- **Durée** : 30 min
+
 ---
 
 ## 📅 JOUR 2 - Authentification (19 Janvier)
@@ -98,6 +118,26 @@
 ### ✅ Checkpoint Jour 2 (18h00)
 - PassCommand, NickCommand, UserCommand fonctionnels
 - Utilisateurs peuvent s'authentifier complètement
+
+### 📚 Apprentissage Design Patterns (Jour 2 - 30min après standup)
+
+#### 👤 NERO : Observer Pattern
+- **Fichier** : [docs/patterns/observer.md](docs/patterns/observer.md)
+- **Pourquoi** : Notification des événements dans les canaux
+- **Application** : Channel notifie ses membres des événements
+- **Durée** : 30 min
+
+#### 👤 YASSER : Strategy Pattern
+- **Fichier** : [docs/patterns/strategy.md](docs/patterns/strategy.md)
+- **Pourquoi** : Différentes stratégies de validation
+- **Application** : Validation de nickname avec différentes règles
+- **Durée** : 30 min
+
+#### 👤 BAHOLY : Template Method Pattern
+- **Fichier** : Étude personnelle sur refactoring.guru
+- **Pourquoi** : Structure commune pour les commandes
+- **Application** : Méthodes communes dans Command base
+- **Durée** : 30 min
 - QuitCommand permet la déconnexion propre
 
 ---
@@ -138,6 +178,26 @@
 - PrivmsgCommand permet la communication
 - **Serveur IRC fonctionnel pour usage basique**
 
+### 📚 Apprentissage Design Patterns (Jour 3 - 30min après standup)
+
+#### 👤 NERO : Composite Pattern
+- **Fichier** : Étude personnelle sur refactoring.guru
+- **Pourquoi** : Gérer hiérarchie d'objets (canaux, membres)
+- **Application** : Structure de Channel avec sous-groupes
+- **Durée** : 30 min
+
+#### 👤 YASSER : Facade Pattern
+- **Fichier** : [docs/patterns/facade.md](docs/patterns/facade.md)
+- **Pourquoi** : Simplifier les opérations complexes
+- **Application** : Simplifier JoinCommand avec ChannelFacade
+- **Durée** : 30 min
+
+#### 👤 BAHOLY : Adapter Pattern
+- **Fichier** : Étude personnelle sur refactoring.guru
+- **Pourquoi** : Adapter différentes interfaces
+- **Application** : Interface entre protocole IRC et classes internes
+- **Durée** : 30 min
+
 ---
 
 ## 📅 JOUR 4 - Modération (21 Janvier)
@@ -167,6 +227,26 @@
 - KickCommand, InviteCommand, TopicCommand fonctionnels
 - Modération de base opérationnelle
 
+### 📚 Apprentissage Design Patterns (Jour 4 - 30min après standup)
+
+#### 👤 NERO : Decorator Pattern
+- **Fichier** : Étude personnelle sur refactoring.guru
+- **Pourquoi** : Ajouter des responsabilités dynamiquement
+- **Application** : Décorer les commandes avec logging, validation
+- **Durée** : 30 min
+
+#### 👤 YASSER : Proxy Pattern
+- **Fichier** : Étude personnelle sur refactoring.guru
+- **Pourquoi** : Contrôler l'accès aux objets
+- **Application** : Proxy pour vérifier permissions avant exécution
+- **Durée** : 30 min
+
+#### 👤 BAHOLY : Chain of Responsibility
+- **Fichier** : Étude personnelle sur refactoring.guru
+- **Pourquoi** : Chaîner les validations
+- **Application** : Chaîne de validation pour les commandes
+- **Durée** : 30 min
+
 ---
 
 ## 📅 JOUR 5 - Modes Avancés & Finalisation (22 Janvier)
@@ -190,6 +270,26 @@
 - Vérification des permissions
 - Intégration complète
 
+### 📚 Apprentissage Design Patterns (Jour 5 - 30min après standup)
+
+#### 👤 NERO : State Pattern
+- **Fichier** : Étude personnelle sur refactoring.guru
+- **Pourquoi** : Gérer les différents états du client/canal
+- **Application** : États de connexion client (non-auth, auth, registered)
+- **Durée** : 30 min
+
+#### 👤 YASSER : Mediator Pattern
+- **Fichier** : Étude personnelle sur refactoring.guru
+- **Pourquoi** : Centraliser la communication entre objets
+- **Application** : Server comme médiateur entre clients et canaux
+- **Durée** : 30 min
+
+#### 👤 BAHOLY : Visitor Pattern
+- **Fichier** : Étude personnelle sur refactoring.guru
+- **Pourquoi** : Opérations sur structure d'objets
+- **Application** : Parcourir et traiter les commandes
+- **Durée** : 30 min
+
 ### 🧪 Après-midi: Tests & Débogage (Toute l'équipe)
 - Tests d'intégration avec clients IRC réels
 - Correction des bugs critiques
@@ -204,7 +304,71 @@
 
 ---
 
-## 📋 Ordre d'Implémentation - Approche Collaborative
+## � Récapitulatif Apprentissage Design Patterns
+
+### 🎯 Objectif
+Chaque membre de l'équipe apprend **1 pattern par jour** (15 patterns au total) pour renforcer les compétences en architecture logicielle et mieux comprendre la structure du projet IRC.
+
+### 📖 Patterns Créés (Tutoriels dans docs/patterns/)
+
+1. **[Singleton](docs/patterns/singleton.md)** - Instance unique (Server)
+2. **[Factory Method](docs/patterns/factory.md)** - Création d'objets (MessageParser)
+3. **[Command](docs/patterns/command.md)** - Encapsuler les requêtes (toutes les commandes)
+4. **[Observer](docs/patterns/observer.md)** - Notification d'événements (Channel)
+5. **[Strategy](docs/patterns/strategy.md)** - Algorithmes interchangeables
+6. **[Facade](docs/patterns/facade.md)** - Interface simplifiée
+
+### 🗓️ Planning d'Apprentissage
+
+| Jour | NERO | YASSER | BAHOLY |
+|------|------|--------|--------|
+| J1 | Singleton | Command | Factory |
+| J2 | Observer | Strategy | Template Method |
+| J3 | Composite | Facade | Adapter |
+| J4 | Decorator | Proxy | Chain of Resp. |
+| J5 | State | Mediator | Visitor |
+
+**Total : 15 patterns** (3 patterns × 5 jours)
+
+### ⏱️ Organisation Quotidienne
+
+**08h30 - 09h00** : Apprentissage Design Pattern (30 min)
+- Lecture du tutoriel dans `docs/patterns/` (si disponible)
+- Ou étude sur [refactoring.guru](https://refactoring.guru/design-patterns)
+- Réflexion sur l'application dans le projet IRC
+
+**09h00 - 09h15** : Standup - Partage des insights patterns (15 min)
+- Chacun partage en 2-3 min ce qu'il a appris
+- Discussion sur l'application pratique dans le code du jour
+
+### 🎓 Patterns Essentiels pour le Projet
+
+| Pattern | Où dans le projet | Priorité |
+|---------|-------------------|----------|
+| **Command** | Toutes les commandes IRC | ⭐⭐⭐⭐⭐ |
+| **Factory** | MessageParser | ⭐⭐⭐⭐⭐ |
+| **Singleton** | Server (optionnel) | ⭐⭐⭐⭐ |
+| **Observer** | Channel → Clients | ⭐⭐⭐⭐ |
+| **Facade** | Simplifier opérations | ⭐⭐⭐ |
+| **Strategy** | Validation flexible | ⭐⭐⭐ |
+
+### 📋 Checklist Apprentissage
+
+Pour chaque pattern :
+- [ ] Lire le tutoriel (15 min)
+- [ ] Comprendre le problème résolu (5 min)
+- [ ] Identifier l'application dans IRC (5 min)
+- [ ] Discuter avec l'équipe au standup (5 min)
+
+### 💡 Ressources
+
+- **Tutoriels locaux** : `docs/patterns/*.md`
+- **Site de référence** : [Refactoring.Guru](https://refactoring.guru/design-patterns)
+- **Livre recommandé** : "Design Patterns" (Gang of Four)
+
+---
+
+## �📋 Ordre d'Implémentation - Approche Collaborative
 
 ### Jour 1 - Infrastructure (Toute l'équipe)
 - **NERO**: Server | **YASSER**: Client + Command | **BAHOLY**: MessageParser
@@ -737,12 +901,23 @@ git diff develop...feature/ma-branche
 - **Tests manuels** prioritaires, tests unitaires si temps disponible
 
 ### Planning Journalier Suggéré
-- **08h00**: Standup - objectifs du jour (15 min)
-- **08h15-12h00**: Développement intensif
-- **12h00-13h00**: Pause déjeuner
-- **13h00-16h00**: Développement + intégration
-- **16h00-16h15**: Standup de fin - revue des avancements (15 min)
-- **16h15-18h00**: PRs, reviews, merges vers develop
-- **18h00**: Checkpoint quotidien
+- **08h00-08h30**: 📚 **Apprentissage Design Pattern** (30 min individuel)
+  - Lecture tutoriel dans `docs/patterns/` ou refactoring.guru
+  - Réflexion sur application dans le projet
+- **08h30-08h45**: ☕ **Mini-break & préparation**
+- **08h45-09h00**: 👥 **Standup** - Objectifs + Partage patterns (15 min)
+  - Chacun partage son pattern en 2-3 min
+  - Plan du jour
+- **09h00-12h00**: 💻 **Développement intensif** (3h)
+- **12h00-13h00**: 🍽️ **Pause déjeuner**
+- **13h00-16h00**: 💻 **Développement + intégration** (3h)
+- **16h00-16h15**: 👥 **Checkpoint** - Revue des avancements (15 min)
+- **16h15-18h00**: 🔄 **PRs, reviews, merges vers develop** (1h45)
+- **18h00**: ✅ **Checkpoint quotidien validé**
+
+**Temps effectif de développement** : 6h
+**Temps d'apprentissage** : 30 min
+**Temps de coordination** : 30 min
+**Total journée** : 10h (08h00-18h00)
 
 ---
