@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:30 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/22 09:25:09 by marvin           ###   ########.fr       */
+/*   Updated: 2026/01/22 09:26:53 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ private:
     std::map<int, Client*> clients;
     std::map<std::string, Channel*> channels;
 
-    void setupSocket();
+    int setupSocket();
     void handleSelect();
     void acceptNewClient();
     void handleClientMessage(int fd);

@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:18 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/19 14:57:54 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/19 17:20:26 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 #include <csignal>
 #include <iostream>
 #include <sys/socket.h>
+#include <fcntl.h>
+#include <netinet/in.h> 
+#include <arpa/inet.h> 
 
 volatile sig_atomic_t g_running = 1;
 
@@ -51,8 +54,10 @@ void signalHandler(int signum) {
 }
 
 void Server::start() {
-    setupSocket();
+    int errorFlag = setupSocket();
 
+    if (errorFlag == 1)
+        return;
     signal(SIGINT, signalHandler);
     signal(SIGTERM, signalHandler);
 
@@ -91,7 +96,56 @@ void Server::stop() {
     this->running = false;
 }
 
-void Server::setupSocket() {
+int Server::setupSocket() {
+
+    if (this->port < 1 || this->port > 65535) {
+        std::cerr << "Error: Invalid port: " << this->port << std::endl;
+        std::cerr << "Port must be between 1 and 65535" << std::endl;
+        return (1);
+    }
+    
+    serverSocket = socket(AF_INET, SOCK_STREAM, 0);
+    if (serverSocket == -1) {
+        std::cerr << "Error: failed to create socket, program is stopping" << std::endl;
+        return (1);
+    }
+    std::cout << "Socket created succesfully. FD: " << serverSocket << std::endl;
+    
+    int opt = 1;
+    setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+    int flags = fcntl(serverSocket, F_GETFL, 0);
+    fcntl(serverSocket, F_SETFL, flags | O_NONBLOCK);
+
+    struct sockaddr_in addr;
+    addr.sin_family = AF_INET;
+    addr.sin_port = htons(this->port);
+    addr.sin_addr.s_addr = INADDR_ANY;
+
+    int bindResult = bind(serverSocket, (struct sockaddr*)&addr, sizeof(addr));
+
+    if (bindResult == -1) {
+        std::cerr << "Error: failed to bind to port: " << this->port << std::endl;
+        std::cerr << "Error: port might be already used" << std::endl;
+        close (serverSocket);
+        return (1);
+    }
+    std::cout << "Socket boumd to port: " << this->port << std::endl; 
+
+    int listenResult = listen(serverSocket, 10);
+    
+    if (listenResult == -1) {
+        std::cerr << "Error: failed to listen to port: " << this->port << std::endl;
+        close (serverSocket);
+        return (1);
+    }
+    std::cout << "Server ready to listen on port: " << this->port << std::endl;
+
+    std::cout << "\n=== SERVER SETUP COMPLETE ===" << std::endl;
+    std::cout << "Server listening on port: " << this->port << std::endl;
+    std::cout << "Socket fd: " << serverSocket << std::endl;
+    std::cout << "Ready to accept connections" << std::endl << std::endl;
+
+    return (0);
 }
 
 void Server::handleSelect() {
