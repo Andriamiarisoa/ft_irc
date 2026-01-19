@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:18 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/19 14:20:08 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/19 14:57:54 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "../includes/Channel.hpp"
 #include <csignal>
 #include <iostream>
+#include <sys/socket.h>
 
 volatile sig_atomic_t g_running = 1;
 
@@ -65,6 +66,29 @@ void Server::start() {
 }
 
 void Server::stop() {
+    std::cout << "SERVER SHUTDOWN!" << std::endl;
+    
+    std::map<int, Client*>::iterator it;
+    std::string exitMessage = "ERROR: Server is shutting down\r\n";
+    
+    for (it = clients.begin()  ; it != clients.end()  ;  it++) {
+        int clientFd = it->first;
+
+        int sent = send(clientFd, exitMessage.c_str(), exitMessage.length(), 0);
+        if (sent > 0)
+            std::cout << "Shutdown message sent succesfully to fd:   " <<  clientFd  << std::endl;
+        else
+            std::cout << "Shutdown message not sent to fd:   " <<  clientFd  << std::endl;
+    }
+    for (it = clients.begin() ; it != clients.end() ; it++) {
+        close(it->first);
+    }
+
+    if (serverSocket != -1)
+        close(serverSocket);
+
+    std::cout << "All clients connexion closed succesfully, server has now shut down" << std::endl;
+    this->running = false;
 }
 
 void Server::setupSocket() {
