@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:30 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/19 15:23:08 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/19 19:01:15 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ private:
 
     int setupSocket();
     void handleSelect();
+    int gettingSocketReady();
+    int setupBind();
+    int  setupListen();
     void acceptNewClient();
     void handleClientMessage(int fd);
     void disconnectClient(int fd);
