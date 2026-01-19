@@ -1,4 +1,4 @@
 *.o
 ircserv
 */commit.md
-srcs/mainServer.cpp
+src/mainServer.cpp
