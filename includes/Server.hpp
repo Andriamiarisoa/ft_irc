@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:30 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/22 09:26:53 by marvin           ###   ########.fr       */
+/*   Updated: 2026/01/22 09:27:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ private:
 
     int setupSocket();
     void handleSelect();
+    int gettingSocketReady();
+    int setupBind();
+    int  setupListen();
     void acceptNewClient();
     void handleClientMessage(int fd);
     void disconnectClient(int fd);
