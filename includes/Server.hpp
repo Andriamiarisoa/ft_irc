@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Server.hpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/19 08:20:30 by herrakot          #+#    #+#             */
+/*   Updated: 2026/01/19 09:38:44 by herrakot         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
@@ -5,6 +17,7 @@
 #include <vector>
 #include <map>
 #include <poll.h>
+#include <unistd.h>
 
 class Client;
 class Channel;
@@ -14,6 +27,7 @@ private:
     int port;
     std::string password;
     int serverSocket;
+    bool    running;
     std::vector<pollfd> fds;
     std::map<int, Client*> clients;
     std::map<std::string, Channel*> channels;
