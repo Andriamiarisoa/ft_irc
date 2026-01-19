@@ -1,3 +1,4 @@
 *.o
 ircserv
 */commit.md
+srcs/mainServer.cpp
