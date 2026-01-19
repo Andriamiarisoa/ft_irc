@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:18 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/19 19:08:21 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/19 19:14:15 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,8 @@ void Server::handleSelect() {
         return;
     }
     else {
-        if (FD_ISSET(serverSocket, &readfds)) {
+        if (FD_ISSET(serverSocket, &readfds)) 
+        {
             acceptNewClient();
         }
         for (it = clients.begin() ; it != clients.end() ; it++) {
