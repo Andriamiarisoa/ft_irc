@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:18 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/19 09:50:10 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/19 13:19:38 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ Server::~Server() {
     }
     channels.clear();
 
-    fds.clear();
-
     if (serverSocket != -1) {
         close (serverSocket);
     }
@@ -52,7 +50,7 @@ void Server::stop() {
 void Server::setupSocket() {
 }
 
-void Server::handlePoll() {
+void Server::handleSelect() {
 }
 
 void Server::acceptNewClient() {

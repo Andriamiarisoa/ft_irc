@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:30 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/19 09:38:44 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/19 13:53:42 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 #define SERVER_HPP
 
 #include <string>
-#include <vector>
 #include <map>
-#include <poll.h>
+#include <sys/select.h>
 #include <unistd.h>
 
 class Client;
@@ -28,12 +27,11 @@ private:
     std::string password;
     int serverSocket;
     bool    running;
-    std::vector<pollfd> fds;
     std::map<int, Client*> clients;
     std::map<std::string, Channel*> channels;
 
     void setupSocket();
-    void handlePoll();
+    void handleSelect();
     void acceptNewClient();
     void handleClientMessage(int fd);
     void disconnectClient(int fd);

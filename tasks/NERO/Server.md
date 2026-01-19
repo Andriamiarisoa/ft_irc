@@ -20,7 +20,6 @@ La classe `Server` est le cœur de l'implémentation du serveur IRC. Elle gère 
 ### Gestion des Clients et Canaux
 - `std::map<int, Client*> clients` - Carte de fd → pointeur Client
 - `std::map<std::string, Channel*> channels` - Carte de nom de canal → pointeur Channel
-- `std::vector<pollfd> fds` - Descripteurs de fichiers poll pour le multiplexage
 
 ---
 
@@ -39,7 +38,6 @@ Server(int port, const std::string& password)
 - [ ] Définir l'indicateur running à false
 - [ ] Initialiser la map clients vide
 - [ ] Initialiser la map channels vide
-- [ ] Initialiser le vector fds vide
 
 ---
 
@@ -55,7 +53,7 @@ Server(int port, const std::string& password)
 - [ ] Supprimer tous les objets Client (libérer la mémoire)
 - [ ] Supprimer tous les objets Channel (libérer la mémoire)
 - [ ] Fermer le socket serveur s'il est ouvert (serverSocket >= 0)
-- [ ] Vider tous les conteneurs (clients, channels, fds)
+- [ ] Vider tous les conteneurs (clients, channels)
 
 ---
 
@@ -70,7 +68,7 @@ void start()
 - [ ] Appeler setupSocket() pour initialiser le socket serveur
 - [ ] Définir l'indicateur running à true
 - [ ] Entrer dans la boucle principale while(running)
-- [ ] Appeler handlePoll() à chaque itération
+- [ ] Appeler handleSelect() à chaque itération
 - [ ] Gérer Ctrl+C proprement (considérer les gestionnaires de signaux)
 - [ ] Appeler stop() à la sortie
 
@@ -108,25 +106,27 @@ void setupSocket()
 - [ ] Lier le socket à l'adresse avec bind()
 - [ ] Vérifier les erreurs de bind (port déjà utilisé, etc.)
 - [ ] Commencer l'écoute avec listen() (backlog = 10)
-- [ ] Ajouter le socket serveur au vector fds pour poll()
 - [ ] Enregistrer un message de succès avec le numéro de port
 
 ---
 
-### handlePoll()
+### handleSelect()
 ```cpp
-void handlePoll()
+void handleSelect()
 ```
 
-**Objectif** : Gérer les événements I/O en utilisant poll()
+**Objectif** : Gérer les événements I/O en utilisant select()
 
 **TODO** :
-- [ ] Appeler poll() avec le vector fds et le timeout
-- [ ] Vérifier la valeur de retour de poll() pour les erreurs
-- [ ] Itérer à travers tous les fds
-- [ ] Si fd est le socket serveur et POLLIN : appeler acceptNewClient()
-- [ ] Si fd est un socket client et POLLIN : appeler handleClientMessage(fd)
-- [ ] Si fd a POLLHUP ou POLLERR : appeler disconnectClient(fd)
+- [ ] Créer et initialiser fd_set readfds avec FD_ZERO()
+- [ ] Ajouter le socket serveur avec FD_SET(serverSocket, &readfds)
+- [ ] Itérer à travers tous les clients et les ajouter avec FD_SET()
+- [ ] Calculer max_fd (le plus grand descripteur de fichier)
+- [ ] Définir un timeout (struct timeval) pour éviter un blocage infini
+- [ ] Appeler select(max_fd + 1, &readfds, NULL, NULL, &timeout)
+- [ ] Vérifier la valeur de retour de select() pour les erreurs
+- [ ] Si FD_ISSET(serverSocket, &readfds) : appeler acceptNewClient()
+- [ ] Pour chaque client, si FD_ISSET(client_fd, &readfds) : appeler handleClientMessage(fd)
 - [ ] Gérer les cas limites (EINTR, lectures partielles)
 
 ---
@@ -144,7 +144,6 @@ void acceptNewClient()
 - [ ] Définir le nouveau socket en mode non-bloquant avec fcntl()
 - [ ] Créer un nouvel objet Client avec fd
 - [ ] Ajouter le client à la map clients (clé = fd)
-- [ ] Ajouter fd au vector fds pour poll()
 - [ ] Enregistrer la nouvelle connexion (adresse IP si possible)
 - [ ] Envoyer un message de bienvenue au client
 
@@ -180,7 +179,6 @@ void disconnectClient(int fd)
 - [ ] Trouver le client dans la map clients
 - [ ] Retirer le client de tous les canaux (itérer les canaux du client)
 - [ ] Diffuser le message QUIT aux canaux
-- [ ] Retirer fd du vector fds
 - [ ] Fermer le socket avec close(fd)
 - [ ] Supprimer l'objet Client
 - [ ] Retirer de la map clients
@@ -248,7 +246,7 @@ void executeCommand(Client* client, const std::string& cmd)
 
 ### Phase 2 - Gestion des Connexions
 5. acceptNewClient()
-6. handlePoll() - polling basique
+6. handleSelect() - select basique
 7. disconnectClient()
 
 ### Phase 3 - Traitement des Messages
@@ -270,7 +268,7 @@ void executeCommand(Client* client, const std::string& cmd)
 - [ ] Le serveur ne plante pas sur une entrée mal formée
 - [ ] Fuites mémoire vérifiées avec valgrind
 - [ ] Le serveur répond correctement à Ctrl+C
-- [ ] Le timeout de poll ne cause pas une utilisation CPU à 100%
+- [ ] Le timeout de select ne cause pas une utilisation CPU à 100%
 
 ---
 
