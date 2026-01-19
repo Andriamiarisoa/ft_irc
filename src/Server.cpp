@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:18 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/19 13:19:38 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/19 14:20:08 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 #include "../includes/Server.hpp"
 #include "../includes/Client.hpp"
 #include "../includes/Channel.hpp"
+#include <csignal>
+#include <iostream>
+
+volatile sig_atomic_t g_running = 1;
 
 
 Server::Server(int port, const std::string &password) : port(port), password(password), serverSocket(-1) {
@@ -40,8 +44,24 @@ Server::~Server() {
     }
 }
 
+void signalHandler(int signum) {
+    (void) signum;
+    g_running = 0;
+}
+
 void Server::start() {
-    
+    setupSocket();
+
+    signal(SIGINT, signalHandler);
+    signal(SIGTERM, signalHandler);
+
+    this->running = true;
+    g_running = 1;
+    while (running && g_running)
+    {
+        handleSelect();
+    }
+    stop();
 }
 
 void Server::stop() {
