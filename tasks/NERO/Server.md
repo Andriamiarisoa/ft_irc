@@ -127,7 +127,7 @@ void handleSelect()
 - [x] Vérifier la valeur de retour de select() pour les erreurs
 - [x] Si FD_ISSET(serverSocket, &readfds) : appeler acceptNewClient()
 - [x] Pour chaque client, si FD_ISSET(client_fd, &readfds) : appeler handleClientMessage(fd)
-- [ ] Gérer les cas limites (EINTR, lectures partielles)
+- [x] Gérer les cas limites (EINTR, lectures partielles)
 
 ---
 
@@ -139,13 +139,13 @@ void acceptNewClient()
 **Objectif** : Accepter une nouvelle connexion client
 
 **TODO** :
-- [ ] Appeler accept() sur le socket serveur
-- [ ] Vérifier les erreurs d'accept
-- [ ] Définir le nouveau socket en mode non-bloquant avec fcntl()
-- [ ] Créer un nouvel objet Client avec fd
-- [ ] Ajouter le client à la map clients (clé = fd)
-- [ ] Enregistrer la nouvelle connexion (adresse IP si possible)
-- [ ] Envoyer un message de bienvenue au client
+- [x] Appeler accept() sur le socket serveur
+- [x] Vérifier les erreurs d'accept
+- [x] Définir le nouveau socket en mode non-bloquant avec fcntl()
+- [x] Créer un nouvel objet Client avec fd
+- [x] Ajouter le client à la map clients (clé = fd)
+- [x] Enregistrer la nouvelle connexion (adresse IP si possible)
+- [x] Envoyer un message de bienvenue au client
 
 ---
 
@@ -157,14 +157,14 @@ void handleClientMessage(int fd)
 **Objectif** : Lire et traiter les messages du client
 
 **TODO** :
-- [ ] Trouver le client dans la map clients par fd
-- [ ] Lire les données du socket avec recv()
-- [ ] Gérer les erreurs de recv (EAGAIN, EWOULDBLOCK, erreurs)
-- [ ] Si recv retourne 0 : client déconnecté, appeler disconnectClient()
-- [ ] Ajouter les données reçues au buffer du client
-- [ ] Extraire les commandes complètes (chercher \r\n)
-- [ ] Pour chaque commande complète : appeler executeCommand()
-- [ ] Gérer les messages partiels (garder dans le buffer)
+- [x] Trouver le client dans la map clients par fd
+- [x] Lire les données du socket avec recv()
+- [x] Gérer les erreurs de recv (EAGAIN, EWOULDBLOCK, erreurs)
+- [x] Si recv retourne 0 : client déconnecté, appeler disconnectClient()
+- [x] Ajouter les données reçues au buffer du client
+- [x] Extraire les commandes complètes (chercher \r\n)
+- [x] Pour chaque commande complète : appeler executeCommand()
+- [x] Gérer les messages partiels (garder dans le buffer)
 
 ---
 

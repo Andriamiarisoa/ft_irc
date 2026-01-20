@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:18 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/20 05:16:48 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/20 08:29:10 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,8 +201,8 @@ void Server::handleSelect() {
         }
         for (it = clients.begin() ; it != clients.end() ; it++) {
             int fd = it->first;
-            if (FD_ISSET(fd, &readfds)) {
-                handleClientMessage(fd);
+        if (FD_ISSET(fd, &readfds)) {
+            handleClientMessage(fd);
             }
         }        
     }
@@ -236,11 +236,52 @@ void Server::acceptNewClient() {
 }
 
 void Server::handleClientMessage(int fd) {
-    (void)fd;
+    std::map<int, Client*>::iterator it = clients.find(fd);
+    if (it == clients.end())  {
+        std::cerr << "Client from FD: " << fd << " not found in map" << std::endl;
+        return;
+    }
+    Client* client = it->second;
+    char buffer[512];
+    int byteReceived = recv(fd, buffer, sizeof(buffer) -  1, 0);
+    
+    if (byteReceived == 0) {
+        disconnectClient(fd);
+        return;
+    }
+    if (byteReceived == -1) {
+        if (errno == EAGAIN || errno == EWOULDBLOCK)
+            return;
+        std::cerr << "Error: failed to receive the message from  client FD: " << fd << std::endl;
+        disconnectClient(fd);
+        return;
+    }
+    buffer[byteReceived] = '\0';
+    client->appendToBuffer(std::string(buffer, byteReceived));
+
+    std::string command;
+    while ((command = client->extractCommand()) != "") {
+        std::cout << "command found ready to be executed : " << command << std::endl;
+        executeCommand(client, command);
+    }
 }
 
 void Server::disconnectClient(int fd) {
-    (void)fd;
+    std::map<int, Client*>::iterator it = clients.find(fd);
+    if (it == clients.end()) {
+        std::cerr << "Error: Client not found in the map" << std::endl;
+        return;
+    }
+    Client* client = it->second;
+    std::string nickname = client->getNickname();
+    if (nickname.empty())
+        nickname = "Unkown";
+
+    std::string quitMess = ": " + nickname + " QUIT :Client disconnected\r\n";
+    
+    // std::set<Channel*> clientChannels = client.getChannels();
+    // for (std::)
+    
 }
 
 Client* Server::getClientByNick(const std::string& nick) {
