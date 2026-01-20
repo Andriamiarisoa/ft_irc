@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:18 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/20 12:51:03 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/20 13:27:47 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -318,9 +318,24 @@ void Server::disconnectClient(int fd) {
     std::cout << "Client with FD: " << fd << " , [nickname] : " << nickname << " disconnected" << std::endl;
 }
 
+std::string Server::toLower(const std::string& str) {
+    std::string result = str;
+    for (size_t i = 0 ; i < result.length() ; i++) {
+        result[i] = std::tolower(result[i]);
+    }
+    return (result);
+}
+
 Client* Server::getClientByNick(const std::string& nick) {
-    (void)nick;
-    return NULL;
+    std::map<int, Client*>::iterator it;
+    std::string lowerNick = toLower(nick);
+    for (it = clients.begin() ; it != clients.end() ; it++) {
+        Client* client = it->second;
+        if (toLower(client->getNickname()) == lowerNick) {
+            return (client);
+        }
+    }
+    return (NULL);
 }
 
 Channel* Server::getOrCreateChannel(const std::string& name) {

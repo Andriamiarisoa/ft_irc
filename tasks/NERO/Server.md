@@ -176,13 +176,13 @@ void disconnectClient(int fd)
 **Objectif** : Déconnecter le client et nettoyer
 
 **TODO** :
-- [ ] Trouver le client dans la map clients
-- [ ] Retirer le client de tous les canaux (itérer les canaux du client)
-- [ ] Diffuser le message QUIT aux canaux
-- [ ] Fermer le socket avec close(fd)
-- [ ] Supprimer l'objet Client
-- [ ] Retirer de la map clients
-- [ ] Enregistrer la déconnexion
+- [x] Trouver le client dans la map clients
+- [x] Retirer le client de tous les canaux (itérer les canaux du client)
+- [x] Diffuser le message QUIT aux canaux
+- [x] Fermer le socket avec close(fd)
+- [x] Supprimer l'objet Client
+- [x] Retirer de la map clients
+- [x] Enregistrer la déconnexion
 
 ---
 

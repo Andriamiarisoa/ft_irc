@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:30 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/22 09:27:15 by marvin           ###   ########.fr       */
+/*   Updated: 2026/01/22 09:27:33 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,11 @@ public:
     
     void start();
     void stop();
+<<<<<<< HEAD
     Client* getClientByNick(const std::string& nick);
+=======
+    std::string toLower(const std::string& str);
+>>>>>>> 0cf348e (feat: function to find the client by their nickname implemented)
 };
 
 #endif
