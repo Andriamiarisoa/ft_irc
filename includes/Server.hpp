@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:30 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/22 09:28:59 by marvin           ###   ########.fr       */
+/*   Updated: 2026/01/22 09:31:01 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ private:
 
     int setupSocket();
     void handleSelect();
+    int prepareSelectFds(fd_set& readfds);
+    void displayIdleAnimation();
+    void processReadyClients(fd_set& readfds);
     int gettingSocketReady();
     int setupBind();
     int  setupListen();
