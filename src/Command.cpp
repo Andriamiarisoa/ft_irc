@@ -5,7 +5,7 @@
 
 Command::Command(Server* srv, Client* cli, const std::vector<std::string>& params)
     : server(srv), client(cli), params(params) {
-    if (srv == nullptr || cli == nullptr) {
+    if (srv == NULL || cli == NULL) {
         throw std::invalid_argument("Server or Client pointer is null");
     }
 }
@@ -13,33 +13,42 @@ Command::Command(Server* srv, Client* cli, const std::vector<std::string>& param
 Command::~Command() {
 }
 
+std::string Command::formatCode(int code) {
+    std::ostringstream oss;
+    if (code < 10)
+        oss << "00" << code;
+    else if (code < 100)
+        oss << "0" << code;
+    else
+        oss << code;
+    return oss.str();
+}
+
+std::string Command::getClientNick() {
+    if (client->isRegistered() && !client->getNickname().empty())
+        return client->getNickname();
+    return "*";
+}
+
 void Command::sendReply(int code, const std::string& msg) {
     std::ostringstream  oss;
-    std::string         nickname;       
+    std::string         hostname = "irc.example.com";
 
-    if (client->isRegistered())
-        nickname = client->getNickname();
-    else
-        nickname = "*";
-    oss << ":" << "irc.example.com" 
-        << " " << code 
-        << " " << nickname 
-        << " :" << msg 
+    oss << ":" << hostname 
+        << " " << formatCode(code) 
+        << " " << getClientNick() 
+        << " " << msg 
         << "\r\n";
     client->sendMessage(oss.str());
 }
 
 void Command::sendError(int code, const std::string& msg) {
     std::ostringstream  oss;
-    std::string         nickname;       
+    std::string         hostname = "irc.example.com";
 
-    if (client->isRegistered())
-        nickname = client->getNickname();
-    else
-        nickname = "*";
-    oss << ":" << "irc.example.com" 
-        << " " << code 
-        << " " << nickname 
+    oss << ":" << hostname 
+        << " " << formatCode(code) 
+        << " " << getClientNick() 
         << " :" << msg 
         << "\r\n";
     client->sendMessage(oss.str());
