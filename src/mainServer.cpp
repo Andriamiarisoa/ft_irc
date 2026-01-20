@@ -1,8 +1,19 @@
 #include "../includes/Server.hpp"
+#include <iostream>
 
-int     main() {
-    Server Nero(6667, "testpassword");
+int main(int argc, char* argv[]) {
+    if (argc != 3) {
+        std::cerr << "Usage: " << argv[0] << " <port> <password>" << std::endl;
+        return 1;
+    }
 
-    Nero.start();
-    return (0);
+    int port = std::atoi(argv[1]);
+    std::string password = argv[2];
+
+
+        Server server(port, password);
+        server.start();
+
+
+    return 0;
 }
