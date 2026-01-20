@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:18 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/20 15:54:00 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/20 16:38:12 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,10 @@ void Server::start() {
 }
 
 void Server::stop() {
-    std::cout << "SERVER SHUTDOWN!" << std::endl;
+    std::cout << std::endl;
+    std::cout << "\n╔════════════════════════════════════════╗" << std::endl;
+    std::cout << "║          SERVER SHUTTING DOWN          ║" << std::endl;
+    std::cout << "╚════════════════════════════════════════╝" << std::endl;
     
     std::map<int, Client*>::iterator it;
     std::string exitMessage = "ERROR: Server is shutting down\r\n";
@@ -86,9 +89,9 @@ void Server::stop() {
 
         int sent = send(clientFd, exitMessage.c_str(), exitMessage.length(), 0);
         if (sent > 0)
-            std::cout << "Shutdown message sent succesfully to fd:   " <<  clientFd  << std::endl;
+            std::cout << "  [OK] Shutdown message sent to FD: " << clientFd << std::endl;
         else
-            std::cout << "Shutdown message not sent to fd:   " <<  clientFd  << std::endl;
+            std::cout << "  [!!] Failed to send shutdown to FD: " << clientFd << std::endl;
     }
     sleep (1);
     for (it = clients.begin() ; it != clients.end() ; it++) {
@@ -98,17 +101,18 @@ void Server::stop() {
     if (serverSocket != -1)
         close(serverSocket);
 
-    std::cout << "All clients connexion closed succesfully, server has now shut down" << std::endl;
+    std::cout << "\n  All connections closed. Server stopped." << std::endl;
+    std::cout << "════════════════════════════════════════════\n" << std::endl;
     this->running = false;
 }
 
 int Server::gettingSocketReady() {
     serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket == -1) {
-        std::cerr << "Error: failed to create socket, program is stopping" << std::endl;
+        std::cerr << "[ERROR] Failed to create socket" << std::endl;
         return (1);
     }
-    std::cout << "Socket created succesfully. FD: " << serverSocket << std::endl;
+    std::cout << "  [OK] Socket created (FD: " << serverSocket << ")" << std::endl;
     return (0);
 }
 
@@ -120,30 +124,34 @@ int Server::setupBind() {
     
     int bindResult = bind(serverSocket, (struct sockaddr*)&addr, sizeof(addr));
     if (bindResult == -1) {
-        std::cerr << "Error: failed to bind to port: " << this->port << std::endl;
-        std::cerr << "Error: port might be already used" << std::endl;
+        std::cerr << "[ERROR] Failed to bind to port " << this->port << std::endl;
+        std::cerr << "        Port may already be in use" << std::endl;
         close (serverSocket);
         return (1);
     }
-    std::cout << "Socket bound to port: " << this->port << std::endl; 
+    std::cout << "  [OK] Bound to port " << this->port << std::endl; 
     return (0);
 }
 
 int Server::setupListen() {
     int listenResult = listen(serverSocket, 10);
     if (listenResult == -1) {
-        std::cerr << "Error: failed to listen to port: " << this->port << std::endl;
+        std::cerr << "[ERROR] Failed to listen on port " << this->port << std::endl;
         close (serverSocket);
         return (1);
     }
-    std::cout << "Server ready to listen on port: " << this->port << std::endl;
+    std::cout << "  [OK] Listening (backlog: 10)" << std::endl;
     return (0);
 }
 
 int Server::setupSocket() {
+    std::cout << "\n╔════════════════════════════════════════╗" << std::endl;
+    std::cout << "║         FT_IRC SERVER STARTING         ║" << std::endl;
+    std::cout << "╚════════════════════════════════════════╝\n" << std::endl;
+    
     if (this->port < 1 || this->port > 65535) {
-        std::cerr << "Error: Invalid port: " << this->port << std::endl;
-        std::cerr << "Port must be between 1 and 65535" << std::endl;
+        std::cerr << "[ERROR] Invalid port: " << this->port << std::endl;
+        std::cerr << "        Must be between 1 and 65535" << std::endl;
         return (1);
     }
 
@@ -160,29 +168,69 @@ int Server::setupSocket() {
 
     if (setupListen() == 1)
         return (1);
-    std::cout << "\n=== SERVER SETUP COMPLETE ===" << std::endl;
-    std::cout << "Server listening on port: " << this->port << std::endl;
-    std::cout << "Socket fd: " << serverSocket << std::endl;
-    std::cout << "Ready to accept connections" << std::endl << std::endl;
+    
+    std::cout << "\n════════════════════════════════════════════" << std::endl;
+    std::cout << "  Server ready on port " << this->port << std::endl;
+    std::cout << "  Press Ctrl+C to stop" << std::endl;
+    std::cout << "════════════════════════════════════════════\n" << std::endl;
     return (0);
 }
 
-void Server::handleSelect() {
-    fd_set readfds;
+int Server::prepareSelectFds(fd_set& readfds) {
     FD_ZERO(&readfds);
-
     FD_SET(serverSocket, &readfds);
+    
+    int maxFd = serverSocket;
     std::map<int, Client*>::iterator it;
     for (it = clients.begin() ; it != clients.end() ; it++) {
         int fd = it->first;
         FD_SET(fd, &readfds);
-    }
-    int maxFd = serverSocket;
-    for (it = clients.begin() ; it != clients.end() ; it++) {
-        int fd = it->first;
         if (fd > maxFd)
             maxFd = fd;
     }
+    return maxFd;
+}
+
+void Server::displayIdleAnimation() {
+    static int animFrame = 0;
+    static time_t lastTime = 0;
+    time_t now = time(NULL);
+    
+    const char* spinner[] = {"⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"};
+    const int spinnerSize = 10;
+    
+    if (now != lastTime) {
+        std::cout << "\r\033[K" << spinner[animFrame % spinnerSize] 
+                  << " Waiting for connections... [" << clients.size() 
+                  << " client(s) connected]" << std::flush;
+        animFrame++;
+        lastTime = now;
+    }
+}
+
+void Server::processReadyClients(fd_set& readfds) {
+    if (FD_ISSET(serverSocket, &readfds))
+        acceptNewClient();
+    
+    std::vector<int> readyFds;
+    std::map<int, Client*>::iterator it;
+    for (it = clients.begin() ; it != clients.end() ; it++) {
+        int fd = it->first;
+        if (FD_ISSET(fd, &readfds))
+            readyFds.push_back(fd);
+    }
+    
+    for (size_t i = 0; i < readyFds.size(); i++) {
+        int fd = readyFds[i];
+        if (clients.find(fd) != clients.end())
+            handleClientMessage(fd);
+    }
+}
+
+void Server::handleSelect() {
+    fd_set readfds;
+    int maxFd = prepareSelectFds(readfds);
+    
     struct timeval timeout;
     timeout.tv_sec = 1;
     timeout.tv_usec = 0;
@@ -192,46 +240,15 @@ void Server::handleSelect() {
     if (selectResult == -1) {
         if (errno == EINTR)
             return;
-        std::cerr << "Error: select had an unexcepted behavior, quitting the server" << std::endl;
+        std::cerr << "\n[ERROR] Select failed unexpectedly, shutting down" << std::endl;
         running = false;
         return;
     }
-    else if (selectResult == 0) {
-        static int animFrame = 0;
-        static time_t lastTime = 0;
-        time_t now = time(NULL);
-        
-        const char* spinner[] = {"⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"};
-        const int spinnerSize = 10;
-        
-        if (now != lastTime) {
-            std::cout << "\r\033[K" << spinner[animFrame % spinnerSize] 
-                      << " Waiting for connections... [" << clients.size() 
-                      << " client(s) connected]" << std::flush;
-            animFrame++;
-            lastTime = now;
-        }
+    if (selectResult == 0) {
+        displayIdleAnimation();
         return;
     }
-    else {
-        if (FD_ISSET(serverSocket, &readfds)) 
-        {
-            acceptNewClient();
-        }
-        std::vector<int> readyFds;
-        for (it = clients.begin() ; it != clients.end() ; it++) {
-            int fd = it->first;
-            if (FD_ISSET(fd, &readfds)) {
-                readyFds.push_back(fd);
-            }
-        }
-        for (size_t i = 0; i < readyFds.size(); i++) {
-            int fd = readyFds[i];
-            if (clients.find(fd) != clients.end()) {
-                handleClientMessage(fd);
-            }
-        }        
-    }
+    processReadyClients(readfds);
 }
 
 void Server::acceptNewClient() {
@@ -240,7 +257,7 @@ void Server::acceptNewClient() {
 
     int clientFd = accept(serverSocket, (struct sockaddr*)&clientAddr, &clientLen);
     if (clientFd == -1) {
-        std::cerr << "Error: failed to accept new client" << std::endl;
+        std::cerr << "  [!!] Failed to accept new client" << std::endl;
         return;
     }
     
@@ -254,17 +271,17 @@ void Server::acceptNewClient() {
     
     Client* newClient = new Client(clientFd);
     clients[clientFd] = newClient;
-    std::cout << std::endl;
-    std::cout << "New client connected succesfully, FD: " << clientFd << " from: " << clientIP << " : " << clientPort << std::endl;
+    std::cout << "\n  [+] New client connected" << std::endl;
+    std::cout << "      FD: " << clientFd << " | IP: " << clientIP << ":" << clientPort << std::endl;
 
-    std::string welcome = ":Server ft_ic : welcome tho the IRC Server\r\n";
+    std::string welcome = ":Server ft_irc :Welcome to the IRC Server\r\n";
     send (clientFd, welcome.c_str(), welcome.length(), 0);
 }
 
 void Server::handleClientMessage(int fd) {
     std::map<int, Client*>::iterator it = clients.find(fd);
     if (it == clients.end())  {
-        std::cerr << "Client from FD: " << fd << " not found in map" << std::endl;
+        std::cerr << "  [!!] Client FD " << fd << " not found" << std::endl;
         return;
     }
     Client* client = it->second;
@@ -278,7 +295,7 @@ void Server::handleClientMessage(int fd) {
     if (byteReceived == -1) {
         if (errno == EAGAIN || errno == EWOULDBLOCK)
             return;
-        std::cerr << "Error: failed to receive the message from  client FD: " << fd << std::endl;
+        std::cerr << "  [!!] Failed to receive from FD " << fd << std::endl;
         disconnectClient(fd);
         return;
     }
@@ -287,7 +304,7 @@ void Server::handleClientMessage(int fd) {
 
     std::string command;
     while ((command = client->extractCommand()) != "") {
-        std::cout << "command found ready to be executed : " << command << std::endl;
+        std::cout << "  [CMD] " << command << std::endl;
         executeCommand(client, command);
     }
 }
@@ -295,7 +312,7 @@ void Server::handleClientMessage(int fd) {
 void Server::disconnectClient(int fd) {
     std::map<int, Client*>::iterator it = clients.find(fd);
     if (it == clients.end()) {
-        std::cerr << "Error: Client not found in the map" << std::endl;
+        std::cerr << "  [!!] Cannot disconnect: FD " << fd << " not found" << std::endl;
         return;
     }
     Client* client = it->second;
@@ -316,7 +333,7 @@ void Server::disconnectClient(int fd) {
     close (fd);
     delete client;
     clients.erase(it);
-    std::cout << "Client with FD: " << fd << " , [nickname] : " << nickname << " disconnected" << std::endl;
+    std::cout << "  [-] Client disconnected (FD: " << fd << ", Nick: " << nickname << ")" << std::endl;
 }
 
 std::string Server::toLower(const std::string& str) {
@@ -376,7 +393,9 @@ Channel* Server::getOrCreateChannel(const std::string& name) {
 
 
 //TO_DO : implement this func, function to actually call the execute() 
-/*
+
 void Server::executeCommand(Client* client, const std::string& cmd) {
+    (void)client;
+    (void)cmd;
 }
-*/
+

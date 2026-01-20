@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:30 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/20 16:15:57 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/20 16:27:57 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ private:
 
     int setupSocket();
     void handleSelect();
+    int prepareSelectFds(fd_set& readfds);
+    void displayIdleAnimation();
+    void processReadyClients(fd_set& readfds);
     int gettingSocketReady();
     int setupBind();
     int  setupListen();
