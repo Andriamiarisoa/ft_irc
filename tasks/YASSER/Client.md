@@ -38,13 +38,13 @@ Client(int fd)
 **Objectif**: Initialiser le client avec le descripteur de socket
 
 **TODO**:
-- [ ] Stocker fd dans la variable membre
-- [ ] Initialiser nickname à une chaîne vide
-- [ ] Initialiser username à une chaîne vide
-- [ ] Définir authenticated à false
-- [ ] Définir registered à false
-- [ ] Initialiser le buffer vide
-- [ ] Initialiser l'ensemble channels vide
+- [x] Stocker fd dans la variable membre
+- [x] Initialiser nickname à une chaîne vide
+- [x] Initialiser username à une chaîne vide
+- [x] Définir authenticated à false
+- [x] Définir registered à false
+- [x] Initialiser le buffer vide
+- [x] Initialiser l'ensemble channels vide
 
 ---
 
@@ -56,10 +56,10 @@ Client(int fd)
 **Objectif**: Nettoyer les ressources du client
 
 **TODO**:
-- [ ] Vider l'ensemble channels (ne pas supprimer les objets Channel)
-- [ ] Vider le buffer
-- [ ] Note: Le socket doit être fermé par la classe Server
-- [ ] Note: Ne pas fermer fd ici (Server en est propriétaire)
+- [x] Vider l'ensemble channels (ne pas supprimer les objets Channel)
+- [x] Vider le buffer
+- [x] Note: Le socket doit être fermé par la classe Server
+- [x] Note: Ne pas fermer fd ici (Server en est propriétaire)
 
 ---
 
@@ -71,8 +71,8 @@ int getFd() const
 **Objectif**: Obtenir le descripteur de socket du client
 
 **TODO**:
-- [ ] Retourner la valeur de fd
-- [ ] Getter simple, aucune validation nécessaire
+- [x] Retourner la valeur de fd
+- [x] Getter simple, aucune validation nécessaire
 
 ---
 
@@ -84,8 +84,8 @@ std::string getNickname() const
 **Objectif**: Obtenir le pseudonyme du client
 
 **TODO**:
-- [ ] Retourner la chaîne nickname
-- [ ] Retourner une chaîne vide si non défini
+- [x] Retourner la chaîne nickname
+- [x] Retourner une chaîne vide si non défini
 
 ---
 
@@ -97,8 +97,8 @@ std::string getUsername() const
 **Objectif**: Obtenir le nom d'utilisateur du client
 
 **TODO**:
-- [ ] Retourner la chaîne username
-- [ ] Retourner une chaîne vide si non défini
+- [x] Retourner la chaîne username
+- [x] Retourner une chaîne vide si non défini
 
 ---
 
@@ -110,8 +110,8 @@ bool isAuthenticated() const
 **Objectif**: Vérifier si le client a réussi l'authentification par mot de passe
 
 **TODO**:
-- [ ] Retourner l'indicateur authenticated
-- [ ] Utilisé pour vérifier que la commande PASS a réussi
+- [x] Retourner l'indicateur authenticated
+- [x] Utilisé pour vérifier que la commande PASS a réussi
 
 ---
 
@@ -123,9 +123,9 @@ bool isRegistered() const
 **Objectif**: Vérifier si le client est complètement enregistré (NICK + USER)
 
 **TODO**:
-- [ ] Retourner l'indicateur registered
-- [ ] Le client doit être authenticated ET avoir un nickname ET un username
-- [ ] Utilisé pour vérifier si le client peut utiliser les commandes IRC
+- [x] Retourner l'indicateur registered
+- [x] Le client doit être authenticated ET avoir un nickname ET un username
+- [x] Utilisé pour vérifier si le client peut utiliser les commandes IRC
 
 ---
 
@@ -137,12 +137,12 @@ void setNickname(const std::string& nick)
 **Objectif**: Définir le pseudonyme du client
 
 **TODO**:
-- [ ] Valider le format du pseudonyme (RFC 1459)
+- [x] Valider le format du pseudonyme (RFC 1459)
   - Doit commencer par une lettre
   - Peut contenir lettres, chiffres, caractères spéciaux (-, [, ], \, `, ^, {, })
   - Maximum 9 caractères
-- [ ] Stocker nickname dans la variable membre
-- [ ] Vérifier si le client devient enregistré après avoir défini le pseudonyme
+- [x] Stocker nickname dans la variable membre
+- [x] Vérifier si le client devient enregistré après avoir défini le pseudonyme
 - [ ] Si déjà enregistré, envoyer la réponse NICK aux canaux
 
 ---
@@ -155,10 +155,10 @@ void setUsername(const std::string& user)
 **Objectif**: Définir le nom d'utilisateur du client
 
 **TODO**:
-- [ ] Stocker username dans la variable membre
-- [ ] Vérifier si le client devient enregistré après avoir défini le nom d'utilisateur
+- [x] Stocker username dans la variable membre
+- [x] Vérifier si le client devient enregistré après avoir défini le nom d'utilisateur
 - [ ] Envoyer les messages de bienvenue (001-004) si nouvellement enregistré
-- [ ] Marquer l'indicateur registered comme true
+- [x] Marquer l'indicateur registered comme true
 
 ---
 
@@ -170,9 +170,9 @@ void authenticate()
 **Objectif**: Marquer le client comme authentifié par mot de passe
 
 **TODO**:
-- [ ] Définir l'indicateur authenticated à true
-- [ ] Appelé après une commande PASS réussie
-- [ ] Le client a toujours besoin de NICK et USER pour être complètement enregistré
+- [x] Définir l'indicateur authenticated à true
+- [x] Appelé après une commande PASS réussie
+- [x] Le client a toujours besoin de NICK et USER pour être complètement enregistré
 
 ---
 
@@ -184,10 +184,10 @@ void addToChannel(Channel* channel)
 **Objectif**: Ajouter le client à un canal
 
 **TODO**:
-- [ ] Insérer le pointeur channel dans l'ensemble channels
-- [ ] Vérifier que channel n'est pas NULL
-- [ ] Aucune vérification de doublons nécessaire (set le gère)
-- [ ] Ne pas appeler channel->addMember ici (fait par le canal)
+- [x] Insérer le pointeur channel dans l'ensemble channels
+- [x] Vérifier que channel n'est pas NULL
+- [x] Aucune vérification de doublons nécessaire (set le gère)
+- [x] Ne pas appeler channel->addMember ici (fait par le canal)
 
 ---
 
@@ -199,9 +199,9 @@ void removeFromChannel(Channel* channel)
 **Objectif**: Retirer le client d'un canal
 
 **TODO**:
-- [ ] Effacer le canal de l'ensemble channels
-- [ ] Vérifier d'abord si le canal existe dans l'ensemble
-- [ ] Ne pas appeler channel->removeMember ici (fait par le canal)
+- [x] Effacer le canal de l'ensemble channels
+- [x] Vérifier d'abord si le canal existe dans l'ensemble
+- [x] Ne pas appeler channel->removeMember ici (fait par le canal)
 
 ---
 
@@ -213,10 +213,10 @@ void appendToBuffer(const std::string& data)
 **Objectif**: Ajouter les données reçues au tampon de messages
 
 **TODO**:
-- [ ] Ajouter data à la chaîne buffer
-- [ ] Vérifier le débordement du tampon (max 512 octets par message)
-- [ ] Si buffer > 1024 octets, tronquer ou déconnecter
-- [ ] Pas d'analyse ici, juste accumulation
+- [x] Ajouter data à la chaîne buffer
+- [x] Vérifier le débordement du tampon (max 512 octets par message)
+- [x] Si buffer > 1024 octets, tronquer ou déconnecter
+- [x] Pas d'analyse ici, juste accumulation
 
 ---
 
@@ -228,14 +228,14 @@ std::string extractCommand()
 **Objectif**: Extraire une commande complète du tampon
 
 **TODO**:
-- [ ] Rechercher "\r\n" dans le buffer
-- [ ] Si trouvé:
+- [x] Rechercher "\r\n" dans le buffer
+- [x] Si trouvé:
   - Extraire la sous-chaîne du début jusqu'à "\r\n"
   - Retirer la partie extraite du buffer (y compris "\r\n")
   - Retourner la commande extraite
-- [ ] Si non trouvé:
+- [x] Si non trouvé:
   - Retourner une chaîne vide (message incomplet)
-- [ ] Gérer plusieurs "\r\n" (extraire seulement le premier)
+- [x] Gérer plusieurs "\r\n" (extraire seulement le premier)
 
 ---
 
@@ -247,12 +247,12 @@ void sendMessage(const std::string& msg)
 **Objectif**: Envoyer un message au client
 
 **TODO**:
-- [ ] S'assurer que le message se termine par "\r\n"
-- [ ] Appeler send() avec fd et le message
-- [ ] Gérer les envois partiels (EAGAIN, EWOULDBLOCK)
-- [ ] Considérer une file d'attente de messages pour les gros messages
-- [ ] Gérer les erreurs d'envoi avec précaution
-- [ ] Journaliser les erreurs mais ne pas lancer d'exceptions
+- [x] S'assurer que le message se termine par "\r\n"
+- [x] Appeler send() avec fd et le message
+- [x] Gérer les envois partiels (EAGAIN, EWOULDBLOCK)
+- [x] Considérer une file d'attente de messages pour les gros messages
+- [x] Gérer les erreurs d'envoi avec précaution
+- [x] Journaliser les erreurs mais ne pas lancer d'exceptions
 
 ---
 
