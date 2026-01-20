@@ -194,11 +194,11 @@ Client* getClientByNick(const std::string& nick)
 **Objectif** : Trouver un client par son pseudonyme
 
 **TODO** :
-- [ ] Itérer à travers la map clients
-- [ ] Comparer le pseudonyme de chaque client avec le paramètre
-- [ ] Retourner le pointeur si trouvé
-- [ ] Retourner NULL si non trouvé
-- [ ] Considérer la comparaison insensible à la casse (standard IRC)
+- [x] Itérer à travers la map clients
+- [x] Comparer le pseudonyme de chaque client avec le paramètre
+- [x] Retourner le pointeur si trouvé
+- [x] Retourner NULL si non trouvé
+- [x] Considérer la comparaison insensible à la casse (standard IRC)
 
 ---
 
