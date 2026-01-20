@@ -28,10 +28,10 @@ Command(Server* srv, Client* cli, const std::vector<std::string>& params)
 **Objectif**: Initialiser la commande avec le contexte
 
 **TODO**:
-- [ ] Stocker le pointeur du serveur dans la variable membre
-- [ ] Stocker le pointeur du client dans la variable membre
-- [ ] Copier le vecteur params dans la variable membre
-- [ ] Valider que les pointeurs ne sont pas NULL
+- [x] Stocker le pointeur du serveur dans la variable membre
+- [x] Stocker le pointeur du client dans la variable membre
+- [x] Copier le vecteur params dans la variable membre
+- [x] Valider que les pointeurs ne sont pas NULL
 
 ---
 
@@ -43,9 +43,9 @@ virtual ~Command()
 **Objectif**: Destructeur virtuel pour le polymorphisme
 
 **TODO**:
-- [ ] Rendre le destructeur virtuel (déjà déclaré)
-- [ ] Pas de nettoyage nécessaire (les pointeurs ne sont pas possédés par Command)
-- [ ] S'assurer que les classes dérivées peuvent être supprimées via un pointeur de base
+- [x] Rendre le destructeur virtuel (déjà déclaré)
+- [x] Pas de nettoyage nécessaire (les pointeurs ne sont pas possédés par Command)
+- [x] S'assurer que les classes dérivées peuvent être supprimées via un pointeur de base
 
 ---
 
@@ -57,9 +57,9 @@ virtual void execute() = 0
 **Objectif**: Exécuter la commande (implémenté par les classes dérivées)
 
 **TODO**:
-- [ ] Ceci est virtuel pur - pas d'implémentation dans la classe de base
-- [ ] Chaque classe de commande dérivée doit implémenter ceci
-- [ ] La logique de la commande va ici dans les classes dérivées
+- [x] Ceci est virtuel pur - pas d'implémentation dans la classe de base
+- [x] Chaque classe de commande dérivée doit implémenter ceci
+- [x] La logique de la commande va ici dans les classes dérivées
 
 **Notes d'Implémentation pour les Classes Dérivées**:
 - Vérifier si le client est enregistré (sauf PASS, NICK, USER)
@@ -79,13 +79,13 @@ void sendReply(int code, const std::string& msg)
 **Objectif**: Envoyer une réponse numérique au client
 
 **TODO**:
-- [ ] Formater le message avec le format de réponse numérique IRC
-- [ ] Format: ":servername code clientnick msg\r\n"
-- [ ] Utiliser le nom d'hôte du serveur (peut être codé en dur pour l'instant)
-- [ ] Obtenir le surnom du client depuis l'objet client
-- [ ] Construire la chaîne de réponse complète
-- [ ] Appeler client->sendMessage() avec la réponse formatée
-- [ ] Gérer les clients non enregistrés (utiliser "*" comme surnom)
+- [x] Formater le message avec le format de réponse numérique IRC
+- [x] Format: ":servername code clientnick msg\r\n"
+- [x] Utiliser le nom d'hôte du serveur (peut être codé en dur pour l'instant)
+- [x] Obtenir le surnom du client depuis l'objet client
+- [x] Construire la chaîne de réponse complète
+- [x] Appeler client->sendMessage() avec la réponse formatée
+- [x] Gérer les clients non enregistrés (utiliser "*" comme surnom)
 
 **Format de Réponse**:
 ```
@@ -108,12 +108,12 @@ void sendError(int code, const std::string& msg)
 **Objectif**: Envoyer une réponse d'erreur au client
 
 **TODO**:
-- [ ] Formater le message avec le format d'erreur IRC
-- [ ] Format: ":servername code clientnick :msg\r\n"
-- [ ] Similaire à sendReply mais pour les erreurs
-- [ ] Construire la chaîne d'erreur complète
-- [ ] Appeler client->sendMessage() avec l'erreur formatée
-- [ ] Gérer les clients non enregistrés (utiliser "*" comme surnom)
+- [x] Formater le message avec le format d'erreur IRC
+- [x] Format: ":servername code clientnick :msg\r\n"
+- [x] Similaire à sendReply mais pour les erreurs
+- [x] Construire la chaîne d'erreur complète
+- [x] Appeler client->sendMessage() avec l'erreur formatée
+- [x] Gérer les clients non enregistrés (utiliser "*" comme surnom)
 
 **Format d'Erreur**:
 ```
@@ -167,13 +167,13 @@ void sendError(int code, const std::string& msg)
 
 ## Liste de Vérification pour les Tests
 
-- [ ] Le constructeur stocke tous les paramètres correctement
-- [ ] Le destructeur est virtuel (tester la suppression polymorphe)
-- [ ] sendReply formate les messages correctement
-- [ ] sendError formate les erreurs correctement
-- [ ] Le format de réponse correspond au standard IRC
-- [ ] Les messages se terminent par \r\n
-- [ ] Les clients non enregistrés sont gérés (surnom = *)
+- [x] Le constructeur stocke tous les paramètres correctement
+- [x] Le destructeur est virtuel (tester la suppression polymorphe)
+- [x] sendReply formate les messages correctement
+- [x] sendError formate les erreurs correctement
+- [x] Le format de réponse correspond au standard IRC
+- [x] Les messages se terminent par \r\n
+- [x] Les clients non enregistrés sont gérés (surnom = *)
 
 ---
 

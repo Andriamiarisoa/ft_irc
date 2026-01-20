@@ -1,3 +1,5 @@
 *.o
 ircserv
 */commit.md
+tests/test_client
+tests/test_command

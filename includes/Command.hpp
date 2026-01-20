@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <stdexcept>
 
 class Server;
 class Client;
@@ -13,6 +14,8 @@ protected:
     Client* client;
     std::vector<std::string> params;
     
+    std::string formatCode(int code);
+    std::string getClientNick();
     void sendReply(int code, const std::string& msg);
     void sendError(int code, const std::string& msg);
 
