@@ -210,12 +210,12 @@ Channel* getOrCreateChannel(const std::string& name)
 **Objectif** : Obtenir un canal existant ou en créer un nouveau
 
 **TODO** :
-- [ ] Rechercher le canal dans la map channels
-- [ ] Si trouvé : retourner le pointeur du canal existant
-- [ ] Si non trouvé : créer un nouvel objet Channel avec le nom
-- [ ] Ajouter le nouveau canal à la map channels
-- [ ] Retourner le pointeur du nouveau canal
-- [ ] Valider le format du nom du canal (#channel)
+- [x] Rechercher le canal dans la map channels
+- [x] Si trouvé : retourner le pointeur du canal existant
+- [x] Si non trouvé : créer un nouvel objet Channel avec le nom
+- [x] Ajouter le nouveau canal à la map channels
+- [x] Retourner le pointeur du nouveau canal
+- [x] Valider le format du nom du canal (#channel)
 
 ---
 

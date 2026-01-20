@@ -1,15 +1,9 @@
 *.o
 ircserv
 */commit.md
-<<<<<<< HEAD
-<<<<<<< HEAD
 tests/test_client
 tests/test_command
 tests/test_messageparser
 tests/test_nickcommand
-=======
 srcs/mainServer.cpp
->>>>>>> eff55bc (feat: Start function implemented for main loop, with signal handler for graceful exit)
-=======
 src/mainServer.cpp
->>>>>>> 1beca00 (feat: Stop function implemented in case to exit gracefully in case of error or signal)

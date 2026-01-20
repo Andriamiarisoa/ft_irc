@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:18 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/20 14:04:35 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/20 15:54:00 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 #include <fcntl.h>
 #include <netinet/in.h> 
 #include <arpa/inet.h> 
+#include "../includes/Command.hpp"
 
 volatile sig_atomic_t g_running = 1;
 
@@ -373,7 +374,9 @@ Channel* Server::getOrCreateChannel(const std::string& name) {
     return (newChannel);
 }
 
+
+//TO_DO : implement this func, function to actually call the execute() 
+/*
 void Server::executeCommand(Client* client, const std::string& cmd) {
-    (void)client;
-    (void)cmd;
 }
+*/
