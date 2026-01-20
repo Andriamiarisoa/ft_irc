@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:18 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/19 22:27:55 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/20 05:16:48 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ void Server::stop() {
         else
             std::cout << "Shutdown message not sent to fd:   " <<  clientFd  << std::endl;
     }
+    sleep (1);
     for (it = clients.begin() ; it != clients.end() ; it++) {
         close(it->first);
     }
@@ -190,7 +191,7 @@ void Server::handleSelect() {
         return;
     }
     else if (selectResult == 0) {
-        std::cout << "Time out: no activity on the server" << std::endl;
+        std::cout << "." << std::flush;
         return;
     }
     else {
@@ -218,7 +219,7 @@ void Server::acceptNewClient() {
     }
     
     char clientIP[INET_ADDRSTRLEN];
-    inet_ntop(AF_INET, &clientAddr.sin_addr, clientIP, INET6_ADDRSTRLEN);
+    inet_ntop(AF_INET, &clientAddr.sin_addr, clientIP, INET_ADDRSTRLEN);
     
     int clientPort = ntohs(clientAddr.sin_port);
     
@@ -227,7 +228,8 @@ void Server::acceptNewClient() {
     
     Client* newClient = new Client(clientFd);
     clients[clientFd] = newClient;
-    std::cout << "New client connected succesfully, FD: " << clientFd << "from: " << clientIP << ":" << clientPort << std::endl;
+    std::cout << std::endl;
+    std::cout << "New client connected succesfully, FD: " << clientFd << " from: " << clientIP << " : " << clientPort << std::endl;
 
     std::string welcome = ":Server ft_ic : welcome tho the IRC Server\r\n";
     send (clientFd, welcome.c_str(), welcome.length(), 0);
