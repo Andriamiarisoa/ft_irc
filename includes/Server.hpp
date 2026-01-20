@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:30 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/20 13:39:22 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/20 16:15:57 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,15 @@ private:
     void handleClientMessage(int fd);
     void disconnectClient(int fd);
     Client* getClientByNick(const std::string& nick);
-    Channel* getOrCreateChannel(const std::string& name);
     void executeCommand(Client* client, const std::string& cmd);
-
-public:
+    
+    public:
     Server(int port, const std::string& password);
     ~Server();
     
     void start();
     void stop();
+    Channel* getOrCreateChannel(const std::string& name);
     std::string toLower(const std::string& str);
     bool    isValidName(const std::string& src) ;
 };

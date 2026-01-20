@@ -2,3 +2,4 @@
 ircserv
 */commit.md
 src/mainServer.cpp
+tests/
