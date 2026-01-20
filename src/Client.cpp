@@ -7,6 +7,8 @@ Client::Client(int fd)
 }
 
 Client::~Client() {
+    channels.clear();
+    buffer.clear();
 }
 
 int Client::getFd() const {
@@ -30,22 +32,36 @@ bool Client::isRegistered() const {
 }
 
 void Client::setNickname(const std::string& nick) {
-    (void)nick;
+    // TODO: Validate nickname according to IRC rules
+    this->nickname = nick;
+    // TODO: Check if already registered and send appropriate response to Channel
+    if (authenticated && !nickname.empty() && !username.empty()) {
+        registered = true;
+    }
 }
 
 void Client::setUsername(const std::string& user) {
-    (void)user;
+    this->username = user;
+    if (authenticated && !nickname.empty() && !username.empty()) {
+        registered = true;
+        // TODO: Send welcome message to client
+    }
 }
 
 void Client::authenticate() {
+    this->authenticated = true;
 }
 
 void Client::addToChannel(Channel* channel) {
-    (void)channel;
+    if (!channel)
+        return;
+    channels.insert(channel);
 }
 
 void Client::removeFromChannel(Channel* channel) {
-    (void)channel;
+    if (!channel || channels.find(channel) == channels.end())
+        return;
+    channels.erase(channel);
 }
 
 void Client::appendToBuffer(const std::string& data) {
