@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:18 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/20 08:29:10 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/20 12:51:03 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 #include "../includes/Channel.hpp"
 #include <bits/types/struct_timeval.h>
 #include <csignal>
+#include <cerrno>
+#include <ctime>
+#include <vector>
 #include <iostream>
 #include <sys/socket.h>
 #include <fcntl.h>
@@ -186,12 +189,27 @@ void Server::handleSelect() {
     int selectResult = select(maxFd + 1, &readfds, NULL, NULL, &timeout);
 
     if (selectResult == -1) {
+        if (errno == EINTR)
+            return;
         std::cerr << "Error: select had an unexcepted behavior, quitting the server" << std::endl;
         running = false;
         return;
     }
     else if (selectResult == 0) {
-        std::cout << "." << std::flush;
+        static int animFrame = 0;
+        static time_t lastTime = 0;
+        time_t now = time(NULL);
+        
+        const char* spinner[] = {"⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"};
+        const int spinnerSize = 10;
+        
+        if (now != lastTime) {
+            std::cout << "\r\033[K" << spinner[animFrame % spinnerSize] 
+                      << " Waiting for connections... [" << clients.size() 
+                      << " client(s) connected]" << std::flush;
+            animFrame++;
+            lastTime = now;
+        }
         return;
     }
     else {
@@ -199,10 +217,17 @@ void Server::handleSelect() {
         {
             acceptNewClient();
         }
+        std::vector<int> readyFds;
         for (it = clients.begin() ; it != clients.end() ; it++) {
             int fd = it->first;
-        if (FD_ISSET(fd, &readfds)) {
-            handleClientMessage(fd);
+            if (FD_ISSET(fd, &readfds)) {
+                readyFds.push_back(fd);
+            }
+        }
+        for (size_t i = 0; i < readyFds.size(); i++) {
+            int fd = readyFds[i];
+            if (clients.find(fd) != clients.end()) {
+                handleClientMessage(fd);
             }
         }        
     }
@@ -278,10 +303,19 @@ void Server::disconnectClient(int fd) {
         nickname = "Unkown";
 
     std::string quitMess = ": " + nickname + " QUIT :Client disconnected\r\n";
-    
-    // std::set<Channel*> clientChannels = client.getChannels();
-    // for (std::)
-    
+
+    std::map<std::string, Channel*>::iterator itc;
+    for (itc = channels.begin() ; itc != channels.end() ; itc++) {
+        Channel* channel = itc->second;
+        if (channel->isMember(client)) {
+            channel->broadcast(quitMess, client);
+            channel->removeMember(client);
+        }
+    }
+    close (fd);
+    delete client;
+    clients.erase(it);
+    std::cout << "Client with FD: " << fd << " , [nickname] : " << nickname << " disconnected" << std::endl;
 }
 
 Client* Server::getClientByNick(const std::string& nick) {
