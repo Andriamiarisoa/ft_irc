@@ -20,7 +20,6 @@ La classe `Server` est le cœur de l'implémentation du serveur IRC. Elle gère 
 ### Gestion des Clients et Canaux
 - `std::map<int, Client*> clients` - Carte de fd → pointeur Client
 - `std::map<std::string, Channel*> channels` - Carte de nom de canal → pointeur Channel
-- `std::vector<pollfd> fds` - Descripteurs de fichiers poll pour le multiplexage
 
 ---
 
@@ -34,12 +33,11 @@ Server(int port, const std::string& password)
 **Objectif** : Initialiser le serveur avec le port et le mot de passe
 
 **TODO** :
-- [ ] Stocker le port et le mot de passe dans les variables membres
-- [ ] Initialiser serverSocket à -1
-- [ ] Définir l'indicateur running à false
-- [ ] Initialiser la map clients vide
-- [ ] Initialiser la map channels vide
-- [ ] Initialiser le vector fds vide
+- [x] Stocker le port et le mot de passe dans les variables membres
+- [x] Initialiser serverSocket à -1
+- [x] Définir l'indicateur running à false
+- [x] Initialiser la map clients vide
+- [x] Initialiser la map channels vide
 
 ---
 
@@ -51,11 +49,11 @@ Server(int port, const std::string& password)
 **Objectif** : Nettoyer toutes les ressources
 
 **TODO** :
-- [ ] Fermer toutes les connexions client (itérer à travers la map clients)
-- [ ] Supprimer tous les objets Client (libérer la mémoire)
-- [ ] Supprimer tous les objets Channel (libérer la mémoire)
-- [ ] Fermer le socket serveur s'il est ouvert (serverSocket >= 0)
-- [ ] Vider tous les conteneurs (clients, channels, fds)
+- [x] Fermer toutes les connexions client (itérer à travers la map clients)
+- [x] Supprimer tous les objets Client (libérer la mémoire)
+- [x] Supprimer tous les objets Channel (libérer la mémoire)
+- [x] Fermer le socket serveur s'il est ouvert (serverSocket >= 0)
+- [x] Vider tous les conteneurs (clients, channels)
 
 ---
 
@@ -67,12 +65,12 @@ void start()
 **Objectif** : Démarrer le serveur et entrer dans la boucle d'événements principale
 
 **TODO** :
-- [ ] Appeler setupSocket() pour initialiser le socket serveur
-- [ ] Définir l'indicateur running à true
-- [ ] Entrer dans la boucle principale while(running)
-- [ ] Appeler handlePoll() à chaque itération
-- [ ] Gérer Ctrl+C proprement (considérer les gestionnaires de signaux)
-- [ ] Appeler stop() à la sortie
+- [x] Appeler setupSocket() pour initialiser le socket serveur
+- [x] Définir l'indicateur running à true
+- [x] Entrer dans la boucle principale while(running)
+- [x] Appeler handleSelect() à chaque itération
+- [x] Gérer Ctrl+C proprement (considérer les gestionnaires de signaux)
+- [x] Appeler stop() à la sortie
 
 ---
 
@@ -84,11 +82,11 @@ void stop()
 **Objectif** : Arrêter le serveur proprement
 
 **TODO** :
-- [ ] Définir l'indicateur running à false
-- [ ] Envoyer un message de déconnexion à tous les clients connectés
-- [ ] Fermer toutes les connexions client
-- [ ] Fermer le socket serveur
-- [ ] Enregistrer un message d'arrêt
+- [x] Définir l'indicateur running à false
+- [x] Envoyer un message de déconnexion à tous les clients connectés
+- [x] Fermer toutes les connexions client
+- [x] Fermer le socket serveur
+- [x] Enregistrer un message d'arrêt
 
 ---
 
@@ -100,34 +98,36 @@ void setupSocket()
 **Objectif** : Créer et configurer le socket serveur
 
 **TODO** :
-- [ ] Créer le socket avec socket(AF_INET, SOCK_STREAM, 0)
-- [ ] Vérifier les erreurs de création de socket
-- [ ] Définir l'option de socket SO_REUSEADDR avec setsockopt()
-- [ ] Définir le socket en mode non-bloquant avec fcntl()
-- [ ] Créer la structure sockaddr_in avec le port et INADDR_ANY
-- [ ] Lier le socket à l'adresse avec bind()
-- [ ] Vérifier les erreurs de bind (port déjà utilisé, etc.)
-- [ ] Commencer l'écoute avec listen() (backlog = 10)
-- [ ] Ajouter le socket serveur au vector fds pour poll()
-- [ ] Enregistrer un message de succès avec le numéro de port
+- [x] Créer le socket avec socket(AF_INET, SOCK_STREAM, 0)
+- [x] Vérifier les erreurs de création de socket
+- [x] Définir l'option de socket SO_REUSEADDR avec setsockopt()
+- [x] Définir le socket en mode non-bloquant avec fcntl()
+- [x] Créer la structure sockaddr_in avec le port et INADDR_ANY
+- [x] Lier le socket à l'adresse avec bind()
+- [x] Vérifier les erreurs de bind (port déjà utilisé, etc.)
+- [x] Commencer l'écoute avec listen() (backlog = 10)
+- [x] Enregistrer un message de succès avec le numéro de port
 
 ---
 
-### handlePoll()
+### handleSelect()
 ```cpp
-void handlePoll()
+void handleSelect()
 ```
 
-**Objectif** : Gérer les événements I/O en utilisant poll()
+**Objectif** : Gérer les événements I/O en utilisant select()
 
 **TODO** :
-- [ ] Appeler poll() avec le vector fds et le timeout
-- [ ] Vérifier la valeur de retour de poll() pour les erreurs
-- [ ] Itérer à travers tous les fds
-- [ ] Si fd est le socket serveur et POLLIN : appeler acceptNewClient()
-- [ ] Si fd est un socket client et POLLIN : appeler handleClientMessage(fd)
-- [ ] Si fd a POLLHUP ou POLLERR : appeler disconnectClient(fd)
-- [ ] Gérer les cas limites (EINTR, lectures partielles)
+- [x] Créer et initialiser fd_set readfds avec FD_ZERO()
+- [x] Ajouter le socket serveur avec FD_SET(serverSocket, &readfds)
+- [x] Itérer à travers tous les clients et les ajouter avec FD_SET()
+- [x] Calculer max_fd (le plus grand descripteur de fichier)
+- [x] Définir un timeout (struct timeval) pour éviter un blocage infini
+- [x] Appeler select(max_fd + 1, &readfds, NULL, NULL, &timeout)
+- [x] Vérifier la valeur de retour de select() pour les erreurs
+- [x] Si FD_ISSET(serverSocket, &readfds) : appeler acceptNewClient()
+- [x] Pour chaque client, si FD_ISSET(client_fd, &readfds) : appeler handleClientMessage(fd)
+- [x] Gérer les cas limites (EINTR, lectures partielles)
 
 ---
 
@@ -139,14 +139,13 @@ void acceptNewClient()
 **Objectif** : Accepter une nouvelle connexion client
 
 **TODO** :
-- [ ] Appeler accept() sur le socket serveur
-- [ ] Vérifier les erreurs d'accept
-- [ ] Définir le nouveau socket en mode non-bloquant avec fcntl()
-- [ ] Créer un nouvel objet Client avec fd
-- [ ] Ajouter le client à la map clients (clé = fd)
-- [ ] Ajouter fd au vector fds pour poll()
-- [ ] Enregistrer la nouvelle connexion (adresse IP si possible)
-- [ ] Envoyer un message de bienvenue au client
+- [x] Appeler accept() sur le socket serveur
+- [x] Vérifier les erreurs d'accept
+- [x] Définir le nouveau socket en mode non-bloquant avec fcntl()
+- [x] Créer un nouvel objet Client avec fd
+- [x] Ajouter le client à la map clients (clé = fd)
+- [x] Enregistrer la nouvelle connexion (adresse IP si possible)
+- [x] Envoyer un message de bienvenue au client
 
 ---
 
@@ -158,14 +157,14 @@ void handleClientMessage(int fd)
 **Objectif** : Lire et traiter les messages du client
 
 **TODO** :
-- [ ] Trouver le client dans la map clients par fd
-- [ ] Lire les données du socket avec recv()
-- [ ] Gérer les erreurs de recv (EAGAIN, EWOULDBLOCK, erreurs)
-- [ ] Si recv retourne 0 : client déconnecté, appeler disconnectClient()
-- [ ] Ajouter les données reçues au buffer du client
-- [ ] Extraire les commandes complètes (chercher \r\n)
-- [ ] Pour chaque commande complète : appeler executeCommand()
-- [ ] Gérer les messages partiels (garder dans le buffer)
+- [x] Trouver le client dans la map clients par fd
+- [x] Lire les données du socket avec recv()
+- [x] Gérer les erreurs de recv (EAGAIN, EWOULDBLOCK, erreurs)
+- [x] Si recv retourne 0 : client déconnecté, appeler disconnectClient()
+- [x] Ajouter les données reçues au buffer du client
+- [x] Extraire les commandes complètes (chercher \r\n)
+- [x] Pour chaque commande complète : appeler executeCommand()
+- [x] Gérer les messages partiels (garder dans le buffer)
 
 ---
 
@@ -177,14 +176,13 @@ void disconnectClient(int fd)
 **Objectif** : Déconnecter le client et nettoyer
 
 **TODO** :
-- [ ] Trouver le client dans la map clients
-- [ ] Retirer le client de tous les canaux (itérer les canaux du client)
-- [ ] Diffuser le message QUIT aux canaux
-- [ ] Retirer fd du vector fds
-- [ ] Fermer le socket avec close(fd)
-- [ ] Supprimer l'objet Client
-- [ ] Retirer de la map clients
-- [ ] Enregistrer la déconnexion
+- [x] Trouver le client dans la map clients
+- [x] Retirer le client de tous les canaux (itérer les canaux du client)
+- [x] Diffuser le message QUIT aux canaux
+- [x] Fermer le socket avec close(fd)
+- [x] Supprimer l'objet Client
+- [x] Retirer de la map clients
+- [x] Enregistrer la déconnexion
 
 ---
 
@@ -196,11 +194,11 @@ Client* getClientByNick(const std::string& nick)
 **Objectif** : Trouver un client par son pseudonyme
 
 **TODO** :
-- [ ] Itérer à travers la map clients
-- [ ] Comparer le pseudonyme de chaque client avec le paramètre
-- [ ] Retourner le pointeur si trouvé
-- [ ] Retourner NULL si non trouvé
-- [ ] Considérer la comparaison insensible à la casse (standard IRC)
+- [x] Itérer à travers la map clients
+- [x] Comparer le pseudonyme de chaque client avec le paramètre
+- [x] Retourner le pointeur si trouvé
+- [x] Retourner NULL si non trouvé
+- [x] Considérer la comparaison insensible à la casse (standard IRC)
 
 ---
 
@@ -212,12 +210,12 @@ Channel* getOrCreateChannel(const std::string& name)
 **Objectif** : Obtenir un canal existant ou en créer un nouveau
 
 **TODO** :
-- [ ] Rechercher le canal dans la map channels
-- [ ] Si trouvé : retourner le pointeur du canal existant
-- [ ] Si non trouvé : créer un nouvel objet Channel avec le nom
-- [ ] Ajouter le nouveau canal à la map channels
-- [ ] Retourner le pointeur du nouveau canal
-- [ ] Valider le format du nom du canal (#channel)
+- [x] Rechercher le canal dans la map channels
+- [x] Si trouvé : retourner le pointeur du canal existant
+- [x] Si non trouvé : créer un nouvel objet Channel avec le nom
+- [x] Ajouter le nouveau canal à la map channels
+- [x] Retourner le pointeur du nouveau canal
+- [x] Valider le format du nom du canal (#channel)
 
 ---
 
@@ -248,7 +246,7 @@ void executeCommand(Client* client, const std::string& cmd)
 
 ### Phase 2 - Gestion des Connexions
 5. acceptNewClient()
-6. handlePoll() - polling basique
+6. handleSelect() - select basique
 7. disconnectClient()
 
 ### Phase 3 - Traitement des Messages
@@ -270,7 +268,7 @@ void executeCommand(Client* client, const std::string& cmd)
 - [ ] Le serveur ne plante pas sur une entrée mal formée
 - [ ] Fuites mémoire vérifiées avec valgrind
 - [ ] Le serveur répond correctement à Ctrl+C
-- [ ] Le timeout de poll ne cause pas une utilisation CPU à 100%
+- [ ] Le timeout de select ne cause pas une utilisation CPU à 100%
 
 ---
 
