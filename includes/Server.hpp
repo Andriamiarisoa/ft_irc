@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:30 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/19 19:01:15 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/20 13:20:16 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ public:
     
     void start();
     void stop();
+    std::string toLower(const std::string& str);
 };
 
 #endif
