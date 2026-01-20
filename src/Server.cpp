@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:18 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/20 13:27:47 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/20 14:04:35 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -338,9 +338,39 @@ Client* Server::getClientByNick(const std::string& nick) {
     return (NULL);
 }
 
+bool    Server::isValidName(const std::string& src) {
+    if (src.length() < 2 || src.length() > 50) {
+        std::cerr << "Error: the channel name must be between 2 and 50 character" << std::endl;
+        return (false);
+    }
+    if (src[0] != '#' && src[0] != '&') {
+        std::cerr << "Error: the channel name must with # or &" << std::endl;
+        return (false);
+    }
+    for (size_t i = 0 ; i < src.length() ; i++) {
+        if (src[i] == ' ' || src[i] == ',' || src[i] == '\x07' || (src[i] >= 0 && src[i] <= 31)) {
+            std::cerr << "Error: the channel name must not contain character such as: [space: ], [control character: ASCII 0-31], [bell character: \x07 ], [comma: ,]" << std::endl;
+            return (false);
+        }
+    }
+    return (true);
+}
+
 Channel* Server::getOrCreateChannel(const std::string& name) {
-    (void)name;
-    return NULL;
+    std::map<std::string, Channel*>::iterator it;
+    std::string lowerName = toLower(name);
+    for (it = channels.begin() ; it != channels.end() ; it++) {
+        Channel* channel = it->second;
+        if (toLower(channel->getName()) ==  lowerName) {
+            return (channel);
+        }
+    }
+    if (isValidName(lowerName) == false)  {
+        return (NULL);
+    }
+    Channel* newChannel = new Channel(name);
+    channels[lowerName] = newChannel;
+    return (newChannel);
 }
 
 void Server::executeCommand(Client* client, const std::string& cmd) {

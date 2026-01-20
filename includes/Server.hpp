@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:30 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/22 09:27:33 by marvin           ###   ########.fr       */
+/*   Updated: 2026/01/22 09:27:50 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,11 @@ public:
     Client* getClientByNick(const std::string& nick);
 =======
     std::string toLower(const std::string& str);
+<<<<<<< HEAD
 >>>>>>> 0cf348e (feat: function to find the client by their nickname implemented)
+=======
+    bool    isValidName(const std::string& src) ;
+>>>>>>> 80e61e2 (feat: search and creation of channel implemented)
 };
 
 #endif
