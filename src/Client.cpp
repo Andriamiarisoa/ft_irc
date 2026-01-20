@@ -1,6 +1,10 @@
 
 #include "../includes/Client.hpp"
 #include "../includes/Channel.hpp"
+#include <sys/socket.h>
+#include <cerrno>
+#include <cstring>
+#include <iostream>
 
 Client::Client(int fd) 
     : fd(fd), authenticated(false), registered(false) {
@@ -32,7 +36,16 @@ bool Client::isRegistered() const {
 }
 
 void Client::setNickname(const std::string& nick) {
-    // TODO: Validate nickname according to IRC rules
+    if (nick.empty() || nick.length() > 9 || !std::isalpha(nick[0])) {
+        return;
+    }
+    // RFC 1459: caractères autorisés après le premier: lettres, chiffres, -, [, ], \, `, ^, {, }
+    const std::string specialChars = "-[]\\`^{}";
+    for (size_t i = 1; i < nick.length(); ++i) {
+        if (!std::isalnum(nick[i]) && specialChars.find(nick[i]) == std::string::npos) {
+            return;
+        }
+    }
     this->nickname = nick;
     // TODO: Check if already registered and send appropriate response to Channel
     if (authenticated && !nickname.empty() && !username.empty()) {
@@ -50,6 +63,9 @@ void Client::setUsername(const std::string& user) {
 
 void Client::authenticate() {
     this->authenticated = true;
+    if (authenticated && !nickname.empty() && !username.empty()) {
+        registered = true;
+    }
 }
 
 void Client::addToChannel(Channel* channel) {
@@ -65,13 +81,63 @@ void Client::removeFromChannel(Channel* channel) {
 }
 
 void Client::appendToBuffer(const std::string& data) {
-    (void)data;
+    const size_t MAX_BUFFER_SIZE = 1024;
+    
+    if (buffer.length() + data.length() > MAX_BUFFER_SIZE) {
+        buffer.clear();
+        return;
+    }
+    buffer.append(data);
 }
 
 std::string Client::extractCommand() {
-    return "";
+    size_t pos = buffer.find("\r\n");
+    
+    if (pos == std::string::npos) {
+        return "";
+    }
+    
+    std::string command = buffer.substr(0, pos);
+    buffer.erase(0, pos + 2);
+    
+    return command;
 }
 
 void Client::sendMessage(const std::string& msg) {
-    (void)msg;
+    if (msg.empty())
+        return;
+
+    std::string toSend = msg;
+    
+    // S'assurer que le message se termine par "\r\n"
+    if (toSend.length() < 2 || toSend.substr(toSend.length() - 2) != "\r\n") {
+        toSend += "\r\n";
+    }
+
+    size_t totalSent = 0;
+    size_t remaining = toSend.length();
+
+    int retryCount = 0;
+    const int MAX_RETRIES = 10;
+    
+    while (totalSent < toSend.length()) {
+        ssize_t sent = send(fd, toSend.c_str() + totalSent, remaining, 0);
+        
+        if (sent < 0) {
+            // Gérer les envois partiels (EAGAIN, EWOULDBLOCK)
+            if (errno == EAGAIN || errno == EWOULDBLOCK) {
+                if (++retryCount >= MAX_RETRIES) {
+                    std::cerr << "Error: max retries reached for client " << fd << std::endl;
+                    return;
+                }
+                continue;
+            }
+            // Journaliser les erreurs mais ne pas lancer d'exceptions
+            std::cerr << "Error sending message to client " << fd << ": " << strerror(errno) << std::endl;
+            return;
+        }
+        
+        totalSent += sent;
+        remaining -= sent;
+    }
 }

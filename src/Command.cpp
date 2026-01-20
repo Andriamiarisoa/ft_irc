@@ -13,19 +13,30 @@ Command::Command(Server* srv, Client* cli, const std::vector<std::string>& param
 Command::~Command() {
 }
 
+std::string Command::formatCode(int code) {
+    std::ostringstream oss;
+    if (code < 10)
+        oss << "00" << code;
+    else if (code < 100)
+        oss << "0" << code;
+    else
+        oss << code;
+    return oss.str();
+}
+
+std::string Command::getClientNick() {
+    if (client->isRegistered() && !client->getNickname().empty())
+        return client->getNickname();
+    return "*";
+}
+
 void Command::sendReply(int code, const std::string& msg) {
     std::ostringstream  oss;
-    std::string         hostname;
-    std::string         nickname;
+    std::string         hostname = "irc.example.com";
 
-    hostname = "irc.example.com";
-    if (client->isRegistered())
-        nickname = client->getNickname();
-    else
-        nickname = "*";
     oss << ":" << hostname 
-        << " " << code 
-        << " " << nickname 
+        << " " << formatCode(code) 
+        << " " << getClientNick() 
         << " " << msg 
         << "\r\n";
     client->sendMessage(oss.str());
@@ -33,18 +44,12 @@ void Command::sendReply(int code, const std::string& msg) {
 
 void Command::sendError(int code, const std::string& msg) {
     std::ostringstream  oss;
-    std::string         hostname;
-    std::string         nickname;
+    std::string         hostname = "irc.example.com";
 
-    hostname = "irc.example.com";
-    if (client->isRegistered())
-        nickname = client->getNickname();
-    else
-        nickname = "*";
     oss << ":" << hostname 
-        << " " << code 
-        << " " << nickname 
-        << " " << msg 
+        << " " << formatCode(code) 
+        << " " << getClientNick() 
+        << " :" << msg 
         << "\r\n";
     client->sendMessage(oss.str());
 }
