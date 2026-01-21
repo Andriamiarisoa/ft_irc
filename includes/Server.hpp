@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:30 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/22 09:31:01 by marvin           ###   ########.fr       */
+/*   Updated: 2026/01/22 09:33:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ private:
     Channel* getOrCreateChannel(const std::string& name);
     std::string toLower(const std::string& str);
     bool    isValidName(const std::string& src) ;
+    Client* getClientByNick(const std::string& nick);
 };
 
 #endif
