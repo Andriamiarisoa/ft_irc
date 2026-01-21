@@ -2,6 +2,18 @@
 #include "../includes/Command.hpp"
 #include "../includes/Server.hpp"
 #include "../includes/Client.hpp"
+#include "../includes/InviteCommand.hpp"
+#include "../includes/JoinCommand.hpp"
+#include "../includes/KickCommand.hpp"
+#include "../includes/ModeCommand.hpp"
+#include "../includes/NickCommand.hpp"
+#include "../includes/PartCommand.hpp"
+#include "../includes/PassCommand.hpp"
+#include "../includes/PrivmsgCommand.hpp"
+#include "../includes/QuitCommand.hpp"
+#include "../includes/TopicCommand.hpp"
+#include "../includes/UserCommand.hpp"
+#include <iostream>
 #include <string>
 #include <exception>
 
