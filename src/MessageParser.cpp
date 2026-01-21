@@ -17,7 +17,7 @@
 #include <string>
 #include <exception>
 
-Command* createCommand(const std::string& cmd, Server* srv, Client* cli,
+Command* MessageParser::createCommand(const std::string& cmd, Server* srv, Client* cli,
         const std::vector<std::string>& params)
 {
     if (params.empty())
@@ -79,7 +79,7 @@ std::string MessageParser::extractPrefix(const std::string& line) {
     return line.substr(0, pos);
 }
 
-std::string removePrefix(const std::string& line) {
+std::string MessageParser::removePrefix(const std::string& line) {
     std::string prefix;
     std::string cmdLine;
     size_t      pos;
@@ -103,7 +103,7 @@ std::vector<std::string> MessageParser::splitParams(const std::string& str) {
     std::string                 cmdLine;
     size_t                      pos;
 
-    cmdLine = removePrefix(str);
+    cmdLine = MessageParser::removePrefix(str);
     if (cmdLine.empty())
         return std::vector<std::string>();
     while (!cmdLine.empty() && cmdLine[0] != ':')
@@ -130,7 +130,7 @@ Command* MessageParser::parse(const std::string& line, Server* srv, Client* cli)
     std::vector<std::string>    params;
     std::string                 cmd;
 
-    params = splitParams(line);
+    params = MessageParser::splitParams(line);
     if (params.empty())
     {
         std::cerr << "Invalid command" << std::endl;
@@ -140,5 +140,5 @@ Command* MessageParser::parse(const std::string& line, Server* srv, Client* cli)
     params.erase(params.begin());
     for (int i = 0; i < cmd.size(); i++)
         cmd[i] = std::toupper(cmd[i]);
-    return createCommand(cmd, srv, cli, params);
+    return MessageParser::createCommand(cmd, srv, cli, params);
 }
