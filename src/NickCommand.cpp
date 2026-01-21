@@ -18,11 +18,14 @@ void NickCommand::execute() {
         sendError(464, ":You must send PASS first");
         return;
     }
-    if (params.empty()) {
+    if (params.empty() || params.size() < 1 || params[0].empty()) {
         sendError(431, ":No nickname given");
         return;
     }
-    //TODO: Vérifier si le surnom est déjà utilisé par un autre client
+    if (server->getClientByNick(newNick) != NULL && newNick != currentNick) {
+        sendError(433, newNick + " :Nickname is already in use");
+        return;
+    }
     client->setNickname(newNick);
     if (client->getNickname() != newNick) {
         sendError(432, newNick + " :Erroneous nickname");
