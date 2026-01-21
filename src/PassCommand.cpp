@@ -8,4 +8,11 @@ PassCommand::~PassCommand() {
 }
 
 void PassCommand::execute() {
+    if (params.empty()) {
+        sendError(462, "PASS :Not enough parameters");
+        return;
+    }
+    // if (client->isRegistered) {
+
+    // }
 }
