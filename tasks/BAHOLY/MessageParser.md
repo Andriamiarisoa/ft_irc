@@ -19,12 +19,12 @@ static Command* parse(const std::string& line, Server* srv, Client* cli)
 **Objectif**: Analyser un message IRC et créer l'objet Command correspondant
 
 **TODO**:
-- [ ] Extraire le préfixe s'il est présent (commence par :)
-- [ ] Extraire le mot de commande (premier mot après le préfixe)
-- [ ] Extraire les paramètres (mots restants)
-- [ ] Convertir la commande en majuscules pour la comparaison
-- [ ] Créer et retourner l'objet Command approprié basé sur le mot de commande
-- [ ] Retourner NULL pour les commandes inconnues/invalides
+- [x] Extraire le préfixe s'il est présent (commence par :)
+- [x] Extraire le mot de commande (premier mot après le préfixe)
+- [x] Extraire les paramètres (mots restants)
+- [x] Convertir la commande en majuscules pour la comparaison
+- [x] Créer et retourner l'objet Command approprié basé sur le mot de commande
+- [x] Retourner NULL pour les commandes inconnues/invalides
 
 **Étapes d'Analyse**:
 1. Vérifier si la ligne commence par ':' (préfixe)
@@ -68,13 +68,13 @@ static std::vector<std::string> splitParams(const std::string& str)
 **Objectif**: Diviser le message en paramètres
 
 **TODO**:
-- [ ] Initialiser un vecteur vide pour les résultats
-- [ ] Itérer à travers la chaîne
-- [ ] Diviser par les caractères d'espace
-- [ ] Gérer le paramètre final (commence par ':')
+- [x] Initialiser un vecteur vide pour les résultats
+- [x] Itérer à travers la chaîne
+- [x] Diviser par les caractères d'espace
+- [x] Gérer le paramètre final (commence par ':')
   - Tout après ':' est un seul paramètre (espaces inclus)
-- [ ] Ignorer les espaces consécutifs
-- [ ] Retourner le vecteur de paramètres
+- [x] Ignorer les espaces consécutifs
+- [x] Retourner le vecteur de paramètres
 
 **Exemples**:
 ```
@@ -100,10 +100,10 @@ static std::string extractPrefix(const std::string& line)
 **Objectif**: Extraire le préfixe d'un message IRC
 
 **TODO**:
-- [ ] Vérifier si la ligne commence par ':'
-- [ ] Si oui: trouver le premier espace
-- [ ] Retourner la sous-chaîne de 1 à la position de l'espace
-- [ ] Si pas de préfixe: retourner une chaîne vide
+- [x] Vérifier si la ligne commence par ':'
+- [x] Si oui: trouver le premier espace
+- [x] Retourner la sous-chaîne de 1 à la position de l'espace
+- [x] Si pas de préfixe: retourner une chaîne vide
 
 **Format du Préfixe**:
 - Serveur: `:irc.server`
