@@ -4,3 +4,4 @@ ircserv
 tests/test_client
 tests/test_command
 tests/test_messageparser
+tests/test_nickcommand
