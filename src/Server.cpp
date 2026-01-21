@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:18 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/20 16:38:12 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/21 18:43:05 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include "../includes/Server.hpp"
 #include "../includes/Client.hpp"
 #include "../includes/Channel.hpp"
+#include "../includes/MessageParser.hpp"
+#include "../includes/Command.hpp"
 #include <bits/types/struct_timeval.h>
 #include <csignal>
 #include <cerrno>
@@ -391,11 +393,12 @@ Channel* Server::getOrCreateChannel(const std::string& name) {
     return (newChannel);
 }
 
-
-//TO_DO : implement this func, function to actually call the execute() 
-
 void Server::executeCommand(Client* client, const std::string& cmd) {
-    (void)client;
-    (void)cmd;
+    Command* command = MessageParser::parse(cmd, this, client);
+    if (command == NULL) {
+        return;
+    }
+    command->execute();
+    delete command;
 }
 
