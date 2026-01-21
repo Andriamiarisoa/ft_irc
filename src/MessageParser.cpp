@@ -2,10 +2,22 @@
 #include "../includes/Command.hpp"
 #include "../includes/Server.hpp"
 #include "../includes/Client.hpp"
+#include "../includes/InviteCommand.hpp"
+#include "../includes/JoinCommand.hpp"
+#include "../includes/KickCommand.hpp"
+#include "../includes/ModeCommand.hpp"
+#include "../includes/NickCommand.hpp"
+#include "../includes/PartCommand.hpp"
+#include "../includes/PassCommand.hpp"
+#include "../includes/PrivmsgCommand.hpp"
+#include "../includes/QuitCommand.hpp"
+#include "../includes/TopicCommand.hpp"
+#include "../includes/UserCommand.hpp"
+#include <iostream>
 #include <string>
 #include <exception>
 
-Command* createCommand(const std::string& cmd, Server* srv, Client* cli,
+Command* MessageParser::createCommand(const std::string& cmd, Server* srv, Client* cli,
         const std::vector<std::string>& params)
 {
     if (params.empty())
@@ -67,7 +79,7 @@ std::string MessageParser::extractPrefix(const std::string& line) {
     return line.substr(0, pos);
 }
 
-std::string removePrefix(const std::string& line) {
+std::string MessageParser::removePrefix(const std::string& line) {
     std::string prefix;
     std::string cmdLine;
     size_t      pos;
@@ -91,7 +103,7 @@ std::vector<std::string> MessageParser::splitParams(const std::string& str) {
     std::string                 cmdLine;
     size_t                      pos;
 
-    cmdLine = removePrefix(str);
+    cmdLine = MessageParser::removePrefix(str);
     if (cmdLine.empty())
         return std::vector<std::string>();
     while (!cmdLine.empty() && cmdLine[0] != ':')
@@ -118,7 +130,7 @@ Command* MessageParser::parse(const std::string& line, Server* srv, Client* cli)
     std::vector<std::string>    params;
     std::string                 cmd;
 
-    params = splitParams(line);
+    params = MessageParser::splitParams(line);
     if (params.empty())
     {
         std::cerr << "Invalid command" << std::endl;
@@ -126,7 +138,7 @@ Command* MessageParser::parse(const std::string& line, Server* srv, Client* cli)
     }
     cmd = params.front();
     params.erase(params.begin());
-    for (int i = 0; i < cmd.size(); i++)
+    for (long unsigned int i = 0; i < cmd.size(); i++)
         cmd[i] = std::toupper(cmd[i]);
-    return createCommand(cmd, srv, cli, params);
+    return MessageParser::createCommand(cmd, srv, cli, params);
 }
