@@ -19,6 +19,22 @@ int Client::getFd() const {
     return fd;
 }
 
+std::string Client::getRealname() const {
+    return realname;
+}
+
+std::string Client::getHostname() const {
+    return hostname;
+}
+
+void Client::setRealname(const std::string& real) {
+    this->realname = real;
+}
+
+void Client::setHostname(const std::string& host) {
+    this->hostname = host;
+}
+
 std::string Client::getNickname() const {
     return nickname;
 }

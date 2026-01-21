@@ -23,11 +23,15 @@ public:
     ~Client();
     
     int getFd() const;
+    std::string getRealname() const;
+    std::string getHostname() const;    
     std::string getNickname() const;
     std::string getUsername() const;
     bool isAuthenticated() const;
     bool isRegistered() const;
     
+    void setRealname(const std::string& real);
+    void setHostname(const std::string& host);
     void setNickname(const std::string& nick);
     void setUsername(const std::string& user);
     void authenticate();
