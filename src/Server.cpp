@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:18 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/20 16:38:12 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/21 22:40:04 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -398,4 +398,29 @@ void Server::executeCommand(Client* client, const std::string& cmd) {
     (void)client;
     (void)cmd;
 }
+
+void    Server::broadcastQuitNotification(Client* client, const std::string& quitMsg) {
+    std::map<std::string, Channel*>::iterator it;
+    for (it = channels.begin() ; it != channels.end() ; it++) {
+        Channel* channel = it->second;
+        if (channel->isMember(client)) {
+            channel->broadcast(quitMsg, NULL);
+            channel->removeMember(client);
+        }
+    }
+}
+
+std::vector<Channel*>   Server::getClientChannels(Client* client) {
+    std::vector<Channel*> clientChannels;
+    std::map<std::string, Channel*>::iterator it;
+
+    for (it = channels.begin() ; it != channels.end() ; it++) {
+        Channel* channel = it->second;
+        if (channel->isMember(client)) {
+            clientChannels.push_back(channel);
+        }
+    }
+    return (clientChannels);
+}
+
 
