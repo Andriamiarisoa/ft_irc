@@ -38,16 +38,16 @@ void execute()
 **TODO**:
 
 #### Étape 1: Valider les paramètres
-- [ ] Vérifier si le vecteur params a au moins 1 élément
-- [ ] Sinon: envoyer ERR_NEEDMOREPARAMS (461)
+- [x] Vérifier si le vecteur params a au moins 1 élément
+- [x] Sinon: envoyer ERR_NEEDMOREPARAMS (461)
   ```cpp
   sendError(461, "PASS :Not enough parameters");
   return;
   ```
 
 #### Étape 2: Vérifier l'état d'enregistrement
-- [ ] Vérifier si le client est déjà enregistré
-- [ ] Si oui: envoyer ERR_ALREADYREGISTRED (462)
+- [x] Vérifier si le client est déjà enregistré
+- [x] Si oui: envoyer ERR_ALREADYREGISTRED (462)
   ```cpp
   if (client->isRegistered()) {
       sendError(462, ":You may not reregister");
@@ -56,12 +56,12 @@ void execute()
   ```
 
 #### Étape 3: Vérifier le mot de passe
-- [ ] Obtenir le mot de passe du serveur (besoin d'ajouter un getter à la classe Server)
-- [ ] Comparer params[0] avec le mot de passe du serveur
-- [ ] Si correspondance:
+- [x] Obtenir le mot de passe du serveur (besoin d'ajouter un getter à la classe Server)
+- [x] Comparer params[0] avec le mot de passe du serveur
+- [x] Si correspondance:
   - Appeler client->authenticate()
   - Aucune réponse nécessaire (succès silencieux selon le standard IRC)
-- [ ] Si non-correspondance:
+- [x] Si non-correspondance:
   - Envoyer ERR_PASSWDMISMATCH (464)
   ```cpp
   sendError(464, ":Password incorrect");
@@ -86,12 +86,12 @@ void execute()
 
 ## Liste de vérification des tests
 
-- [ ] PASS avec le bon mot de passe authentifie le client
-- [ ] PASS avec le mauvais mot de passe envoie l'erreur 464
-- [ ] PASS sans paramètre envoie l'erreur 461
-- [ ] PASS après l'enregistrement envoie l'erreur 462
-- [ ] Plusieurs tentatives PASS avant l'enregistrement autorisées
-- [ ] Le client peut passer à NICK après un PASS réussi
+- [x] PASS avec le bon mot de passe authentifie le client
+- [x] PASS avec le mauvais mot de passe envoie l'erreur 464
+- [x] PASS sans paramètre envoie l'erreur 461
+- [x] PASS après l'enregistrement envoie l'erreur 462
+- [x] Plusieurs tentatives PASS avant l'enregistrement autorisées
+- [x] Le client peut passer à NICK après un PASS réussi
 
 ---
 
