@@ -138,7 +138,7 @@ Command* MessageParser::parse(const std::string& line, Server* srv, Client* cli)
     }
     cmd = params.front();
     params.erase(params.begin());
-    for (int i = 0; i < cmd.size(); i++)
+    for (long unsigned int i = 0; i < cmd.size(); i++)
         cmd[i] = std::toupper(cmd[i]);
     return MessageParser::createCommand(cmd, srv, cli, params);
 }
