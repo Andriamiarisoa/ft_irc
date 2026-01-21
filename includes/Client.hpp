@@ -27,6 +27,7 @@ public:
     std::string getHostname() const;    
     std::string getNickname() const;
     std::string getUsername() const;
+    std::set<Channel*> getChannels() const;
     bool isAuthenticated() const;
     bool isRegistered() const;
     
