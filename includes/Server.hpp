@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:30 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/19 09:38:44 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/21 17:35:51 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ private:
     void acceptNewClient();
     void handleClientMessage(int fd);
     void disconnectClient(int fd);
-    Client* getClientByNick(const std::string& nick);
     Channel* getOrCreateChannel(const std::string& name);
     void executeCommand(Client* client, const std::string& cmd);
 
@@ -47,6 +46,7 @@ public:
     
     void start();
     void stop();
+    Client* getClientByNick(const std::string& nick);
 };
 
 #endif
