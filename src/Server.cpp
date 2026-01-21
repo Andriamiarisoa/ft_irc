@@ -423,4 +423,15 @@ std::vector<Channel*>   Server::getClientChannels(Client* client) {
     return (clientChannels);
 }
 
+void Server::removeChannel(const std::string& name) {
+    std::string lowerName = toLower(name);
+    std::map<std::string, Channel*>::iterator it = channels.find(lowerName);
+    
+    if (it != channels.end()) {
+        delete it->second;
+        channels.erase(it);
+        std::cout << "  [-] Channel removed: " << name << std::endl;
+    }
+}
+
 

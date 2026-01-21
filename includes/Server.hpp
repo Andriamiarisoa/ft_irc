@@ -52,6 +52,7 @@ private:
     void stop();
     void disconnectClient(int fd);
     Channel* getOrCreateChannel(const std::string& name);
+    void    removeChannel(const std::string& name);
     std::string toLower(const std::string& str);
     bool    isValidName(const std::string& src) ;
     void    broadcastQuitNotification(Client* client, const std::string& quitMsg);
