@@ -7,3 +7,4 @@ tests/test_messageparser
 tests/test_nickcommand
 srcs/mainServer.cpp
 src/mainServer.cpp
+tests/test_server
