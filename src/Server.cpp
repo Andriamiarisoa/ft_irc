@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:18 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/21 18:43:05 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/21 19:21:12 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -400,5 +400,9 @@ void Server::executeCommand(Client* client, const std::string& cmd) {
     }
     command->execute();
     delete command;
+}
+
+const std::string& Server::getPassword() {
+    return (password);
 }
 
