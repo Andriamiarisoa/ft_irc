@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:30 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/22 19:01:36 by marvin           ###   ########.fr       */
+/*   Updated: 2026/01/22 19:27:15 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ public:
     void    broadcastQuitNotification(Client* client, const std::string& quitMsg);
     std::vector<Channel*>   getClientChannels(Client* client);
     Client* getClientByNick(const std::string& nick);
-    bool    channelExistOrNot(const std::string& name);    
+    bool    channelExistOrNot(const std::string& name);
+    Channel* getChannel(const std::string& name);
 };
 
 #endif
