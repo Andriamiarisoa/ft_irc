@@ -21,8 +21,13 @@ cd tests
 
 # Compile test suite
 g++ -Wall -Wextra -Werror -std=c++98 -I../includes \
-    test_server.cpp ../src/Server.cpp ../src/Client.cpp \
-    ../src/Channel.cpp ../src/MessageParser.cpp ../src/Command.cpp \
+    test_server.cpp \
+    ../src/Server.cpp ../src/Client.cpp ../src/Channel.cpp \
+    ../src/MessageParser.cpp ../src/Command.cpp \
+    ../src/InviteCommand.cpp ../src/JoinCommand.cpp ../src/KickCommand.cpp \
+    ../src/ModeCommand.cpp ../src/NickCommand.cpp ../src/PartCommand.cpp \
+    ../src/PassCommand.cpp ../src/PrivmsgCommand.cpp ../src/QuitCommand.cpp \
+    ../src/TopicCommand.cpp ../src/UserCommand.cpp \
     -o test_server
 
 # Or add to Makefile:
