@@ -43,7 +43,7 @@ void JoinCommand::execute() {
             sendError(403, channelName + " :No such channel");
             continue;
         }
-        bool isNewChannel = false; // TODO: check if channel is new or already exists. For now, it's just a Placeholder, implement actual check
+        bool isNewChannel = !server->channelExistOrNot(channelName);
         Channel* channel = server->getOrCreateChannel(channelName);
         if(channel == NULL) {
             sendError(403, channelName + " :No such channel");
