@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:30 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/22 09:38:50 by marvin           ###   ########.fr       */
+/*   Updated: 2026/01/22 15:10:35 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ private:
     Channel* getOrCreateChannel(const std::string& name);
     std::string toLower(const std::string& str);
     bool    isValidName(const std::string& src) ;
-    Client* getClientByNick(const std::string& nick);
 };
 
 #endif
