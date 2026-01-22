@@ -140,22 +140,46 @@ void Channel::addOperator(Client* client) {
 }
 
 void Channel::removeOperator(Client* client) {
-    (void)client;
+    if (operators.size() == 1) {
+        std::string notice = ":server NOTICE " + client->getNickname() + 
+                           " :Cannot remove last operator from " + name + "\r\n";
+        client->sendMessage(notice);
+        return;
+    }
+    if (isOperator(client)) {
+        operators.erase(client);
+    }
+    std::string msg = ":server MODE " + name + " -o " + 
+             client->getNickname() + "\r\n";
+
+    broadcast(msg, NULL);
 }
 
 bool Channel::isOperator(Client* client) const {
-    (void)client;
-    return false;
+    if (operators.find(client) != operators.end())
+        return (true);
+    return (false);
 }
 
 bool Channel::isMember(Client* client) const {
-    (void)client;
-    return false;
+    if (members.find(client) != members.end())
+        return (true);
+    return (false);
 }
 
 void Channel::broadcast(const std::string& msg, Client* exclude) {
-    (void)msg;
-    (void)exclude;
+    std::set<Client*>::iterator it;
+
+    for (it = members.begin() ; it != members.end() ; it++) {
+        Client* client = (*it);
+        if (client == NULL || client == exclude)
+            continue;
+        int fd = client->getFd();
+        if (fd < 0) {
+            continue;
+        }
+        client->sendMessage(msg);
+    }
 }
 
 void Channel::setInviteOnly(bool mode) {
