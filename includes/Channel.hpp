@@ -3,6 +3,7 @@
 
 #include <string>
 #include <set>
+#include "../includes/Server.hpp"
 
 class Client;
 
@@ -17,6 +18,7 @@ private:
     std::set<Client*> invitedUsers;
     bool inviteOnly;
     bool topicRestricted;
+    Server* server;
 
 public:
     Channel(const std::string& name);
@@ -46,6 +48,8 @@ public:
     void inviteUser(Client* client);
     bool isInvited(Client* client) const;
     void kickMember(Client* client, const std::string& reason);
+    void clearAllSet();
+
 };
 
 #endif

@@ -1,14 +1,24 @@
 #include "../includes/Channel.hpp"
 #include "../includes/Client.hpp"
+#include "../includes/Command.hpp"
+
 
 Channel::Channel(const std::string& name) 
-    : name(name), userLimit(0), inviteOnly(false), topicRestricted(false) {
-    (void)this->userLimit;
-    (void)this->inviteOnly;
-    (void)this->topicRestricted;
+    : name(name), userLimit(0), inviteOnly(false), topicRestricted(true) {
+        this->topic = "";
+        this->key = "";
+}
+
+void Channel::clearAllSet() {
+    members.clear();
+    operators.clear();
+    invitedUsers.clear();
+    topic.clear();
+    key.clear();
 }
 
 Channel::~Channel() {
+    clearAllSet();    
 }
 
 std::string Channel::getName() const {
@@ -20,33 +30,113 @@ std::string Channel::getTopic() const {
 }
 
 void Channel::setTopic(const std::string& topic, Client* client) {
-    (void)topic;
-    (void)client;
+    if(topicRestricted == true) {
+        if (!isOperator(client)) {
+            std::string error = ":server 482 " + client->getNickname() + 
+                               " " + name + " :You're not channel operator\r\n";
+            client->sendMessage(error);
+            return;
+        }
+    }
+    this->topic = topic;
+    std::string msg = ":" + client->getNickname() + " TOPIC " + name + " :" + topic + "\r\n";
+    broadcast(msg, NULL);
 }
 
 void Channel::setKey(const std::string& key) {
-    (void)key;
+    this->key = key;
 }
 
 bool Channel::hasKey() const {
-    return false;
+    if (this->key.empty())
+        return (false);
+    else
+        return (true);
 }
 
 bool Channel::checkKey(const std::string& key) const {
-    (void)key;
-    return false;
+    if (this->key == key)
+        return (true);
+    else if (!hasKey())
+        return (true);
+    else
+        return (false);
 }
 
 void Channel::addMember(Client* client) {
-    (void)client;
+    if (client == NULL)
+        return;
+    members.insert(client);
+    client->addToChannel(this);
+    if (getMembers().size() == 1) {
+        addOperator(client);
+    }
+    std::string joinMsg = ":" + client->getNickname() + "!" + 
+                         client->getUsername() + "@host JOIN " + name + "\r\n";
+    
+    broadcast(joinMsg, NULL);
+    if (topic.empty()) {
+       std::string noTopicMsg = ":server 331 " + client->getNickname() + 
+            " " + name + " :No topic is set\r\n";
+        client->sendMessage(noTopicMsg);
+    }
+    else {
+        std::string topicMsg = ":server 332 " + client->getNickname() + 
+            " " + name + " :" + topic + "\r\n";
+        client->sendMessage(topicMsg);
+    }
+    std::string memmberList = "";
+    std::set<Client*>::iterator it;
+    for (it = members.begin() ; it != members.end() ; it++) {
+        if (!memmberList.empty())
+            memmberList += " ";
+        if (operators.find(*it) != operators.end()) {
+            memmberList += "@";
+        }
+        memmberList += (*it)->getNickname();
+    }
+    std::string namesMsg = ":server 353 " + client->getNickname() + 
+                          " = " + name + " :" + memmberList + "\r\n";
+    client->sendMessage(namesMsg);
+    
+    std::string endMsg = ":server 366 " + client->getNickname() + 
+                        " " + name + " :End of /NAMES list\r\n";
+    client->sendMessage(endMsg);
 }
 
 void Channel::removeMember(Client* client) {
-    (void)client;
+    if (!isMember(client))
+        return;
+    std::string partMsg = ":" + client->getNickname() + "!" + 
+                     client->getUsername() + "@host PART " + name + "\r\n";
+
+    broadcast(partMsg, NULL);
+    members.erase(client);
+    if (isOperator(client)) {
+        operators.erase(client);
+    }
+    if (isInvited(client)) {
+        invitedUsers.erase(client);
+    }
+    client->removeFromChannel(this);
+    if (members.empty()) {
+        server->removeChannel(getName());
+    }
 }
 
 void Channel::addOperator(Client* client) {
-    (void)client;
+    if (!isMember(client)) {
+        std::string error = ":server 441 " + client->getNickname() + 
+                           " " + name + " :They aren't on that channel\r\n";
+        client->sendMessage(error);
+        return;
+    }
+
+    operators.insert(client);
+    std::string msg = ":server MODE " + name + " +o " + 
+                      client->getNickname() + "\r\n";
+
+    broadcast(msg, NULL);
 }
 
 void Channel::removeOperator(Client* client) {
