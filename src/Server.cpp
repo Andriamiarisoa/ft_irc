@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:18 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/21 19:21:12 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/21 23:54:56 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -405,4 +405,40 @@ void Server::executeCommand(Client* client, const std::string& cmd) {
 const std::string& Server::getPassword() {
     return (password);
 }
+
+void    Server::broadcastQuitNotification(Client* client, const std::string& quitMsg) {
+    std::map<std::string, Channel*>::iterator it;
+    for (it = channels.begin() ; it != channels.end() ; it++) {
+        Channel* channel = it->second;
+        if (channel->isMember(client)) {
+            channel->broadcast(quitMsg, NULL);
+            channel->removeMember(client);
+        }
+    }
+}
+
+std::vector<Channel*>   Server::getClientChannels(Client* client) {
+    std::vector<Channel*> clientChannels;
+    std::map<std::string, Channel*>::iterator it;
+
+    for (it = channels.begin() ; it != channels.end() ; it++) {
+        Channel* channel = it->second;
+        if (channel->isMember(client)) {
+            clientChannels.push_back(channel);
+        }
+    }
+    return (clientChannels);
+}
+
+void Server::removeChannel(const std::string& name) {
+    std::string lowerName = toLower(name);
+    std::map<std::string, Channel*>::iterator it = channels.find(lowerName);
+    
+    if (it != channels.end()) {
+        delete it->second;
+        channels.erase(it);
+        std::cout << "  [-] Channel removed: " << name << std::endl;
+    }
+}
+
 
