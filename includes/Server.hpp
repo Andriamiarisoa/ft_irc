@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:30 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/22 18:53:18 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/22 21:42:23 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ private:
     const std::string& getPassword();
     void    broadcastQuitNotification(Client* client, const std::string& quitMsg);
     std::vector<Channel*>   getClientChannels(Client* client);
-    bool    channelExistOrNot(const std::string& name);    
+    bool    channelExistOrNot(const std::string& name);
+    Channel* getChannel(const std::string& name);
 };
 
 #endif
