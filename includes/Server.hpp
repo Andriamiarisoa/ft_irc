@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:30 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/20 16:27:57 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/21 23:55:43 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <string>
 #include <map>
+#include <vector>
 #include <sys/select.h>
 #include <unistd.h>
 
@@ -40,7 +41,6 @@ private:
     int  setupListen();
     void acceptNewClient();
     void handleClientMessage(int fd);
-    void disconnectClient(int fd);
     Client* getClientByNick(const std::string& nick);
     void executeCommand(Client* client, const std::string& cmd);
     
@@ -50,9 +50,14 @@ private:
     
     void start();
     void stop();
+    void disconnectClient(int fd);
     Channel* getOrCreateChannel(const std::string& name);
+    void    removeChannel(const std::string& name);
     std::string toLower(const std::string& str);
     bool    isValidName(const std::string& src) ;
+    const std::string& getPassword();
+    void    broadcastQuitNotification(Client* client, const std::string& quitMsg);
+    std::vector<Channel*>   getClientChannels(Client* client);
 };
 
 #endif

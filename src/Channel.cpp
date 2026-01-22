@@ -93,3 +93,8 @@ void Channel::kickMember(Client* client, const std::string& reason) {
     (void)client;
     (void)reason;
 }
+
+std::set<Client*> Channel::getMembers() const {
+    return (members);
+}
+
