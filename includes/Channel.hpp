@@ -49,7 +49,10 @@ public:
     bool isInvited(Client* client) const;
     void kickMember(Client* client, const std::string& reason);
     void clearAllSet();
-
+    bool isChannelInvitOnly() const;
+    bool isChannelFull() const;
+    size_t getMembersCount() const;
+    
 };
 
 #endif

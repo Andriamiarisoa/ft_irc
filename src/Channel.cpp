@@ -220,6 +220,23 @@ void Channel::setUserLimit(int limit) {
     }
 }
 
+bool    Channel::isChannelInvitOnly() const {
+    return (inviteOnly);
+}
+
+bool Channel::isChannelFull() const {
+    if (userLimit == 0)
+        return (false);
+    if (members.size() >= (size_t)userLimit)
+        return (true);
+    else
+        return (false);
+}
+
+size_t Channel::getMembersCount() const {
+    return (members.size());
+}
+
 void Channel::inviteUser(Client* client) {
     if (client == NULL)
         return;
