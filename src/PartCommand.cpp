@@ -36,4 +36,25 @@ void PartCommand::execute() {
     }
     std::vector<std::string> channelsToPart = split(params[0], ',');
     std::string partReason = (params.size() > 1) ? params[1] : "";
+    for (size_t i = 0; i < channelsToPart.size(); i++) {
+        Channel* channel = server->getChannel(channelsToPart[i]);
+        if (!channel) {
+            sendError(403, channelsToPart[i] + " :No such channel");
+            continue;
+        }
+        if (!channel->isMember(client)) {
+            sendError(442, channelsToPart[i] + " :You're not on that channel");
+            continue;
+        }
+        std::string partMsg = ":" + client->getNickname() + " PART " + channelsToPart[i];
+        if (!partReason.empty()) {
+            partMsg += " :" + partReason;
+        }
+        partMsg += "\r\n";
+        channel->broadcast(partMsg, client);
+        channel->removeMember(client);
+        if (channel->getMembers().empty()) {
+            server->removeChannel(channelsToPart[i]);
+        }
+    }
 }

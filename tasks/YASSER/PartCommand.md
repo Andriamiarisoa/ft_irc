@@ -66,8 +66,8 @@ void execute()
 - [x] La raison peut être vide (juste quitter)
 
 #### Étape 5: Pour chaque canal
-- [ ] Obtenir le canal du serveur
-- [ ] Si le canal n'existe pas: envoyer ERR_NOSUCHCHANNEL (403)
+- [x] Obtenir le canal du serveur
+- [x] Si le canal n'existe pas: envoyer ERR_NOSUCHCHANNEL (403)
   ```cpp
   Channel* channel = server->getChannel(channelName);
   if (!channel) {
@@ -77,8 +77,8 @@ void execute()
   ```
 
 #### Étape 6: Vérifier l'appartenance
-- [ ] Vérifier si le client est membre du canal
-- [ ] Sinon: envoyer ERR_NOTONCHANNEL (442)
+- [x] Vérifier si le client est membre du canal
+- [x] Sinon: envoyer ERR_NOTONCHANNEL (442)
   ```cpp
   if (!channel->isMember(client)) {
       sendError(442, channelName + " :You're not on that channel");
@@ -87,9 +87,9 @@ void execute()
   ```
 
 #### Étape 7: Diffuser le message PART
-- [ ] Format: ":nick!user@host PART #channel :reason"
-- [ ] Diffuser à tous les membres (y compris le client qui part)
-- [ ] Inclure la raison si fournie
+- [x] Format: ":nick!user@host PART #channel :reason"
+- [x] Diffuser à tous les membres (y compris le client qui part)
+- [x] Inclure la raison si fournie
   ```cpp
   std::string partMsg = ":" + client->getNickname() + "!" + 
                         client->getUsername() + "@host PART " + 
@@ -100,16 +100,16 @@ void execute()
   ```
 
 #### Étape 8: Retirer du canal
-- [ ] Appeler channel->removeMember(client)
-- [ ] Cela va:
+- [x] Appeler channel->removeMember(client)
+- [x] Cela va:
   - Retirer de l'ensemble des membres
   - Retirer de l'ensemble des opérateurs si opérateur
   - Mettre à jour la liste des canaux du client
 
 #### Étape 9: Supprimer le canal vide
-- [ ] Vérifier si le canal est maintenant vide
-- [ ] Si oui: le serveur doit supprimer le canal
-- [ ] Appeler server->deleteChannel(channelName)
+- [x] Vérifier si le canal est maintenant vide
+- [x] Si oui: le serveur doit supprimer le canal
+- [x] Appeler server->deleteChannel(channelName)
 
 ---
 

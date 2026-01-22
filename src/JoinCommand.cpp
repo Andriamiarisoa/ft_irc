@@ -72,7 +72,6 @@ void JoinCommand::execute() {
             }
         }
         channel->addMember(client);
-        client->addToChannel(channel);
         std::string joinMsg = ":" + client->getNickname() + " JOIN " + channelName + "\r\n";
         client->sendMessage(joinMsg);
         channel->broadcast(joinMsg, client);
