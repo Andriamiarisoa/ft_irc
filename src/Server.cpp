@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:18 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/20 16:38:12 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/22 15:31:18 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include "../includes/Server.hpp"
 #include "../includes/Client.hpp"
 #include "../includes/Channel.hpp"
+#include "../includes/MessageParser.hpp"
+#include "../includes/Command.hpp"
 #include <bits/types/struct_timeval.h>
 #include <csignal>
 #include <cerrno>
@@ -391,11 +393,63 @@ Channel* Server::getOrCreateChannel(const std::string& name) {
     return (newChannel);
 }
 
-
-//TO_DO : implement this func, function to actually call the execute() 
-
 void Server::executeCommand(Client* client, const std::string& cmd) {
-    (void)client;
-    (void)cmd;
+    Command* command = MessageParser::parse(cmd, this, client);
+    if (command == NULL) {
+        return;
+    }
+    command->execute();
+    delete command;
 }
 
+const std::string& Server::getPassword() {
+    return (password);
+}
+
+void    Server::broadcastQuitNotification(Client* client, const std::string& quitMsg) {
+    std::map<std::string, Channel*>::iterator it;
+    for (it = channels.begin() ; it != channels.end() ; it++) {
+        Channel* channel = it->second;
+        if (channel->isMember(client)) {
+            channel->broadcast(quitMsg, NULL);
+            channel->removeMember(client);
+        }
+    }
+}
+
+std::vector<Channel*>   Server::getClientChannels(Client* client) {
+    std::vector<Channel*> clientChannels;
+    std::map<std::string, Channel*>::iterator it;
+
+    for (it = channels.begin() ; it != channels.end() ; it++) {
+        Channel* channel = it->second;
+        if (channel->isMember(client)) {
+            clientChannels.push_back(channel);
+        }
+    }
+    return (clientChannels);
+}
+
+void Server::removeChannel(const std::string& name) {
+    std::string lowerName = toLower(name);
+    std::map<std::string, Channel*>::iterator it = channels.find(lowerName);
+    
+    if (it != channels.end()) {
+        delete it->second;
+        channels.erase(it);
+        std::cout << "  [-] Channel removed: " << name << std::endl;
+    }
+}
+
+bool    Server::channelExistOrNot(const std::string& name) {
+    std::map<std::string, Channel*>::iterator it;
+    
+    for (it = channels.begin() ; it != channels.end() ; it++) {
+        std::string lowerName = name;
+        Channel* channel = it->second;
+        if (toLower(channel->getName()) == lowerName) {
+            return (true);
+        }
+    }
+    return (false);
+}

@@ -64,9 +64,16 @@
 ## Messages privés
 
 - [ ] Implémenter la commande PRIVMSG (messages privés)
+- [ ] Implémenter la commande NOTICE (notifications sans réponse)
 - [ ] Supporter les messages utilisateur à utilisateur
 - [ ] Supporter les messages vers les canaux
 - [ ] Vérifier l'existence du destinataire
+
+## Keep-Alive (PING/PONG)
+
+- [ ] Implémenter la commande PING (client → server)
+- [ ] Implémenter la commande PONG (réponse au PING)
+- [ ] Détecter les clients inactifs (timeout)
 
 ## Opérateurs de canal
 
@@ -121,6 +128,8 @@
 - [ ] Gestion d'erreur robuste
 - [ ] Pas de forking
 - [ ] Utiliser les versions C++ des fonctions (<cstring> au lieu de <string.h>)
+- [ ] Utiliser Replies.hpp pour les codes numériques IRC
+- [ ] Utiliser Client::getPrefix() pour les préfixes utilisateur
 
 ## Bonus (seulement si la partie obligatoire est PARFAITE)
 

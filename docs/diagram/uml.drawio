@@ -7,8 +7,8 @@
                 <mxCell id="2" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;Server&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- port : int&lt;br/&gt;- password : string&lt;br/&gt;- serverSocket : int&lt;br/&gt;- fds : vector&lt;br/&gt;- clients : map&lt;br/&gt;- channels : map&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ Server(port, password)&lt;br/&gt;+ ~Server()&lt;br/&gt;+ start() : void&lt;br/&gt;+ stop() : void&lt;br/&gt;- setupSocket() : void&lt;br/&gt;- handlePoll() : void&lt;br/&gt;- acceptNewClient() : void&lt;br/&gt;- handleClientMessage(fd) : void&lt;br/&gt;- disconnectClient(fd) : void&lt;br/&gt;- getClientByNick(nick) : Client&lt;br/&gt;- getOrCreateChannel(name) : Channel&lt;br/&gt;- executeCommand(client, cmd) : void&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
                     <mxGeometry x="50" y="90" width="300" height="320" as="geometry"/>
                 </mxCell>
-                <mxCell id="3" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;Client&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- fd : int&lt;br/&gt;- nickname : string&lt;br/&gt;- username : string&lt;br/&gt;- realname : string&lt;br/&gt;- hostname : string&lt;br/&gt;- authenticated : bool&lt;br/&gt;- registered : bool&lt;br/&gt;- buffer : string&lt;br/&gt;- channels : set&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ Client(fd)&lt;br/&gt;+ ~Client()&lt;br/&gt;+ getFd() : int&lt;br/&gt;+ getNickname() : string&lt;br/&gt;+ getUsername() : string&lt;br/&gt;+ isAuthenticated() : bool&lt;br/&gt;+ isRegistered() : bool&lt;br/&gt;+ setNickname(nick) : void&lt;br/&gt;+ setUsername(user) : void&lt;br/&gt;+ authenticate() : void&lt;br/&gt;+ addToChannel(channel) : void&lt;br/&gt;+ removeFromChannel(channel) : void&lt;br/&gt;+ appendToBuffer(data) : void&lt;br/&gt;+ extractCommand() : string&lt;br/&gt;+ sendMessage(msg) : void&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
-                    <mxGeometry x="420" y="40" width="280" height="400" as="geometry"/>
+                <mxCell id="3" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;Client&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- fd : int&lt;br/&gt;- nickname : string&lt;br/&gt;- username : string&lt;br/&gt;- realname : string&lt;br/&gt;- hostname : string&lt;br/&gt;- authenticated : bool&lt;br/&gt;- registered : bool&lt;br/&gt;- buffer : string&lt;br/&gt;- channels : set&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ Client(fd)&lt;br/&gt;+ ~Client()&lt;br/&gt;+ getFd() : int&lt;br/&gt;+ getNickname() : string&lt;br/&gt;+ getUsername() : string&lt;br/&gt;+ getPrefix() : string&lt;br/&gt;+ isAuthenticated() : bool&lt;br/&gt;+ isRegistered() : bool&lt;br/&gt;+ setNickname(nick) : void&lt;br/&gt;+ setUsername(user) : void&lt;br/&gt;+ authenticate() : void&lt;br/&gt;+ addToChannel(channel) : void&lt;br/&gt;+ removeFromChannel(channel) : void&lt;br/&gt;+ appendToBuffer(data) : void&lt;br/&gt;+ extractCommand() : string&lt;br/&gt;+ sendMessage(msg) : void&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="420" y="40" width="280" height="420" as="geometry"/>
                 </mxCell>
                 <mxCell id="4" value="&lt;p style=&quot;margin:0px;margin-top:4px;text-align:center;&quot;&gt;&lt;b&gt;Channel&lt;/b&gt;&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;- name : string&lt;br/&gt;- topic : string&lt;br/&gt;- key : string&lt;br/&gt;- userLimit : int&lt;br/&gt;- members : set&lt;br/&gt;- operators : set&lt;br/&gt;- invitedUsers : set&lt;br/&gt;- inviteOnly : bool&lt;br/&gt;- topicRestricted : bool&lt;/p&gt;&lt;hr size=&quot;1&quot;/&gt;&lt;p style=&quot;margin:0px;margin-left:4px;&quot;&gt;+ Channel(name)&lt;br/&gt;+ ~Channel()&lt;br/&gt;+ getName() : string&lt;br/&gt;+ getTopic() : string&lt;br/&gt;+ setTopic(topic, client) : void&lt;br/&gt;+ setKey(key) : void&lt;br/&gt;+ hasKey() : bool&lt;br/&gt;+ checkKey(key) : bool&lt;br/&gt;+ addMember(client) : void&lt;br/&gt;+ removeMember(client) : void&lt;br/&gt;+ addOperator(client) : void&lt;br/&gt;+ removeOperator(client) : void&lt;br/&gt;+ isOperator(client) : bool&lt;br/&gt;+ isMember(client) : bool&lt;br/&gt;+ broadcast(msg, exclude) : void&lt;br/&gt;+ setInviteOnly(mode) : void&lt;br/&gt;+ setTopicRestricted(mode) : void&lt;br/&gt;+ setUserLimit(limit) : void&lt;br/&gt;+ inviteUser(client) : void&lt;br/&gt;+ isInvited(client) : bool&lt;br/&gt;+ kickMember(client, reason) : void&lt;/p&gt;" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
                     <mxGeometry x="940" y="40" width="300" height="520" as="geometry"/>
@@ -51,6 +51,15 @@
                 </mxCell>
                 <mxCell id="20" value="&lt;b&gt;QuitCommand&lt;/b&gt;&lt;hr&gt;+ execute() : void" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
                     <mxGeometry x="850" y="1000" width="150" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="&lt;b&gt;NoticeCommand&lt;/b&gt;&lt;hr&gt;+ execute() : void" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="1120" y="900" width="150" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="&lt;b&gt;PingCommand&lt;/b&gt;&lt;hr&gt;+ execute() : void" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="1030" y="1000" width="150" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="&lt;b&gt;PongCommand&lt;/b&gt;&lt;hr&gt;+ execute() : void" style="verticalAlign=top;align=left;overflow=fill;fontSize=12;fontFamily=Helvetica;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="1210" y="1000" width="150" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="50" value="1" style="endArrow=diamondThin;endFill=1;endSize=24;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" parent="1" source="2" edge="1">
                     <mxGeometry relative="1" as="geometry">
@@ -122,6 +131,15 @@
                 <mxCell id="80" value="" style="endArrow=block;dashed=0;endFill=0;endSize=12;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.8;entryY=1.1;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="20" target="5" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
+                <mxCell id="81" value="" style="endArrow=block;dashed=0;endFill=0;endSize=12;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.95;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="21" target="5" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="82" value="" style="endArrow=block;dashed=0;endFill=0;endSize=12;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.85;entryY=1.1;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="22" target="5" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="83" value="" style="endArrow=block;dashed=0;endFill=0;endSize=12;html=1;rounded=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.9;entryY=1.1;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="23" target="5" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
                 <mxCell id="90" value="Utilise poll() pour gérer&#xa;les I/O non-bloquants.&#xa;Un seul poll() pour tout." style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;size=15;align=left;verticalAlign=top;fillColor=#ffffcc;strokeColor=#000000;" parent="1" vertex="1">
                     <mxGeometry x="40" y="640" width="200" height="90" as="geometry"/>
                 </mxCell>
@@ -130,6 +148,9 @@
                 </mxCell>
                 <mxCell id="92" value="Modes supportés:&#xa;i = invite-only&#xa;t = topic restricted&#xa;k = key/password&#xa;o = operator&#xa;l = user limit" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;size=15;align=left;verticalAlign=top;fillColor=#ffffcc;strokeColor=#000000;" parent="1" vertex="1">
                     <mxGeometry x="1300" y="220" width="200" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="93" value="Utilise Replies.hpp pour&#xa;les codes numériques IRC&#xa;(001-004, 3xx, 4xx)" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;size=15;align=left;verticalAlign=top;fillColor=#ffffcc;strokeColor=#000000;" parent="1" vertex="1">
+                    <mxGeometry x="760" y="620" width="200" height="80" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

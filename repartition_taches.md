@@ -270,6 +270,34 @@
 - Vérification des permissions
 - Intégration complète
 
+### 👥 Nouvelles Tâches Ajoutées (22 Janvier)
+
+#### 👤 BAHOLY
+**NoticeCommand** (`includes/NoticeCommand.hpp` & `src/NoticeCommand.cpp`)
+- Implémentation déjà créée
+- À intégrer dans MessageParser
+- Voir `tasks/BAHOLY/NoticeCommand.md`
+
+**Mise à jour MessageParser**
+- Ajouter NOTICE, PING, PONG au parser
+- Voir `INCOHERENCES.md`
+
+#### 👤 ALL
+**PingCommand & PongCommand** (`includes/PingCommand.hpp` & `includes/PongCommand.hpp`)
+- Implémentation déjà créée
+- Essentiels pour keep-alive
+- Voir `tasks/ALL/PingPongCommand.md`
+
+**Replies.hpp** (`includes/Replies.hpp`)
+- Macros pour codes numériques IRC
+- À intégrer progressivement dans toutes les commandes
+- Voir `tasks/ALL/Replies.md`
+
+#### 👤 NERO
+**Mise à jour Makefile**
+- Ajouter les nouveaux fichiers sources
+- Résoudre le conflit Git dans Server.hpp
+
 ### 📚 Apprentissage Design Patterns (Jour 5 - 30min après standup)
 
 #### 👤 NERO : State Pattern
