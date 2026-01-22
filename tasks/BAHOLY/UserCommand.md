@@ -23,8 +23,8 @@ UserCommand(Server* srv, Client* cli, const std::vector<std::string>& params)
 **Objectif**: Initialiser la commande USER
 
 **TODO**:
-- [ ] Appeler le constructeur de la classe de base
-- [ ] Aucune initialisation supplémentaire nécessaire
+- [x] Appeler le constructeur de la classe de base
+- [x] Aucune initialisation supplémentaire nécessaire
 
 ---
 
@@ -38,8 +38,8 @@ void execute()
 **TODO**:
 
 #### Étape 1: Vérifier l'Authentification
-- [ ] Vérifier que le client est authentifié (a passé PASS)
-- [ ] Sinon: envoyer une erreur et retourner
+- [x] Vérifier que le client est authentifié (a passé PASS)
+- [x] Sinon: envoyer une erreur et retourner
   ```cpp
   if (!client->isAuthenticated()) {
       sendError(464, ":You must send PASS first");
@@ -48,17 +48,17 @@ void execute()
   ```
 
 #### Étape 2: Valider les Paramètres
-- [ ] Vérifier que params contient au moins 4 éléments
-- [ ] Format: USER <username> <mode> <unused> :<realname>
-- [ ] Si insuffisant: envoyer ERR_NEEDMOREPARAMS (461)
+- [x] Vérifier que params contient au moins 4 éléments
+- [x] Format: USER <username> <mode> <unused> :<realname>
+- [x] Si insuffisant: envoyer ERR_NEEDMOREPARAMS (461)
   ```cpp
   sendError(461, "USER :Not enough parameters");
   return;
   ```
 
 #### Étape 3: Vérifier l'État d'Enregistrement
-- [ ] Vérifier si le client est déjà enregistré
-- [ ] Si oui: envoyer ERR_ALREADYREGISTRED (462)
+- [x] Vérifier si le client est déjà enregistré
+- [x] Si oui: envoyer ERR_ALREADYREGISTRED (462)
   ```cpp
   if (client->isRegistered()) {
       sendError(462, ":You may not reregister");
@@ -67,15 +67,15 @@ void execute()
   ```
 
 #### Étape 4: Définir le Nom d'Utilisateur
-- [ ] Extraire le nom d'utilisateur de params[0]
-- [ ] Appeler client->setUsername(params[0])
-- [ ] Stocker le nom réel si nécessaire (params[3])
-- [ ] Note: mode (params[1]) et unused (params[2]) typiquement ignorés
+- [x] Extraire le nom d'utilisateur de params[0]
+- [x] Appeler client->setUsername(params[0])
+- [x] Stocker le nom réel si nécessaire (params[3])
+- [x] Note: mode (params[1]) et unused (params[2]) typiquement ignorés
 
 #### Étape 5: Vérifier la Complétion de l'Enregistrement
-- [ ] Vérifier si le client a maintenant à la fois un surnom et un nom d'utilisateur
-- [ ] Si oui: le client est entièrement enregistré!
-- [ ] Envoyer la séquence de messages de bienvenue (001-004)
+- [x] Vérifier si le client a maintenant à la fois un surnom et un nom d'utilisateur
+- [x] Si oui: le client est entièrement enregistré!
+- [x] Envoyer la séquence de messages de bienvenue (001-004)
 
 #### Étape 6: Envoyer les Messages de Bienvenue
 ```cpp
@@ -145,16 +145,16 @@ USER john 0 * :John Doe
 
 ## Liste de Vérification des Tests
 
-- [ ] USER avec 4 paramètres définit le nom d'utilisateur
-- [ ] USER avec < 4 paramètres envoie l'erreur 461
-- [ ] USER sans PASS d'abord est rejeté
-- [ ] USER après l'enregistrement envoie l'erreur 462
-- [ ] USER + NICK complète l'enregistrement
-- [ ] Messages de bienvenue envoyés lors de l'enregistrement
-- [ ] Nom réel avec espaces géré correctement
-- [ ] Ordre: PASS → NICK → USER fonctionne
-- [ ] Ordre: PASS → USER → NICK fonctionne
-- [ ] Client marqué comme enregistré après USER
+- [x] USER avec 4 paramètres définit le nom d'utilisateur
+- [x] USER avec < 4 paramètres envoie l'erreur 461
+- [x] USER sans PASS d'abord est rejeté
+- [x] USER après l'enregistrement envoie l'erreur 462
+- [x] USER + NICK complète l'enregistrement
+- [x] Messages de bienvenue envoyés lors de l'enregistrement
+- [x] Nom réel avec espaces géré correctement
+- [x] Ordre: PASS → NICK → USER fonctionne
+- [x] Ordre: PASS → USER → NICK fonctionne
+- [x] Client marqué comme enregistré après USER
 
 ---
 
