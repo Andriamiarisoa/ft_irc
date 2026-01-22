@@ -5,8 +5,8 @@
 #include "../includes/Command.hpp"
 
 
-Channel::Channel(const std::string& name) 
-    : name(name), userLimit(0), inviteOnly(false), topicRestricted(true) {
+Channel::Channel(const std::string& name, Server* srv) 
+    : name(name), userLimit(0), inviteOnly(false), topicRestricted(true), server(srv) {
         this->topic = "";
         this->key = "";
 }
@@ -41,7 +41,8 @@ void Channel::setTopic(const std::string& topic, Client* client) {
         }
     }
     this->topic = topic;
-    std::string msg = ":" + client->getNickname() + " TOPIC " + name + " :" + topic + "\r\n";
+    std::string msg = ":" + client->getNickname() + "!" + 
+                     client->getUsername() + "@host TOPIC " + name + " :" + topic + "\r\n";
     broadcast(msg, NULL);
 }
 
@@ -124,19 +125,16 @@ void Channel::removeMember(Client* client) {
 
     broadcast(partMsg, NULL);
     members.erase(client);
-    operators.erase(client);      // erase does nothing if not found
-    invitedUsers.erase(client);   // erase does nothing if not found
+    operators.erase(client);      
+    invitedUsers.erase(client);   
     client->removeFromChannel(this);
-    if (members.empty()) {
+    if (members.empty() && server != NULL) {
         server->removeChannel(getName());
     }
 }
 
 void Channel::addOperator(Client* client) {
     if (!isMember(client)) {
-        std::string error = ":server 441 " + client->getNickname() + 
-                           " " + name + " :They aren't on that channel\r\n";
-        client->sendMessage(error);
         return;
     }
 
@@ -148,18 +146,21 @@ void Channel::addOperator(Client* client) {
 }
 
 void Channel::removeOperator(Client* client) {
+    if (!isOperator(client)) {
+        return;
+    }
+    
     if (operators.size() == 1) {
         std::string notice = ":server NOTICE " + client->getNickname() + 
                            " :Cannot remove last operator from " + name + "\r\n";
         client->sendMessage(notice);
         return;
     }
-    if (isOperator(client)) {
-        operators.erase(client);
-    }
+    
+    operators.erase(client);
+    
     std::string msg = ":server MODE " + name + " -o " + 
              client->getNickname() + "\r\n";
-
     broadcast(msg, NULL);
 }
 
@@ -247,8 +248,6 @@ void Channel::inviteUser(Client* client) {
     if (client == NULL)
         return;
 
-    if (!inviteOnly)
-        return;
     invitedUsers.insert(client);
 }
 
@@ -273,9 +272,20 @@ void Channel::kickMember(Client* kicker, Client* client, const std::string& reas
         return;
     }
 
-    // if (!isMember(client)) {
-    //     std::string error = 
-    // }
+    if (!isMember(client)) {
+        std::string error = ":server 441 " + kicker->getNickname() + 
+            " " + client->getNickname() + " " + name + 
+            " :They aren't on that channel\r\n";
+        kicker->sendMessage(error);
+        return;
+    }
+    
+    std::string kickMsg = ":" + kicker->getNickname() + "!" + 
+                                    kicker->getUsername() + "@host KICK " + name + " " + 
+                                    client->getNickname() + " :" + reason + "\r\n";
+    
+    broadcast(kickMsg, NULL);
+    removeMember(client);
 }
 
 std::set<Client*> Channel::getMembers() const {

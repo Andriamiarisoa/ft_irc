@@ -551,7 +551,7 @@ void test_12_memory_management() {
     
     {
         for (int i = 0; i < 100; i++) {
-            Channel* ch = new Channel("#test");
+            Channel* ch = new Channel("#test", NULL);
             delete ch;
         }
         test_result("100 Channel create/destroy cycles", true);
