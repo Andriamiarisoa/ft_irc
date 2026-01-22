@@ -33,4 +33,5 @@ void QuitCommand::execute() {
         }
     }
     server->disconnectClient(client->getFd());
+    return;
 }
