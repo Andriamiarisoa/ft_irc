@@ -23,8 +23,8 @@ NickCommand(Server* srv, Client* cli, const std::vector<std::string>& params)
 **Objectif** : Initialiser la commande NICK
 
 **TODO** :
-- [ ] Appeler le constructeur de la classe de base
-- [ ] Aucune initialisation supplémentaire nécessaire
+- [x] Appeler le constructeur de la classe de base
+- [x] Aucune initialisation supplémentaire nécessaire
 
 ---
 
@@ -38,8 +38,8 @@ void execute()
 **TODO** :
 
 #### Étape 1 : Vérifier l'Authentification
-- [ ] Vérifier que le client est authentifié (a passé PASS)
-- [ ] Si non authentifié : envoyer ERR_PASSWDMISMATCH (464) ou déconnecter
+- [x] Vérifier que le client est authentifié (a passé PASS)
+- [x] Si non authentifié : envoyer ERR_PASSWDMISMATCH (464) ou déconnecter
   ```cpp
   if (!client->isAuthenticated()) {
       sendError(464, ":You must send PASS first");
@@ -48,19 +48,19 @@ void execute()
   ```
 
 #### Étape 2 : Valider les Paramètres
-- [ ] Vérifier si le vecteur params a au moins 1 élément
-- [ ] Si non : envoyer ERR_NONICKNAMEGIVEN (431)
+- [x] Vérifier si le vecteur params a au moins 1 élément
+- [x] Si non : envoyer ERR_NONICKNAMEGIVEN (431)
   ```cpp
   sendError(431, ":No nickname given");
   return;
   ```
 
 #### Étape 3 : Valider le Format du Pseudonyme
-- [ ] Vérifier que le pseudonyme respecte les exigences IRC :
+- [x] Vérifier que le pseudonyme respecte les exigences IRC :
   - Doit commencer par une lettre (a-z, A-Z)
   - Peut contenir des lettres, chiffres, caractères spéciaux : - [ ] \ ` ^ { }
   - Maximum 9 caractères
-- [ ] Si invalide : envoyer ERR_ERRONEUSNICKNAME (432)
+- [x] Si invalide : envoyer ERR_ERRONEUSNICKNAME (432)
   ```cpp
   sendError(432, params[0] + " :Erroneous nickname");
   return;
@@ -76,17 +76,17 @@ void execute()
   ```
 
 #### Étape 5 : Définir le Pseudonyme
-- [ ] Stocker l'ancien pseudonyme si le client en avait un
-- [ ] Appeler client->setNickname(params[0])
+- [x] Stocker l'ancien pseudonyme si le client en avait un
+- [x] Appeler client->setNickname(params[0])
 - [ ] Si le client est déjà enregistré (changement de pseudo) :
   - Diffuser le changement NICK à tous les canaux
   - Format : ":oldnick!user@host NICK :newnick"
-- [ ] Si cela complète l'enregistrement (a aussi le nom d'utilisateur) :
+- [x] Si cela complète l'enregistrement (a aussi le nom d'utilisateur) :
   - Envoyer les messages de bienvenue (001-004)
 
 #### Étape 6 : Complétion de l'Enregistrement
-- [ ] Vérifier si le client est maintenant complètement enregistré
-- [ ] Si oui, envoyer la séquence de bienvenue :
+- [x] Vérifier si le client est maintenant complètement enregistré
+- [x] Si oui, envoyer la séquence de bienvenue :
   ```
   001 RPL_WELCOME: :Welcome to the IRC Network <nick>!<user>@<host>
   002 RPL_YOURHOST: :Your host is <servername>, running version <ver>
