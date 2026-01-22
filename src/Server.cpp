@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:18 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/22 15:31:18 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/22 20:19:16 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -388,7 +388,7 @@ Channel* Server::getOrCreateChannel(const std::string& name) {
     if (isValidName(lowerName) == false)  {
         return (NULL);
     }
-    Channel* newChannel = new Channel(name);
+    Channel* newChannel = new Channel(name, this);
     channels[lowerName] = newChannel;
     return (newChannel);
 }
