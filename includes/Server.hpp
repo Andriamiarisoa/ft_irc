@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:30 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/22 18:22:08 by marvin           ###   ########.fr       */
+/*   Updated: 2026/01/22 19:01:36 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,12 @@ private:
     void handleClientMessage(int fd);
     void executeCommand(Client* client, const std::string& cmd);
     
-    public:
+public:
     Server(int port, const std::string& password);
     ~Server();
     
     void start();
     void stop();
-    Client* getClientByNick(const std::string& nick);
     void disconnectClient(int fd);
     Channel* getOrCreateChannel(const std::string& name);
     void    removeChannel(const std::string& name);
@@ -58,6 +57,8 @@ private:
     const std::string& getPassword();
     void    broadcastQuitNotification(Client* client, const std::string& quitMsg);
     std::vector<Channel*>   getClientChannels(Client* client);
+    Client* getClientByNick(const std::string& nick);
+    bool    channelExistOrNot(const std::string& name);    
 };
 
 #endif
