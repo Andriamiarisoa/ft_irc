@@ -21,7 +21,7 @@ private:
     Server* server;
 
 public:
-    Channel(const std::string& name);
+    Channel(const std::string& name, Server* srv);
     ~Channel();
     
     std::string getName() const;
