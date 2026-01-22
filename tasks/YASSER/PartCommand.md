@@ -23,8 +23,8 @@ PartCommand(Server* srv, Client* cli, const std::vector<std::string>& params)
 **Objectif**: Initialiser la commande PART
 
 **TODO**:
-- [ ] Appeler le constructeur de la classe de base
-- [ ] Aucune initialisation supplémentaire nécessaire
+- [x] Appeler le constructeur de la classe de base
+- [x] Aucune initialisation supplémentaire nécessaire
 
 ---
 
@@ -38,8 +38,8 @@ void execute()
 **TODO**:
 
 #### Étape 1: Vérifier l'enregistrement
-- [ ] Vérifier que le client est complètement enregistré
-- [ ] Sinon: envoyer ERR_NOTREGISTERED (451)
+- [x] Vérifier que le client est complètement enregistré
+- [x] Sinon: envoyer ERR_NOTREGISTERED (451)
   ```cpp
   if (!client->isRegistered()) {
       sendError(451, ":You have not registered");
@@ -48,16 +48,16 @@ void execute()
   ```
 
 #### Étape 2: Valider les paramètres
-- [ ] Vérifier que params contient au moins 1 élément (nom du canal)
-- [ ] Sinon: envoyer ERR_NEEDMOREPARAMS (461)
+- [x] Vérifier que params contient au moins 1 élément (nom du canal)
+- [x] Sinon: envoyer ERR_NEEDMOREPARAMS (461)
   ```cpp
   sendError(461, "PART :Not enough parameters");
   return;
   ```
 
 #### Étape 3: Analyser les canaux
-- [ ] Diviser params[0] par virgules pour obtenir la liste des canaux
-- [ ] Exemple: "PART #foo,#bar"
+- [x] Diviser params[0] par virgules pour obtenir la liste des canaux
+- [x] Exemple: "PART #foo,#bar"
   - Canaux: ["#foo", "#bar"]
 
 #### Étape 4: Extraire la raison du départ (Optionnel)
