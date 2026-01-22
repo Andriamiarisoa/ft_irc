@@ -1,3 +1,5 @@
+
+#include <sstream>
 #include "../includes/Channel.hpp"
 #include "../includes/Client.hpp"
 #include "../includes/Command.hpp"
@@ -183,19 +185,48 @@ void Channel::broadcast(const std::string& msg, Client* exclude) {
 }
 
 void Channel::setInviteOnly(bool mode) {
-    (void)mode;
+    inviteOnly = mode;
+
+    if (!mode) {
+        invitedUsers.clear();
+    }
+    std::string modeStr = mode ? "+i" : "-i";
+    std::string msg = ":server MODE " + name + " " + modeStr + "\r\n";
+    broadcast (msg, NULL);
 }
 
 void Channel::setTopicRestricted(bool mode) {
-    (void)mode;
+    topicRestricted = mode;
+
+    std::string modeStr = mode ? "+t" : "-t";
+    std::string msg = ":server MODE " + name + " " + modeStr + "\r\n";
+    broadcast (msg, NULL);
 }
 
 void Channel::setUserLimit(int limit) {
-    (void)limit;
+    if (limit < 0) {
+        return;
+    }
+    userLimit = limit;
+    std::string msg;
+    if (limit == 0) {
+        msg =  "server MODE " + name + "-l\r\n";
+    }
+    else {
+        std::stringstream ss;
+
+        ss << limit;
+        msg = "server MODE " + name + " +l " + ss.str() + "\r\n"; 
+    }
 }
 
 void Channel::inviteUser(Client* client) {
-    (void)client;
+    if (client == NULL)
+        return;
+
+    if (!inviteOnly)
+        return;
+    invitedUsers.insert(client);
 }
 
 bool Channel::isInvited(Client* client) const {
