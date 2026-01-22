@@ -35,4 +35,5 @@ void PartCommand::execute() {
         return;
     }
     std::vector<std::string> channelsToPart = split(params[0], ',');
+    std::string partReason = (params.size() > 1) ? params[1] : "";
 }

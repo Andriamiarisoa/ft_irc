@@ -61,9 +61,9 @@ void execute()
   - Canaux: ["#foo", "#bar"]
 
 #### Étape 4: Extraire la raison du départ (Optionnel)
-- [ ] Si params[1] existe, l'utiliser comme raison du départ
-- [ ] Exemple: "PART #general :Going to sleep"
-- [ ] La raison peut être vide (juste quitter)
+- [x] Si params[1] existe, l'utiliser comme raison du départ
+- [x] Exemple: "PART #general :Going to sleep"
+- [x] La raison peut être vide (juste quitter)
 
 #### Étape 5: Pour chaque canal
 - [ ] Obtenir le canal du serveur
