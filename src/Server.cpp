@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:18 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/21 23:54:56 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/22 15:31:18 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -441,4 +441,15 @@ void Server::removeChannel(const std::string& name) {
     }
 }
 
-
+bool    Server::channelExistOrNot(const std::string& name) {
+    std::map<std::string, Channel*>::iterator it;
+    
+    for (it = channels.begin() ; it != channels.end() ; it++) {
+        std::string lowerName = name;
+        Channel* channel = it->second;
+        if (toLower(channel->getName()) == lowerName) {
+            return (true);
+        }
+    }
+    return (false);
+}
