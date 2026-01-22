@@ -77,28 +77,28 @@ void execute()
 - [x] Si le canal a une clé (mode +k):
   - Vérifier si le client a fourni la bonne clé
   - Si mauvaise/manquante: envoyer ERR_BADCHANNELKEY (475)
-- [ ] Si le canal est sur invitation uniquement (mode +i):
+- [x] Si le canal est sur invitation uniquement (mode +i):
   - Vérifier si le client est invité
   - Si non: envoyer ERR_INVITEONLYCHAN (473)
-- [ ] Si le canal a une limite d'utilisateurs (mode +l):
+- [x] Si le canal a une limite d'utilisateurs (mode +l):
   - Vérifier si le canal est plein
   - Si plein: envoyer ERR_CHANNELISFULL (471)
 
 #### Étape 7: Vérifier si Déjà Membre
-- [ ] Si le client est déjà dans le canal: ignorer (pas d'erreur)
-- [ ] IRC permet le re-JOIN silencieusement
+- [x] Si le client est déjà dans le canal: ignorer (pas d'erreur)
+- [x] IRC permet le re-JOIN silencieusement
 
 #### Étape 8: Ajouter le Client au Canal
-- [ ] Appeler channel->addMember(client)
-- [ ] Cela va:
+- [x] Appeler channel->addMember(client)
+- [x] Cela va:
   - Ajouter le client à l'ensemble des membres
   - Faire du premier membre un opérateur
   - Diffuser JOIN à tous les membres
   - Envoyer le sujet et la liste des noms au client
 
 #### Étape 9: Effacer l'Invitation (si invité)
-- [ ] Si le client était invité, retirer de la liste des invités
-- [ ] L'invitation est à usage unique
+- [x] Si le client était invité, retirer de la liste des invités
+- [x] L'invitation est à usage unique
 
 ---
 

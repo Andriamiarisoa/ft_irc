@@ -43,7 +43,6 @@ void JoinCommand::execute() {
             sendError(403, channelName + " :No such channel");
             continue;
         }
-        // 
         bool isNewChannel = false; // TODO: check if channel is new or already exists. For now, it's just a Placeholder, implement actual check
         Channel* channel = server->getOrCreateChannel(channelName);
         if(channel == NULL) {
@@ -63,13 +62,11 @@ void JoinCommand::execute() {
                     continue;
                 }
             }
-            bool channelIsInviteOnly = false; // TODO: check if channel is invite only. For now, it's just a Placeholder, implement actual check
-            if (channelIsInviteOnly && channel->isInvited(client) == false && channel->isOperator(client) == false) {
+            if (channel->isChannelInvitOnly() && channel->isInvited(client) == false) {
                 sendError(473, channelName + " :Cannot join channel (+i) - invite only");
                 continue;
             }
-            bool channelIsFull = false; // TODO: check if channel is full. For now, it's just a Placeholder, implement actual check
-            if (channelIsFull) {
+            if (channel->isChannelFull()) {
                 sendError(471, channelName + " :Cannot join channel (+l) - channel is full");
                 continue;
             }
