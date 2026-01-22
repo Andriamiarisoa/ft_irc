@@ -68,8 +68,18 @@ bool Channel::checkKey(const std::string& key) const {
 void Channel::addMember(Client* client) {
     if (client == NULL)
         return;
+    
+    if (isChannelFull()) {
+        std::string error = ":server 471 " + client->getNickname() + 
+                           " " + name + " :Cannot join channel (+l)\r\n";
+        client->sendMessage(error);
+        return;
+    }
+    
     members.insert(client);
     client->addToChannel(this);
+    
+    invitedUsers.erase(client);
     if (getMembers().size() == 1) {
         addOperator(client);
     }
@@ -114,12 +124,8 @@ void Channel::removeMember(Client* client) {
 
     broadcast(partMsg, NULL);
     members.erase(client);
-    if (isOperator(client)) {
-        operators.erase(client);
-    }
-    if (isInvited(client)) {
-        invitedUsers.erase(client);
-    }
+    operators.erase(client);      // erase does nothing if not found
+    invitedUsers.erase(client);   // erase does nothing if not found
     client->removeFromChannel(this);
     if (members.empty()) {
         server->removeChannel(getName());
@@ -210,14 +216,14 @@ void Channel::setUserLimit(int limit) {
     userLimit = limit;
     std::string msg;
     if (limit == 0) {
-        msg =  "server MODE " + name + "-l\r\n";
+        msg = ":server MODE " + name + " -l\r\n";
     }
     else {
         std::stringstream ss;
-
         ss << limit;
-        msg = "server MODE " + name + " +l " + ss.str() + "\r\n"; 
+        msg = ":server MODE " + name + " +l " + ss.str() + "\r\n"; 
     }
+    broadcast(msg, NULL);
 }
 
 bool    Channel::isChannelInvitOnly() const {
@@ -247,13 +253,29 @@ void Channel::inviteUser(Client* client) {
 }
 
 bool Channel::isInvited(Client* client) const {
-    (void)client;
-    return false;
+    std::set<Client*>::iterator it = invitedUsers.find(client);
+
+    if (it != invitedUsers.end()) {
+        return (true);
+    }
+    return (false);
 }
 
-void Channel::kickMember(Client* client, const std::string& reason) {
-    (void)client;
-    (void)reason;
+void Channel::kickMember(Client* kicker, Client* client, const std::string& reason) {
+    if (kicker == NULL || client == NULL) {
+        return;
+    }
+
+    if (!isOperator(kicker)) {
+        std::string error = ":server 482 " + kicker->getNickname() + 
+           " " + name + " :You're not channel operator\r\n";
+        kicker->sendMessage(error);
+        return;
+    }
+
+    // if (!isMember(client)) {
+    //     std::string error = 
+    // }
 }
 
 std::set<Client*> Channel::getMembers() const {

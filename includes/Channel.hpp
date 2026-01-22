@@ -47,7 +47,7 @@ public:
     void setUserLimit(int limit);
     void inviteUser(Client* client);
     bool isInvited(Client* client) const;
-    void kickMember(Client* client, const std::string& reason);
+    void kickMember(Client* kicker, Client* client, const std::string& reason);
     void clearAllSet();
     bool isChannelInvitOnly() const;
     bool isChannelFull() const;
