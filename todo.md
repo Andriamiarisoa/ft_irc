@@ -10,7 +10,7 @@
 ## Architecture de base
 
 - [ ] Implémenter la classe Server
-- [ ] Implémenter la classe Client
+- [x] Implémenter la classe Client
 - [ ] Implémenter la classe Channel
 - [ ] Gérer les arguments : `./ircserv <port> <password>`
 - [ ] Valider le port et le mot de passe au démarrage
@@ -47,19 +47,19 @@
 
 - [ ] Vérifier le mot de passe de connexion
 - [ ] Implémenter la commande PASS
-- [ ] Implémenter la commande NICK (définir le pseudo)
+- [x] Implémenter la commande NICK (définir le pseudo)
 - [ ] Implémenter la commande USER (définir le username)
 - [ ] Gérer l'ordre d'authentification
 - [ ] Envoyer les messages de bienvenue (RPL_WELCOME, etc.)
 
 ## Gestion des canaux
 
-- [ ] Implémenter la commande JOIN (rejoindre un canal)
-- [ ] Implémenter la commande PART (quitter un canal)
-- [ ] Créer automatiquement les canaux si inexistants
-- [ ] Définir le premier utilisateur comme opérateur
-- [ ] Transmettre les messages à tous les membres du canal
-- [ ] Gérer la liste des membres par canal
+- [x] Implémenter la commande JOIN (rejoindre un canal)
+- [x] Implémenter la commande PART (quitter un canal)
+- [x] Créer automatiquement les canaux si inexistants
+- [x] Définir le premier utilisateur comme opérateur
+- [x] Transmettre les messages à tous les membres du canal
+- [x] Gérer la liste des membres par canal
 
 ## Messages privés
 
@@ -79,7 +79,7 @@
 
 - [ ] Gérer les privilèges d'opérateur (operator vs regular user)
 - [ ] Implémenter la commande KICK (éjecter un client)
-- [ ] Implémenter la commande INVITE (inviter un client)
+- [x] Implémenter la commande INVITE (inviter un client)
 - [ ] Implémenter la commande TOPIC (changer/voir le topic)
 - [ ] Implémenter la commande MODE avec les modes suivants :
   - [ ] `i` : Mode invite-only (invitation seulement)

@@ -4,12 +4,13 @@ ircserv
 tests/test_client
 tests/test_command
 tests/test_messageparser
-<<<<<<< HEAD
 tests/test_nickcommand
 srcs/mainServer.cpp
 src/mainServer.cpp
 tests/test_server
-=======
+tests/test_pass_command
 tests/test_pass_command
 tests/test_quit_command
->>>>>>> feature/Channel
+tests/test_privmsg_command
+tests/test_invite_command
+tests/test_topic_command

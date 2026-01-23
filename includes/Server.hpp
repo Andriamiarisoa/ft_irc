@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:30 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/20 16:27:57 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/22 19:36:25 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,15 @@ private:
     int  setupListen();
     void acceptNewClient();
     void handleClientMessage(int fd);
-    void disconnectClient(int fd);
-    Client* getClientByNick(const std::string& nick);
     void executeCommand(Client* client, const std::string& cmd);
     
-    public:
+public:
     Server(int port, const std::string& password);
     ~Server();
     
     void start();
     void stop();
+    void disconnectClient(int fd);
     Channel* getOrCreateChannel(const std::string& name);
     void    removeChannel(const std::string& name);
     std::string toLower(const std::string& str);
@@ -59,7 +58,8 @@ private:
     void    broadcastQuitNotification(Client* client, const std::string& quitMsg);
     std::vector<Channel*>   getClientChannels(Client* client);
     Client* getClientByNick(const std::string& nick);
-    bool    channelExistOrNot(const std::string& name);    
+    bool    channelExistOrNot(const std::string& name);
+    Channel* getChannel(const std::string& name);
 };
 
 #endif
