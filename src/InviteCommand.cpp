@@ -32,7 +32,10 @@ void InviteCommand::execute() {
         sendError(442, channelName + " :You're not on that channel");
         return;
     }
-    // TODO: check if client is operator if channel is invite-only
+    if (channel->isChannelInvitOnly() && !channel->isOperator(client)) {
+        sendError(482, channelName + " :You're not channel operator");
+        return;
+    }
     Client* targetClient = server->getClientByNick(targetNick);
     if (!targetClient) {
         sendError(401, targetNick + " :No such nick/channel");
@@ -42,4 +45,10 @@ void InviteCommand::execute() {
         sendError(443, targetNick + " " + channelName + " :is already on channel");
         return;
     }
+    channel->inviteUser(targetClient);
+    std::string inviteMsg = ":" + client->getNickname() + "!" +
+                          client->getUsername() + "@host INVITE " +
+                          targetNick + " " + channelName + "\r\n";
+    targetClient->sendMessage(inviteMsg);
+    sendReply(341, targetNick + " " + channelName);
 }

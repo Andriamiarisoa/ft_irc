@@ -76,7 +76,7 @@ void execute()
   ```
 
 #### Étape 6 : Vérifier le Statut d'Opérateur (pour les canaux +i)
-- [ ] Si le canal est sur invitation uniquement (+i) :
+- [x] Si le canal est sur invitation uniquement (+i) :
   - Vérifier si le client est opérateur du canal
   - Sinon : envoyer ERR_CHANOPRIVSNEEDED (482)
   ```cpp
@@ -95,8 +95,8 @@ void execute()
   ```
 
 #### Étape 8 : Vérifier que la Cible n'est pas Déjà dans le Canal
-- [ ] Vérifier si la cible est déjà membre du canal
-- [ ] Si oui : envoyer ERR_USERONCHANNEL (443)
+- [x] Vérifier si la cible est déjà membre du canal
+- [x] Si oui : envoyer ERR_USERONCHANNEL (443)
   ```cpp
   sendError(443, targetNick + " " + channelName + 
             " :is already on channel");
@@ -104,18 +104,18 @@ void execute()
   ```
 
 #### Étape 9 : Ajouter à la Liste des Invités
-- [ ] Appeler channel->inviteUser(targetClient)
-- [ ] Cela ajoute la cible à l'ensemble des invités du canal
+- [x] Appeler channel->inviteUser(targetClient)
+- [x] Cela ajoute la cible à l'ensemble des invités du canal
 
 #### Étape 10 : Envoyer une Confirmation à l'Inviteur
-- [ ] Envoyer RPL_INVITING (341) à l'inviteur
+- [x] Envoyer RPL_INVITING (341) à l'inviteur
   ```cpp
   sendReply(341, channelName + " " + targetNick);
   ```
 
 #### Étape 11 : Envoyer INVITE à la Cible
-- [ ] Format : ":inviter!user@host INVITE target #channel"
-- [ ] Envoyer au client cible
+- [x] Format : ":inviter!user@host INVITE target #channel"
+- [x] Envoyer au client cible
   ```cpp
   std::string inviteMsg = ":" + client->getNickname() + "!" +
                           client->getUsername() + "@host INVITE " +
