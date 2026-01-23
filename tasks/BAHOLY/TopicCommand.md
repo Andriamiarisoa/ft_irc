@@ -40,8 +40,8 @@ void execute()
 **TODO** :
 
 #### Étape 1 : Vérifier l'Enregistrement
-- [ ] Vérifier que le client est complètement enregistré
-- [ ] Sinon : envoyer ERR_NOTREGISTERED (451)
+- [x] Vérifier que le client est complètement enregistré
+- [x] Sinon : envoyer ERR_NOTREGISTERED (451)
   ```cpp
   if (!client->isRegistered()) {
       sendError(451, ":You have not registered");
@@ -50,50 +50,50 @@ void execute()
   ```
 
 #### Étape 2 : Valider les Paramètres
-- [ ] Vérifier que params a au moins 1 élément (nom du canal)
-- [ ] Sinon : envoyer ERR_NEEDMOREPARAMS (461)
+- [x] Vérifier que params a au moins 1 élément (nom du canal)
+- [x] Sinon : envoyer ERR_NEEDMOREPARAMS (461)
   ```cpp
   sendError(461, "TOPIC :Not enough parameters");
   return;
   ```
 
 #### Étape 3 : Extraire le Nom du Canal
-- [ ] Nom du canal : params[0]
+- [x] Nom du canal : params[0]
 
 #### Étape 4 : Obtenir le Canal
-- [ ] Appeler server->getChannel(channelName)
-- [ ] Si le canal n'existe pas : envoyer ERR_NOSUCHCHANNEL (403)
+- [x] Appeler server->getChannel(channelName)
+- [x] Si le canal n'existe pas : envoyer ERR_NOSUCHCHANNEL (403)
   ```cpp
   sendError(403, channelName + " :No such channel");
   return;
   ```
 
 #### Étape 5 : Vérifier que le Client est dans le Canal
-- [ ] Vérifier si le client est membre du canal
-- [ ] Sinon : envoyer ERR_NOTONCHANNEL (442)
+- [x] Vérifier si le client est membre du canal
+- [x] Sinon : envoyer ERR_NOTONCHANNEL (442)
   ```cpp
   sendError(442, channelName + " :You're not on that channel");
   return;
   ```
 
 #### Étape 6 : Déterminer l'Action (Voir ou Définir)
-- [ ] Si params.size() == 1 : VOIR le sujet
-- [ ] Si params.size() >= 2 : DÉFINIR le sujet
+- [x] Si params.size() == 1 : VOIR le sujet
+- [x] Si params.size() >= 2 : DÉFINIR le sujet
 
 ---
 
 ### VOIR LE SUJET (params.size() == 1)
 
 #### Étape 7a : Vérifier si le Sujet est Défini
-- [ ] Appeler channel->getTopic()
-- [ ] Si le sujet est vide : envoyer RPL_NOTOPIC (331)
+- [x] Appeler channel->getTopic()
+- [x] Si le sujet est vide : envoyer RPL_NOTOPIC (331)
   ```cpp
   sendReply(331, channelName + " :No topic is set");
   return;
   ```
 
 #### Étape 8a : Envoyer le Sujet au Client
-- [ ] Envoyer RPL_TOPIC (332) avec le texte du sujet
+- [x] Envoyer RPL_TOPIC (332) avec le texte du sujet
   ```cpp
   sendReply(332, channelName + " :" + channel->getTopic());
   ```
@@ -112,8 +112,8 @@ void execute()
 ### DÉFINIR LE SUJET (params.size() >= 2)
 
 #### Étape 7b : Extraire le Nouveau Sujet
-- [ ] Joindre tous les params à partir de l'index 1
-- [ ] Supprimer le ':' initial s'il est présent
+- [x] Joindre tous les params à partir de l'index 1
+- [x] Supprimer le ':' initial s'il est présent
   ```cpp
   std::string newTopic = params[1];
   for (size_t i = 2; i < params.size(); ++i) {
@@ -126,7 +126,7 @@ void execute()
   ```
 
 #### Étape 8b : Vérifier le Mode de Protection du Sujet (+t)
-- [ ] Si le canal a le mode +t (protection du sujet) :
+- [x] Si le canal a le mode +t (protection du sujet) :
   - Vérifier si le client est opérateur du canal
   - Sinon : envoyer ERR_CHANOPRIVSNEEDED (482)
   ```cpp
@@ -137,7 +137,7 @@ void execute()
   ```
 
 #### Étape 9b : Définir le Sujet
-- [ ] Appeler channel->setTopic(newTopic)
+- [x] Appeler channel->setTopic(newTopic)
 - [ ] Optionnel : Sauvegarder le pseudo de l'auteur et l'horodatage
   ```cpp
   channel->setTopic(newTopic);
@@ -147,8 +147,8 @@ void execute()
   ```
 
 #### Étape 10b : Diffuser le Changement de TOPIC
-- [ ] Envoyer le message TOPIC à TOUS les membres du canal (y compris l'émetteur)
-- [ ] Format : ":nick!user@host TOPIC #canal :nouveau sujet"
+- [x] Envoyer le message TOPIC à TOUS les membres du canal (y compris l'émetteur)
+- [x] Format : ":nick!user@host TOPIC #canal :nouveau sujet"
   ```cpp
   std::string topicMsg = ":" + client->getNickname() + "!" +
                          client->getUsername() + "@host TOPIC " +
@@ -165,9 +165,9 @@ void execute()
 TOPIC #canal :
 ```
 
-- [ ] Une chaîne vide après ':' efface le sujet
-- [ ] Nécessite toujours la permission d'opérateur si +t
-- [ ] Diffuser le sujet vide à tous les membres
+- [x] Une chaîne vide après ':' efface le sujet
+- [x] Nécessite toujours la permission d'opérateur si +t
+- [x] Diffuser le sujet vide à tous les membres
   ```cpp
   std::string topicMsg = ":" + client->getNickname() + "!" +
                          client->getUsername() + "@host TOPIC " +
