@@ -42,7 +42,7 @@ void NickCommand::execute() {
         return ;
     }
     if (client->isRegistered()) {
-        std::string msg = ":" + currentNick + "!" + client->getUsername() + "@" + client->getHostname() + " NICK :" + newNick;
+        std::string msg = client->getPrefix() + " NICK :" + newNick;
         const std::set<Channel*>& channels = client->getChannels();
 
         client->sendMessage(msg);
@@ -55,7 +55,7 @@ void NickCommand::execute() {
         std::string version = "1.0";
 
         client->registerClient();
-        sendReply(001, ":Welcome to the IRC Network " + client->getNickname() + "!" + client->getUsername() + "@" + client->getHostname());
+        sendReply(001, ":Welcome to the IRC Network " + client->getPrefix());
         sendReply(002, ":Your host is " + serverName + ", running version " + version);
         sendReply(003, ":This server was created just now");
         sendReply(004, serverName + " " + version + " o o");

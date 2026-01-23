@@ -46,7 +46,7 @@ void PartCommand::execute() {
             sendError(442, channelsToPart[i] + " :You're not on that channel");
             continue;
         }
-        std::string partMsg = ":" + client->getNickname() + " PART " + channelsToPart[i];
+        std::string partMsg = client->getPrefix() + " PART " + channelsToPart[i];
         if (!partReason.empty()) {
             if (partReason[0] == ':') {
                 partMsg += " " + partReason;
