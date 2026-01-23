@@ -30,7 +30,7 @@ void PartCommand::execute() {
         sendError(451, ":You have not registered");
         return;
     }
-    if (params.empty() || params[0].empty()) {
+    if (params.empty() || params[0].empty() || params.size() > 2) {
         sendError(461, "PART :Not enough parameters");
         return;
     }
@@ -48,7 +48,11 @@ void PartCommand::execute() {
         }
         std::string partMsg = ":" + client->getNickname() + " PART " + channelsToPart[i];
         if (!partReason.empty()) {
-            partMsg += " :" + partReason;
+            if (partReason[0] == ':') {
+                partMsg += " " + partReason;
+            } else {
+                partMsg += " :" + partReason;
+            }
         }
         partMsg += "\r\n";
         channel->broadcast(partMsg, client);
