@@ -118,7 +118,7 @@ std::vector<std::string> MessageParser::splitParams(const std::string& str) {
     }
     if (!cmdLine.empty())
     {
-        if (cmdLine.size() < 2 || cmdLine[1] == ' ')
+        if (cmdLine.size() > 1 &&cmdLine[1] == ' ')
             return std::vector<std::string>();
         else
             result.push_back(cmdLine);
