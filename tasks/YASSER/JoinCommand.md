@@ -23,8 +23,8 @@ JoinCommand(Server* srv, Client* cli, const std::vector<std::string>& params)
 **Objectif**: Initialiser la commande JOIN
 
 **TODO**:
-- [ ] Appeler le constructeur de la classe de base
-- [ ] Aucune initialisation supplémentaire nécessaire
+- [x] Appeler le constructeur de la classe de base
+- [x] Aucune initialisation supplémentaire nécessaire
 
 ---
 
@@ -38,8 +38,8 @@ void execute()
 **TODO**:
 
 #### Étape 1: Vérifier l'Enregistrement
-- [ ] Vérifier que le client est entièrement enregistré
-- [ ] Si non: envoyer ERR_NOTREGISTERED (451)
+- [x] Vérifier que le client est entièrement enregistré
+- [x] Si non: envoyer ERR_NOTREGISTERED (451)
   ```cpp
   if (!client->isRegistered()) {
       sendError(451, ":You have not registered");
@@ -48,57 +48,57 @@ void execute()
   ```
 
 #### Étape 2: Valider les Paramètres
-- [ ] Vérifier si params a au moins 1 élément (nom du canal)
-- [ ] Si non: envoyer ERR_NEEDMOREPARAMS (461)
+- [x] Vérifier si params a au moins 1 élément (nom du canal)
+- [x] Si non: envoyer ERR_NEEDMOREPARAMS (461)
   ```cpp
   sendError(461, "JOIN :Not enough parameters");
   return;
   ```
 
 #### Étape 3: Analyser les Canaux et les Clés
-- [ ] Diviser params[0] par des virgules pour obtenir la liste des canaux
-- [ ] Si params[1] existe, diviser par des virgules pour obtenir la liste des clés
-- [ ] Exemple: "JOIN #foo,#bar key1,key2"
+- [x] Diviser params[0] par des virgules pour obtenir la liste des canaux
+- [x] Si params[1] existe, diviser par des virgules pour obtenir la liste des clés
+- [x] Exemple: "JOIN #foo,#bar key1,key2"
   - Canaux: ["#foo", "#bar"]
   - Clés: ["key1", "key2"]
 
 #### Étape 4: Pour Chaque Canal
-- [ ] Valider le format du nom du canal:
+- [x] Valider le format du nom du canal:
   - Doit commencer par # ou &
   - Pas d'espaces, virgules ou caractères de contrôle
   - Maximum 50 caractères
-- [ ] Si invalide: envoyer ERR_NOSUCHCHANNEL (403)
+- [x] Si invalide: envoyer ERR_NOSUCHCHANNEL (403)
 
 #### Étape 5: Obtenir ou Créer le Canal
-- [ ] Appeler server->getOrCreateChannel(channelName)
-- [ ] Si le canal est nouveau: le client devient le premier opérateur
+- [x] Appeler server->getOrCreateChannel(channelName)
+- [x] Si le canal est nouveau: le client devient le premier opérateur
 
 #### Étape 6: Vérifier l'Accès au Canal
-- [ ] Si le canal a une clé (mode +k):
+- [x] Si le canal a une clé (mode +k):
   - Vérifier si le client a fourni la bonne clé
   - Si mauvaise/manquante: envoyer ERR_BADCHANNELKEY (475)
-- [ ] Si le canal est sur invitation uniquement (mode +i):
+- [x] Si le canal est sur invitation uniquement (mode +i):
   - Vérifier si le client est invité
   - Si non: envoyer ERR_INVITEONLYCHAN (473)
-- [ ] Si le canal a une limite d'utilisateurs (mode +l):
+- [x] Si le canal a une limite d'utilisateurs (mode +l):
   - Vérifier si le canal est plein
   - Si plein: envoyer ERR_CHANNELISFULL (471)
 
 #### Étape 7: Vérifier si Déjà Membre
-- [ ] Si le client est déjà dans le canal: ignorer (pas d'erreur)
-- [ ] IRC permet le re-JOIN silencieusement
+- [x] Si le client est déjà dans le canal: ignorer (pas d'erreur)
+- [x] IRC permet le re-JOIN silencieusement
 
 #### Étape 8: Ajouter le Client au Canal
-- [ ] Appeler channel->addMember(client)
-- [ ] Cela va:
+- [x] Appeler channel->addMember(client)
+- [x] Cela va:
   - Ajouter le client à l'ensemble des membres
   - Faire du premier membre un opérateur
   - Diffuser JOIN à tous les membres
   - Envoyer le sujet et la liste des noms au client
 
 #### Étape 9: Effacer l'Invitation (si invité)
-- [ ] Si le client était invité, retirer de la liste des invités
-- [ ] L'invitation est à usage unique
+- [x] Si le client était invité, retirer de la liste des invités
+- [x] L'invitation est à usage unique
 
 ---
 
