@@ -3,6 +3,7 @@
 
 #include <string>
 #include <set>
+#include "../includes/Server.hpp"
 
 class Client;
 
@@ -17,13 +18,15 @@ private:
     std::set<Client*> invitedUsers;
     bool inviteOnly;
     bool topicRestricted;
+    Server* server;
 
 public:
-    Channel(const std::string& name);
+    Channel(const std::string& name, Server* srv);
     ~Channel();
     
     std::string getName() const;
     std::string getTopic() const;
+    std::set<Client*> getMembers() const;
     
     void setTopic(const std::string& topic, Client* client);
     void setKey(const std::string& key);
@@ -44,7 +47,12 @@ public:
     void setUserLimit(int limit);
     void inviteUser(Client* client);
     bool isInvited(Client* client) const;
-    void kickMember(Client* client, const std::string& reason);
+    void kickMember(Client* kicker, Client* client, const std::string& reason);
+    void clearAllSet();
+    bool isChannelInvitOnly() const;
+    bool isChannelFull() const;
+    size_t getMembersCount() const;
+    
 };
 
 #endif

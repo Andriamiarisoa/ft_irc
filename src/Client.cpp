@@ -43,6 +43,10 @@ std::string Client::getUsername() const {
     return username;
 }
 
+std::set<Channel*> Client::getChannels() const {
+    return channels;
+}
+
 bool Client::isAuthenticated() const {
     return authenticated;
 }
