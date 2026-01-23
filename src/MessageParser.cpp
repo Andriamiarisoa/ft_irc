@@ -118,11 +118,12 @@ std::vector<std::string> MessageParser::splitParams(const std::string& str) {
     }
     if (!cmdLine.empty())
     {
-        if (cmdLine[0] == ' ')
-            result.clear();
+        if (cmdLine.size() < 2 || cmdLine[1] == ' ')
+            return std::vector<std::string>();
         else
             result.push_back(cmdLine);
     }
+    result.back() = result.back().substr(0, result.back().size() - 2);
     return result;
 }
 

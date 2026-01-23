@@ -11,3 +11,4 @@ tests/test_server
 tests/test_pass_command
 tests/test_pass_command
 tests/test_quit_command
+tests/test_privmsg_command
