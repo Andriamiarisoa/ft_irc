@@ -2,8 +2,8 @@
 #define TOPICCOMMAND_HPP
 
 #include "Command.hpp"
-#include "Server.hpp"
-#include "Client.hpp"
+#include "../includes/Client.hpp"
+#include "../includes/Server.hpp"
 
 class TopicCommand : public Command {
 public:

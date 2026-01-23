@@ -13,3 +13,4 @@ tests/test_pass_command
 tests/test_quit_command
 tests/test_privmsg_command
 tests/test_invite_command
+tests/test_topic_command
