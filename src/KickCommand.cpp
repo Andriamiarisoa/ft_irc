@@ -13,7 +13,7 @@ KickCommand::~KickCommand() {
 
 void KickCommand::execute() {
     if (!client->isRegistered()) {
-        sendError(451, ": You have not registered");
+        sendError(451, ":You have not registered");
         return;
     }
 
@@ -23,11 +23,37 @@ void KickCommand::execute() {
     }
 
     std::string channelName = params[0];
-    std::string targetname = params[1];
-    if (params.size() == 3) {
-        std::string reason = params[2];
+    std::string targetNick = params[1];
+    std::string reason = client->getNickname(); 
+    if (params.size() >= 3) {
+        reason = params[2];
     }
 
-    Channel* channel = server.getChanne
+    if (!server->channelExistOrNot(channelName)) {
+        sendError(403, channelName + " :No such channel");
+        return;
+    }
+    Channel* channel = server->getChannel(channelName);
 
+    if (!channel->isMember(client)) {
+        sendError(442, channelName + " :You're not on that channel");
+        return;
+    }
+
+    if (!channel->isOperator(client)) {
+        sendError(482, channelName + " :You're not a channel operator");
+        return;
+    }
+    
+    Client* target = server->getClientByNick(targetNick);
+    if (target == NULL) {
+        sendError(401, targetNick + " :No such nick/channel");
+        return;
+    }
+
+    if (!channel->isMember(target)) {
+        sendError(441, targetNick + " " + channelName + " :They aren't on that channel");
+        return;
+    }
+    channel->kickMember(client, target, reason);
 }
