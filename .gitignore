@@ -17,3 +17,4 @@ tests/test_pass_command
 tests/test_pass_command
 tests/test_quit_command
 >>>>>>> feature/QuitCommand
+tests/test_privmsg_command
