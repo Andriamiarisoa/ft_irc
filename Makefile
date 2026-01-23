@@ -31,7 +31,10 @@ SRCS		= main.cpp \
 				$(SRC_DIR)/InviteCommand.cpp \
 				$(SRC_DIR)/TopicCommand.cpp \
 				$(SRC_DIR)/ModeCommand.cpp \
-				$(SRC_DIR)/QuitCommand.cpp
+				$(SRC_DIR)/QuitCommand.cpp \
+				$(SRC_DIR)/NoticeCommand.cpp \
+				$(SRC_DIR)/PingCommand.cpp \
+				$(SRC_DIR)/PongCommand.cpp
 
 # Fichiers objets
 OBJS		= $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)

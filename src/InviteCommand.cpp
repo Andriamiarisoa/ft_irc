@@ -46,8 +46,7 @@ void InviteCommand::execute() {
         return;
     }
     channel->inviteUser(targetClient);
-    std::string inviteMsg = ":" + client->getNickname() + "!" +
-                          client->getUsername() + "@host INVITE " +
+    std::string inviteMsg =client->getPrefix() + " INVITE " +
                           targetNick + " " + channelName + "\r\n";
     targetClient->sendMessage(inviteMsg);
     sendReply(341, targetNick + " " + channelName);

@@ -27,7 +27,7 @@ void PrivmsgCommand::execute() {
             this->sendError(404, this->params[0] + " :Cannot send to channel");
             return;
         }
-        channel->broadcast(":" + this->client->getNickname() + " PRIVMSG " + this->params[0] + " " + this->params[1] + "\r\n", this->client);
+        channel->broadcast(this->client->getPrefix() + " PRIVMSG " + this->params[0] + " " + this->params[1] + "\r\n", this->client);
     }
     else
     {
@@ -36,6 +36,6 @@ void PrivmsgCommand::execute() {
             this->sendError(401, this->params[0] + " :No such client");
             return;
         }
-        targetClient->sendMessage(":" + this->client->getNickname() + " PRIVMSG " + this->params[0] + " " + this->params[1] + "\r\n");
+        targetClient->sendMessage(this->client->getPrefix() + " PRIVMSG " + this->params[0] + " " + this->params[1] + "\r\n");
     }
 }
