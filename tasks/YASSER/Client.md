@@ -102,6 +102,26 @@ std::string getUsername() const
 
 ---
 
+### getPrefix()
+```cpp
+std::string getPrefix() const
+```
+
+**Objectif**: Obtenir le préfixe IRC complet du client
+
+**TODO**:
+- [x] Retourner le format `:nickname!username@hostname`
+- [x] Utilisé pour construire les messages diffusés aux canaux
+- [x] Exemple: `:john!~john@192.168.1.1`
+
+**Utilisation**:
+```cpp
+std::string prefix = client->getPrefix();
+// Retourne ":john!~john@192.168.1.1"
+```
+
+---
+
 ### isAuthenticated()
 ```cpp
 bool isAuthenticated() const

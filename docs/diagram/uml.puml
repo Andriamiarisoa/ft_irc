@@ -45,6 +45,7 @@ class Client {
   +getFd() : int
   +getNickname() : string
   +getUsername() : string
+  +getPrefix() : string
   +isAuthenticated() : bool
   +isRegistered() : bool
   +setNickname(nick : string) : void
@@ -146,6 +147,18 @@ class QuitCommand {
   +execute() : void
 }
 
+class NoticeCommand {
+  +execute() : void
+}
+
+class PingCommand {
+  +execute() : void
+}
+
+class PongCommand {
+  +execute() : void
+}
+
 class MessageParser {
   +{static} parse(line : string, srv : Server, cli : Client) : Command
   -{static} splitParams(str : string) : vector
@@ -163,11 +176,14 @@ Command <|-- UserCommand
 Command <|-- JoinCommand
 Command <|-- PartCommand
 Command <|-- PrivmsgCommand
+Command <|-- NoticeCommand
 Command <|-- KickCommand
 Command <|-- InviteCommand
 Command <|-- TopicCommand
 Command <|-- ModeCommand
 Command <|-- QuitCommand
+Command <|-- PingCommand
+Command <|-- PongCommand
 
 Server ..> MessageParser : uses
 MessageParser ..> Command : creates
@@ -194,6 +210,12 @@ note right of Channel
   k = key/password
   o = operator
   l = user limit
+end note
+
+note bottom of Command
+  Utilise Replies.hpp pour
+  les codes numériques IRC
+  (001-004, 3xx, 4xx)
 end note
 
 @enduml
