@@ -13,7 +13,7 @@ void PrivmsgCommand::execute() {
         this->sendError(451, ":You have not registered");
         return;
     }
-    if (this->params.size() != 2 || this->params[1][0] != ':') {
+    if (this->params.size() != 2) {
         this->sendError(411, "Wrong parameters");
         return;
     }
