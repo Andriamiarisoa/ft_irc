@@ -18,7 +18,7 @@ void InviteCommand::execute() {
         return;
     }
     if (params.empty() || params[0].empty() || params.size() < 2) {
-        sendError(461, "JOIN :Not enough parameters");
+        sendError(461, "INVITE :Not enough parameters");
         return;
     }
     std::string targetNick = params[0];;
