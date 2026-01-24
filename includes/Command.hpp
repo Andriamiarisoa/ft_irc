@@ -16,8 +16,6 @@ protected:
     
     std::string formatCode(int code);
     std::string getClientNick();
-    void sendReply(int code, const std::string& msg);
-    void sendError(int code, const std::string& msg);
 
 public:
     Command(Server* srv, Client* cli, const std::vector<std::string>& params);

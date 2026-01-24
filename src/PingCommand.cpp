@@ -11,8 +11,10 @@ PingCommand::~PingCommand() {
 }
 
 void PingCommand::execute() {
+    std::string nick = client->getNickname();
+    if (nick.empty()) nick = "*";
     if (params.empty()) {
-        sendError(409, "No origin specified");
+        client->sendMessage(ERR_NOORIGIN(nick) + "\r\n");
         return;
     }
 
