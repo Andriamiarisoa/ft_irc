@@ -41,17 +41,21 @@ void execute()
 - [x] Vérifier que le client est complètement enregistré
 - [x] Sinon : envoyer ERR_NOTREGISTERED (451)
   ```cpp
+  #include "Replies.hpp"
+  
   if (!client->isRegistered()) {
-      sendError(451, ":You have not registered");
+      client->sendMessage(ERR_NOTREGISTERED(client->getNickname()) + "\r\n");
       return;
   }
   ```
+  > **Note**: ERR_NOTREGISTERED n'existe pas dans Replies.hpp standard.
+  > Ajouter si besoin : `#define ERR_NOTREGISTERED(nick) (":" SERVER_NAME " 451 " + (nick) + " :You have not registered")`
 
 #### Étape 2 : Valider les Paramètres
 - [x] Vérifier si params a au moins 2 éléments (canal et utilisateur)
 - [x] Sinon : envoyer ERR_NEEDMOREPARAMS (461)
   ```cpp
-  sendError(461, "KICK :Not enough parameters");
+  client->sendMessage(ERR_NEEDMOREPARAMS(client->getNickname(), "KICK") + "\r\n");
   return;
   ```
 
@@ -64,7 +68,7 @@ void execute()
 - [x] Appeler server->getChannel(channelName)
 - [x] Si le canal n'existe pas : envoyer ERR_NOSUCHCHANNEL (403)
   ```cpp
-  sendError(403, channelName + " :No such channel");
+  client->sendMessage(ERR_NOSUCHCHANNEL(client->getNickname(), channelName) + "\r\n");
   return;
   ```
 
@@ -72,7 +76,7 @@ void execute()
 - [x] Vérifier si le client (expulseur) est membre du canal
 - [x] Sinon : envoyer ERR_NOTONCHANNEL (442)
   ```cpp
-  sendError(442, channelName + " :You're not on that channel");
+  client->sendMessage(ERR_NOTONCHANNEL(client->getNickname(), channelName) + "\r\n");
   return;
   ```
 
@@ -80,7 +84,7 @@ void execute()
 - [x] Vérifier si le client est opérateur du canal
 - [x] Sinon : envoyer ERR_CHANOPRIVSNEEDED (482)
   ```cpp
-  sendError(482, channelName + " :You're not channel operator");
+  client->sendMessage(ERR_CHANOPRIVSNEEDED(client->getNickname(), channelName) + "\r\n");
   return;
   ```
 
@@ -88,7 +92,7 @@ void execute()
 - [x] Appeler server->getClientByNick(targetNick)
 - [x] Si non trouvé : envoyer ERR_NOSUCHNICK (401)
   ```cpp
-  sendError(401, targetNick + " :No such nick/channel");
+  client->sendMessage(ERR_NOSUCHNICK(client->getNickname(), targetNick) + "\r\n");
   return;
   ```
 
@@ -96,8 +100,7 @@ void execute()
 - [x] Vérifier si la cible est membre du canal
 - [x] Sinon : envoyer ERR_USERNOTINCHANNEL (441)
   ```cpp
-  sendError(441, targetNick + " " + channelName + 
-            " :They aren't on that channel");
+  client->sendMessage(ERR_USERNOTINCHANNEL(client->getNickname(), targetNick, channelName) + "\r\n");
   return;
   ```
 
@@ -105,10 +108,10 @@ void execute()
 - [x] Format : ":expulseur!user@host KICK #canal cible :raison"
 - [x] Diffuser à TOUS les membres (y compris l'expulseur et l'expulsé)
   ```cpp
-  std::string kickMsg = ":" + client->getNickname() + "!" +
-                        client->getUsername() + "@host KICK " +
-                        channelName + " " + targetNick + " :" +
-                        reason + "\r\n";
+  std::string kickMsg = USER_PREFIX(client->getNickname(), 
+                                    client->getUsername(), "host") +
+                        " KICK " + channelName + " " + targetNick + 
+                        " :" + reason + "\r\n";
   channel->broadcast(kickMsg, NULL); // NULL = envoyer à tous
   ```
 

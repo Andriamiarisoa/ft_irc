@@ -41,7 +41,9 @@ void execute()
 - [x] Vérifier si le vecteur params a au moins 1 élément
 - [x] Sinon: envoyer ERR_NEEDMOREPARAMS (461)
   ```cpp
-  sendError(461, "PASS :Not enough parameters");
+  #include "Replies.hpp"
+  
+  client->sendMessage(ERR_NEEDMOREPARAMS(client->getNickname(), "PASS") + "\r\n");
   return;
   ```
 
@@ -50,7 +52,7 @@ void execute()
 - [x] Si oui: envoyer ERR_ALREADYREGISTRED (462)
   ```cpp
   if (client->isRegistered()) {
-      sendError(462, ":You may not reregister");
+      client->sendMessage(ERR_ALREADYREGISTERED(client->getNickname()) + "\r\n");
       return;
   }
   ```
@@ -64,7 +66,7 @@ void execute()
 - [x] Si non-correspondance:
   - Envoyer ERR_PASSWDMISMATCH (464)
   ```cpp
-  sendError(464, ":Password incorrect");
+  client->sendMessage(ERR_PASSWDMISMATCH(client->getNickname()) + "\r\n");
   ```
 
 ---

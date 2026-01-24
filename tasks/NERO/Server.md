@@ -145,7 +145,16 @@ void acceptNewClient()
 - [x] Créer un nouvel objet Client avec fd
 - [x] Ajouter le client à la map clients (clé = fd)
 - [x] Enregistrer la nouvelle connexion (adresse IP si possible)
-- [x] Envoyer un message de bienvenue au client
+- [x] Envoyer un message de bienvenue au client (après enregistrement complet)
+  ```cpp
+  #include "Replies.hpp"
+  
+  // Après PASS/NICK/USER réussis, envoyer les messages de bienvenue :
+  client->sendMessage(RPL_WELCOME(nick, user, host) + "\r\n");
+  client->sendMessage(RPL_YOURHOST(nick) + "\r\n");
+  client->sendMessage(RPL_CREATED(nick, "Jan 2026") + "\r\n");
+  client->sendMessage(RPL_MYINFO(nick) + "\r\n");
+  ```
 
 ---
 

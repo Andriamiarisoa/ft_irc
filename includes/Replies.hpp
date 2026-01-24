@@ -88,6 +88,9 @@
 #define ERR_USERONCHANNEL(nick, target, chan) \
     (":" SERVER_NAME " 443 " + (nick) + " " + (target) + " " + (chan) + " :is already on channel")
 
+#define ERR_NOTREGISTERED(nick) \
+    (":" SERVER_NAME " 451 " + (nick) + " :You have not registered")
+
 #define ERR_NEEDMOREPARAMS(nick, cmd) \
     (":" SERVER_NAME " 461 " + (nick) + " " + (cmd) + " :Not enough parameters")
 

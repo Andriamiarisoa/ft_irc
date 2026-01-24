@@ -51,9 +51,11 @@ void execute()
   - Ne pas exclure le client (il devrait aussi le voir)
 - [ ] Format du message: ":nick!user@host QUIT :message de déconnexion"
   ```cpp
-  std::string quitMsg = ":" + client->getNickname() + "!" + 
-                        client->getUsername() + "@host QUIT :" + 
-                        message + "\r\n";
+  #include "Replies.hpp"
+  
+  std::string quitMsg = USER_PREFIX(client->getNickname(), 
+                                    client->getUsername(), "host") + 
+                        " QUIT :" + message + "\r\n";
   ```
 
 #### Étape 3: Retirer de Tous les Canaux

@@ -1,6 +1,7 @@
 #include "../includes/PassCommand.hpp"
 #include "../includes/Client.hpp"
 #include "../includes/Server.hpp"
+#include "../includes/Replies.hpp"
 #include <iostream>
 
 PassCommand::PassCommand(Server* srv, Client* cli, const std::vector<std::string>& params)
@@ -11,8 +12,11 @@ PassCommand::~PassCommand() {
 }
 
 void PassCommand::execute() {
+    std::string nick = client->getNickname();
+    if (nick.empty()) nick = "*";
+    
     if (params.size() == 0) {
-        sendError(461, "PASS :Not enough parameters");
+        client->sendMessage(ERR_NEEDMOREPARAMS(nick, "PASS") + "\r\n");
         return;
     }
 
@@ -22,7 +26,7 @@ void PassCommand::execute() {
     }
     
     if (client->isRegistered()) {
-        sendError(462, ":You may not register");
+        client->sendMessage(ERR_ALREADYREGISTERED(nick) + "\r\n");
         return;
     }
     
@@ -32,7 +36,7 @@ void PassCommand::execute() {
         return;
     }
     else {
-        sendError(464, ":Password incorrect");
+        client->sendMessage(ERR_PASSWDMISMATCH(nick) + "\r\n");
         return;
     }
 }

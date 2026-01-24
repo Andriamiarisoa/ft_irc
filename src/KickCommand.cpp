@@ -2,6 +2,7 @@
 #include "../includes/Client.hpp"
 #include "../includes/Server.hpp"
 #include "../includes/Channel.hpp"
+#include "../includes/Replies.hpp"
 #include <iostream>
 
 
@@ -13,13 +14,16 @@ KickCommand::~KickCommand() {
 }
 
 void KickCommand::execute() {
+    std::string nick = client->getNickname();
+    if (nick.empty()) nick = "*";
+    
     if (!client->isRegistered()) {
-        sendError(451, ":You have not registered");
+        client->sendMessage(ERR_NOTREGISTERED(nick) + "\r\n");
         return;
     }
     
     if (params.size() < 2) {
-        sendError(461, "KICK :Not enough parameters");
+        client->sendMessage(ERR_NEEDMOREPARAMS(nick, "KICK") + "\r\n");
         return;
     }
     if (params.size() >3) {
@@ -38,29 +42,29 @@ void KickCommand::execute() {
         reason = client->getNickname();
     }
     if (!server->channelExistOrNot(channelName)) {
-        sendError(403, channelName + " :No such channel");
+        client->sendMessage(ERR_NOSUCHCHANNEL(nick, channelName) + "\r\n");
         return;
     }
     Channel* channel = server->getChannel(channelName);
 
     if (!channel->isMember(client)) {
-        sendError(442, channelName + " :You're not on that channel");
+        client->sendMessage(ERR_NOTONCHANNEL(nick, channelName) + "\r\n");
         return;
     }
 
     if (!channel->isOperator(client)) {
-        sendError(482, channelName + " :You're not a channel operator");
+        client->sendMessage(ERR_CHANOPRIVSNEEDED(nick, channelName) + "\r\n");
         return;
     }
     
     Client* target = server->getClientByNick(targetNick);
     if (target == NULL) {
-        sendError(401, targetNick + " :No such nick/channel");
+        client->sendMessage(ERR_NOSUCHNICK(nick, targetNick) + "\r\n");
         return;
     }
 
     if (!channel->isMember(target)) {
-        sendError(441, targetNick + " " + channelName + " :They aren't on that channel");
+        client->sendMessage(ERR_USERNOTINCHANNEL(nick, targetNick, channelName) + "\r\n");
         return;
     }
     channel->kickMember(client, target, reason);

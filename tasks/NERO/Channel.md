@@ -101,9 +101,17 @@ void setTopic(const std::string& topic, Client* client)
 - [ ] Vérifier si le mode topicRestricted est activé
 - [ ] Si restreint : vérifier que le client est opérateur
 - [ ] Si pas opérateur et restreint : envoyer l'erreur ERR_CHANOPRIVSNEEDED (482)
+  ```cpp
+  #include "Replies.hpp"
+  
+  client->sendMessage(ERR_CHANOPRIVSNEEDED(client->getNickname(), name) + "\r\n");
+  ```
 - [ ] Stocker le nouveau sujet
 - [ ] Diffuser le changement de sujet à tous les membres
 - [ ] Envoyer RPL_TOPIC (332) au canal
+  ```cpp
+  client->sendMessage(RPL_TOPIC(client->getNickname(), name, topic) + "\r\n");
+  ```
 
 ---
 
@@ -158,13 +166,32 @@ void addMember(Client* client)
 
 **TODO** :
 - [ ] Vérifier que le client n'est pas NULL
-- [ ] Insérer le client dans l'ensemble members
+- [ ] Inserér le client dans l'ensemble members
 - [ ] Appeler client->addToChannel(this)
 - [ ] Si c'est le premier membre : le faire opérateur
 - [ ] Diffuser le message JOIN à tous les membres
+  ```cpp
+  #include "Replies.hpp"
+  
+  std::string joinMsg = USER_PREFIX(client->getNickname(), 
+                                    client->getUsername(), "host") +
+                        " JOIN " + name + "\r\n";
+  broadcast(joinMsg, NULL);
+  ```
 - [ ] Envoyer les informations du canal au nouveau membre :
   - Sujet (RPL_TOPIC 332, RPL_NOTOPIC 331)
+    ```cpp
+    if (topic.empty()) {
+        client->sendMessage(RPL_NOTOPIC(client->getNickname(), name) + "\r\n");
+    } else {
+        client->sendMessage(RPL_TOPIC(client->getNickname(), name, topic) + "\r\n");
+    }
+    ```
   - Liste des membres (RPL_NAMREPLY 353, RPL_ENDOFNAMES 366)
+    ```cpp
+    client->sendMessage(RPL_NAMREPLY(client->getNickname(), name, memberList) + "\r\n");
+    client->sendMessage(RPL_ENDOFNAMES(client->getNickname(), name) + "\r\n");
+    ```
 
 ---
 
@@ -182,6 +209,14 @@ void removeMember(Client* client)
 - [ ] Retirer de l'ensemble invited si invité
 - [ ] Appeler client->removeFromChannel(this)
 - [ ] Diffuser le message PART aux membres restants
+  ```cpp
+  #include "Replies.hpp"
+  
+  std::string partMsg = USER_PREFIX(client->getNickname(),
+                                    client->getUsername(), "host") +
+                        " PART " + name + "\r\n";
+  broadcast(partMsg, NULL);
+  ```
 - [ ] Si le canal devient vide : le Server doit supprimer le canal
 
 ---
@@ -314,7 +349,20 @@ void inviteUser(Client* client)
 - [ ] Vérifier si le canal est en mode invitation uniquement
 - [ ] Ajouter le client à l'ensemble invited
 - [ ] Envoyer RPL_INVITING (341) à celui qui invite
+  ```cpp
+  #include "Replies.hpp"
+  
+  inviter->sendMessage(RPL_INVITING(inviter->getNickname(), 
+                                    target->getNickname(), name) + "\r\n");
+  ```
 - [ ] Envoyer le message INVITE au client invité
+  ```cpp
+  std::string inviteMsg = USER_PREFIX(inviter->getNickname(),
+                                      inviter->getUsername(), "host") +
+                          " INVITE " + target->getNickname() + 
+                          " " + name + "\r\n";
+  target->sendMessage(inviteMsg);
+  ```
 - [ ] L'invitation est à usage unique (effacée après le join)
 
 ---
@@ -344,9 +392,21 @@ void kickMember(Client* client, const std::string& reason)
 **TODO** :
 - [ ] Vérifier si le client est membre
 - [ ] Si pas membre : envoyer une erreur
-- [ ] Retirer le membre du canal (appeler removeMember)
+  ```cpp
+  #include "Replies.hpp"
+  
+  kicker->sendMessage(ERR_USERNOTINCHANNEL(kicker->getNickname(), 
+                                           target->getNickname(), name) + "\r\n");
+  ```
 - [ ] Diffuser le message KICK avec la raison à tous les membres
-- [ ] Inclure le client expulsé dans la diffusion
+  ```cpp
+  std::string kickMsg = USER_PREFIX(kicker->getNickname(),
+                                    kicker->getUsername(), "host") +
+                        " KICK " + name + " " + target->getNickname() +
+                        " :" + reason + "\r\n";
+  broadcast(kickMsg, NULL);  // Inclure le client expulsé
+  ```
+- [ ] Retirer le membre du canal (appeler removeMember)
 
 ---
 
@@ -429,6 +489,23 @@ void kickMember(Client* client, const std::string& reason)
 - Maximum 50 caractères (RFC 1459)
 
 ### Réponses numériques
+Toutes ces macros sont définies dans `includes/Replies.hpp` :
+
+```cpp
+#include "Replies.hpp"
+
+// Exemples d'utilisation :
+client->sendMessage(RPL_NOTOPIC(nick, chan) + "\r\n");     // 331
+client->sendMessage(RPL_TOPIC(nick, chan, topic) + "\r\n"); // 332
+client->sendMessage(RPL_INVITING(nick, target, chan) + "\r\n"); // 341
+client->sendMessage(RPL_NAMREPLY(nick, chan, names) + "\r\n");  // 353
+client->sendMessage(RPL_ENDOFNAMES(nick, chan) + "\r\n");  // 366
+
+client->sendMessage(ERR_USERNOTINCHANNEL(nick, target, chan) + "\r\n"); // 441
+client->sendMessage(ERR_NOTONCHANNEL(nick, chan) + "\r\n"); // 442
+client->sendMessage(ERR_CHANOPRIVSNEEDED(nick, chan) + "\r\n"); // 482
+```
+
 - RPL_NOTOPIC (331) : Aucun sujet défini
 - RPL_TOPIC (332) : Contenu du sujet
 - RPL_INVITING (341) : Invitation envoyée
