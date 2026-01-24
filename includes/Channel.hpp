@@ -52,6 +52,7 @@ public:
     bool isChannelInvitOnly() const;
     bool isChannelFull() const;
     size_t getMembersCount() const;
+    int getUserLimit() const;
     
 };
 

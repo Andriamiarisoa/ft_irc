@@ -290,3 +290,6 @@ std::set<Client*> Channel::getMembers() const {
     return (members);
 }
 
+int Channel::getUserLimit() const {
+    return (userLimit);
+}
