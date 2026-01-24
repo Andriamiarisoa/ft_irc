@@ -40,7 +40,7 @@ ModeCommand(Server* srv, Client* cli, const std::vector<std::string>& params)
 **Objectif**: Initialiser la commande MODE
 
 **TODO**:
-- [ ] Appeler le constructeur de la classe de base
+- [x] Appeler le constructeur de la classe de base
 - [ ] Aucune initialisation supplémentaire nécessaire
 
 ---
