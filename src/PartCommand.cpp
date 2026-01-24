@@ -2,6 +2,7 @@
 #include "../includes/Server.hpp"
 #include "../includes/Client.hpp"
 #include "../includes/Channel.hpp"
+#include "../includes/Replies.hpp"
 #include <vector>
 #include <string>
 
@@ -26,12 +27,14 @@ static std::vector<std::string> split(const std::string& str, char delimiter) {
 }
 
 void PartCommand::execute() {
+    std::string nick = client->getNickname();
+    if (nick.empty()) nick = "*";
     if (!client->isRegistered()) {
-        sendError(451, ":You have not registered");
+        client->sendMessage(ERR_NOTREGISTERED(nick) + "\r\n");
         return;
     }
     if (params.empty() || params[0].empty() || params.size() > 2) {
-        sendError(461, "PART :Not enough parameters");
+        client->sendMessage(ERR_NEEDMOREPARAMS(nick, "PART") + "\r\n");
         return;
     }
     std::vector<std::string> channelsToPart = split(params[0], ',');
@@ -39,11 +42,11 @@ void PartCommand::execute() {
     for (size_t i = 0; i < channelsToPart.size(); i++) {
         Channel* channel = server->getChannel(channelsToPart[i]);
         if (!channel) {
-            sendError(403, channelsToPart[i] + " :No such channel");
+            client->sendMessage(ERR_NOSUCHCHANNEL(nick, channelsToPart[i]) + "\r\n");
             continue;
         }
         if (!channel->isMember(client)) {
-            sendError(442, channelsToPart[i] + " :You're not on that channel");
+            client->sendMessage(ERR_NOTONCHANNEL(nick, channelsToPart[i]) + "\r\n");
             continue;
         }
         std::string partMsg = client->getPrefix() + " PART " + channelsToPart[i];

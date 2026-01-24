@@ -2,6 +2,7 @@
 #include "../includes/Server.hpp"
 #include "../includes/Client.hpp"
 #include "../includes/Channel.hpp"
+#include "../includes/Replies.hpp"
 #include <vector>
 #include <string>
 
@@ -26,12 +27,14 @@ static std::vector<std::string> split(const std::string& str, char delimiter) {
 }
 
 void JoinCommand::execute() {
+    std::string nick = client->getNickname();
+    if (nick.empty()) nick = "*";
     if (!client->isRegistered()) {
-        sendError(451, ":You have not registered");
+        client->sendMessage(ERR_NOTREGISTERED(nick) + "\r\n");
         return;
     }
     if (params.empty() || params[0].empty()) {
-        sendError(461, "JOIN :Not enough parameters");
+        client->sendMessage(ERR_NEEDMOREPARAMS(nick, "JOIN") + "\r\n");
         return;
     }
     std::vector<std::string> channelsToJoin = split(params[0], ',');
@@ -40,13 +43,13 @@ void JoinCommand::execute() {
     for (size_t i = 0; i < channelsToJoin.size(); i++) {
         std::string channelName = channelsToJoin[i];
         if (!server->isValidName(channelName)) {
-            sendError(403, channelName + " :No such channel");
+            client->sendMessage(ERR_NOSUCHCHANNEL(nick, channelName) + "\r\n");
             continue;
         }
         bool isNewChannel = !server->channelExistOrNot(channelName);
         Channel* channel = server->getOrCreateChannel(channelName);
         if(channel == NULL) {
-            sendError(403, channelName + " :No such channel");
+            client->sendMessage(ERR_NOSUCHCHANNEL(nick, channelName) + "\r\n");
             continue;
         }
         if (isNewChannel) {
@@ -58,16 +61,16 @@ void JoinCommand::execute() {
             if (channel->hasKey()) {
                 std::string providedKey = (i < channelKeys.size()) ? channelKeys[i] : "";
                 if (!channel->checkKey(providedKey)) {
-                    sendError(475, channelName + " :Cannot join channel (+k) - incorrect key");
+                    client->sendMessage(ERR_BADCHANNELKEY(nick, channelName) + "\r\n");
                     continue;
                 }
             }
             if (channel->isChannelInvitOnly() && channel->isInvited(client) == false) {
-                sendError(473, channelName + " :Cannot join channel (+i) - invite only");
+                client->sendMessage(ERR_INVITEONLYCHAN(nick, channelName) + "\r\n");
                 continue;
             }
             if (channel->isChannelFull()) {
-                sendError(471, channelName + " :Cannot join channel (+l) - channel is full");
+                client->sendMessage(ERR_CHANNELISFULL(nick, channelName) + "\r\n");
                 continue;
             }
         }

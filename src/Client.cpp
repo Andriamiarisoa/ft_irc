@@ -8,6 +8,7 @@
 
 Client::Client(int fd) 
     : fd(fd), authenticated(false), registered(false) {
+        this->hostname = "unknown.host";
 }
 
 Client::~Client() {

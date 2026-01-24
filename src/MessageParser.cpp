@@ -16,6 +16,7 @@
 #include "../includes/NoticeCommand.hpp"
 #include "../includes/PingCommand.hpp"
 #include "../includes/PongCommand.hpp"
+#include "../includes/Replies.hpp"
 #include <iostream>
 #include <string>
 #include <exception>
@@ -68,10 +69,10 @@ Command* MessageParser::createCommand(const std::string& cmd, Server* srv, Clien
         }
     }
     catch (std::exception& e) {
-        std::cerr << e.what() << std::endl;
+        cli->sendMessage(e.what());
         return NULL;
     }
-    std::cerr << "Unknown command: " << cmd << std::endl;
+    cli->sendMessage(ERR_UNKNOWNCOMMAND(cli->getNickname(), cmd) + "\r\n");
     return NULL;
 }
 
@@ -150,7 +151,7 @@ Command* MessageParser::parse(const std::string& line, Server* srv, Client* cli)
     params = MessageParser::splitParams(line);
     if (params.empty())
     {
-        std::cerr << "Invalid command" << std::endl;
+        cli->sendMessage(ERR_UNKNOWNCOMMAND(cli->getNickname(), line) + "\r\n");
         return NULL;
     }
     cmd = params.front();
