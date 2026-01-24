@@ -310,12 +310,19 @@ void Server::disconnectClient(int fd) {
 
     std::string quitMess = ": " + nickname + " QUIT :Client disconnected\r\n";
 
+    std::vector<std::string> channelNames;
     std::map<std::string, Channel*>::iterator itc;
     for (itc = channels.begin() ; itc != channels.end() ; itc++) {
-        Channel* channel = itc->second;
-        if (channel->isMember(client)) {
-            channel->broadcast(quitMess, client);
-            channel->removeMember(client);
+        if (itc->second->isMember(client)) {
+            channelNames.push_back(itc->first);
+        }
+    }
+    
+    for (size_t i = 0; i < channelNames.size(); i++) {
+        std::map<std::string, Channel*>::iterator found = channels.find(channelNames[i]);
+        if (found != channels.end()) {
+            found->second->broadcast(quitMess, client);
+            found->second->removeMember(client);
         }
     }
     close (fd);
@@ -393,12 +400,19 @@ const std::string& Server::getPassword() {
 }
 
 void    Server::broadcastQuitNotification(Client* client, const std::string& quitMsg) {
+    std::vector<std::string> channelNames;
     std::map<std::string, Channel*>::iterator it;
     for (it = channels.begin() ; it != channels.end() ; it++) {
-        Channel* channel = it->second;
-        if (channel->isMember(client)) {
-            channel->broadcast(quitMsg, NULL);
-            channel->removeMember(client);
+        if (it->second->isMember(client)) {
+            channelNames.push_back(it->first);
+        }
+    }
+    
+    for (size_t i = 0; i < channelNames.size(); i++) {
+        std::map<std::string, Channel*>::iterator found = channels.find(channelNames[i]);
+        if (found != channels.end()) {
+            found->second->broadcast(quitMsg, client);
+            found->second->removeMember(client);
         }
     }
 }

@@ -130,7 +130,16 @@ std::vector<std::string> MessageParser::splitParams(const std::string& str) {
         else
             result.push_back(cmdLine);
     }
-    result.back() = result.back().substr(0, result.back().size() - 2);
+    if (!result.empty()) {
+        std::string& last = result.back();
+        if (last.size() >= 2 && last[last.size() - 2] == '\r' && last[last.size() - 1] == '\n') {
+            last = last.substr(0, last.size() - 2);
+        } else if (last.size() >= 1 && last[last.size() - 1] == '\n') {
+            last = last.substr(0, last.size() - 1);
+        } else if (last.size() >= 1 && last[last.size() - 1] == '\r') {
+            last = last.substr(0, last.size() - 1);
+        }
+    }
     return result;
 }
 

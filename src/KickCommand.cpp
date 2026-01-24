@@ -2,6 +2,7 @@
 #include "../includes/Client.hpp"
 #include "../includes/Server.hpp"
 #include "../includes/Channel.hpp"
+#include <iostream>
 
 
 KickCommand::KickCommand(Server* srv, Client* cli, const std::vector<std::string>& params)
@@ -16,19 +17,26 @@ void KickCommand::execute() {
         sendError(451, ":You have not registered");
         return;
     }
-
+    
     if (params.size() < 2) {
         sendError(461, "KICK :Not enough parameters");
         return;
     }
-
+    if (params.size() >3) {
+        std::cerr << "Warning: too much parameters, KICK only takes 3 params, other params ignored" << std::endl;
+    }
     std::string channelName = params[0];
     std::string targetNick = params[1];
     std::string reason = client->getNickname(); 
     if (params.size() >= 3) {
         reason = params[2];
+        if (!reason.empty() && reason[0] == ':') {
+            reason = reason.substr(1);
+        }
     }
-
+    if (reason.empty()) {
+        reason = client->getNickname();
+    }
     if (!server->channelExistOrNot(channelName)) {
         sendError(403, channelName + " :No such channel");
         return;
