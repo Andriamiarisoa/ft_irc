@@ -39,4 +39,8 @@ void ModeCommand::execute() {
         sendReply(324, channelName + " " + modeStr);
         return;
     }
+    if (!channel->isOperator(client)) {
+        sendError(482, channelName + " :You're not channel operator");
+        return;
+    }
 }

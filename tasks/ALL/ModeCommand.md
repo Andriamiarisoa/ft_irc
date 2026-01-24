@@ -55,8 +55,8 @@ void execute()
 **TODO**:
 
 #### Étape 1: Vérifier l'Enregistrement
-- [ ] Vérifier que le client est complètement enregistré
-- [ ] Sinon: envoyer ERR_NOTREGISTERED (451)
+- [x] Vérifier que le client est complètement enregistré
+- [x] Sinon: envoyer ERR_NOTREGISTERED (451)
   ```cpp
   if (!client->isRegistered()) {
       sendError(451, ":You have not registered");
@@ -65,48 +65,48 @@ void execute()
   ```
 
 #### Étape 2: Valider les Paramètres
-- [ ] Vérifier si params contient au moins 1 élément (nom du canal)
-- [ ] Sinon: envoyer ERR_NEEDMOREPARAMS (461)
+- [x] Vérifier si params contient au moins 1 élément (nom du canal)
+- [x] Sinon: envoyer ERR_NEEDMOREPARAMS (461)
   ```cpp
   sendError(461, "MODE :Not enough parameters");
   return;
   ```
 
 #### Étape 3: Extraire le Nom du Canal
-- [ ] Nom du canal: params[0]
-- [ ] Valider qu'il commence par '#'
+- [x] Nom du canal: params[0]
+- [x] Valider qu'il commence par '#'
 
 #### Étape 4: Obtenir le Canal
-- [ ] Appeler server->getChannel(channelName)
-- [ ] Si le canal n'existe pas: envoyer ERR_NOSUCHCHANNEL (403)
+- [x] Appeler server->getChannel(channelName)
+- [x] Si le canal n'existe pas: envoyer ERR_NOSUCHCHANNEL (403)
   ```cpp
   sendError(403, channelName + " :No such channel");
   return;
   ```
 
 #### Étape 5: Vérifier que le Client est dans le Canal
-- [ ] Vérifier si le client est membre du canal
-- [ ] Sinon: envoyer ERR_NOTONCHANNEL (442)
+- [x] Vérifier si le client est membre du canal
+- [x] Sinon: envoyer ERR_NOTONCHANNEL (442)
   ```cpp
   sendError(442, channelName + " :You're not on that channel");
   return;
   ```
 
 #### Étape 6: Déterminer l'Action
-- [ ] Si params.size() == 1: VISUALISER les modes
-- [ ] Si params.size() >= 2: DÉFINIR les modes
+- [x] Si params.size() == 1: VISUALISER les modes
+- [x] Si params.size() >= 2: DÉFINIR les modes
 
 ---
 
 ### VISUALISER LES MODES (params.size() == 1)
 
 #### Étape 7a: Obtenir les Modes Actuels
-- [ ] Appeler channel->getModeString()
-- [ ] Format: "+itk" ou "+itkl 50" (avec paramètres)
+- [x] Appeler channel->getModeString()
+- [x] Format: "+itk" ou "+itkl 50" (avec paramètres)
 
 #### Étape 8a: Envoyer RPL_CHANNELMODEIS
-- [ ] Code de réponse: 324
-- [ ] Format: "#channel +modes [paramètres]"
+- [x] Code de réponse: 324
+- [x] Format: "#channel +modes [paramètres]"
   ```cpp
   std::string modeStr = channel->getModeString();
   sendReply(324, channelName + " " + modeStr);
@@ -117,8 +117,8 @@ void execute()
 ### DÉFINIR LES MODES (params.size() >= 2)
 
 #### Étape 7b: Vérifier le Privilège d'Opérateur
-- [ ] Seuls les opérateurs peuvent changer les modes
-- [ ] Si pas opérateur: envoyer ERR_CHANOPRIVSNEEDED (482)
+- [x] Seuls les opérateurs peuvent changer les modes
+- [x] Si pas opérateur: envoyer ERR_CHANOPRIVSNEEDED (482)
   ```cpp
   if (!channel->isOperator(client)) {
       sendError(482, channelName + " :You're not channel operator");
