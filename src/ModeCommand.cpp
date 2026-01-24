@@ -35,7 +35,7 @@ void ModeCommand::execute() {
         std::string modeStr = "+";
         if (channel->isChannelInvitOnly()) modeStr += "i";
         if (channel->hasKey()) modeStr += "k";
-        if (channel->getMembersCount() > 0) modeStr += "l";
+        if (channel->getUserLimit() > 0) modeStr += ("l " + channel->getUserLimit());
         sendReply(324, channelName + " " + modeStr);
         return;
     }
