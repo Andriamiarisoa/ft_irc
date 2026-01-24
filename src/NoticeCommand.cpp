@@ -13,13 +13,13 @@ NoticeCommand::~NoticeCommand() {
 
 void NoticeCommand::execute() {
     // NOTICE does not generate error replies (RFC 1459)
-    if (params.size() < 2)
+    if (params.size() != 2)
         return;
 
     std::string target = params[0];
     std::string message = params[1];
     
-    if (message.empty())
+    if (message.empty() || message[0] != ':')
         return;
 
     std::string prefix = USER_PREFIX(client->getNickname(), client->getUsername(), client->getHostname());
