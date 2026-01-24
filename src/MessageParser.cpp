@@ -23,11 +23,6 @@
 Command* MessageParser::createCommand(const std::string& cmd, Server* srv, Client* cli,
         const std::vector<std::string>& params)
 {
-    if (params.empty())
-    {
-        std::cerr << "Missing parameters for command: " << cmd << std::endl;
-        return NULL;
-    }
     try{
         if (cmd == "INVITE") {
             return new InviteCommand(srv, cli, params);
@@ -130,7 +125,7 @@ std::vector<std::string> MessageParser::splitParams(const std::string& str) {
     }
     if (!cmdLine.empty())
     {
-        if (cmdLine.size() > 1 &&cmdLine[1] == ' ')
+        if (cmdLine.size() > 1 && cmdLine[1] == ' ')
             return std::vector<std::string>();
         else
             result.push_back(cmdLine);
