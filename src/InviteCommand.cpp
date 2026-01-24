@@ -17,7 +17,7 @@ void InviteCommand::execute() {
         sendError(451, ":You have not registered");
         return;
     }
-    if (params.empty() || params[0].empty() || params.size() == 2) {
+    if (params.empty() || params[0].empty()) {
         sendError(461, "INVITE :Wrong parameters");
         return;
     }

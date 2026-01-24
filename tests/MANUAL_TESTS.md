@@ -31,42 +31,42 @@ irssi -c localhost -p 6667
 ### PASS Command
 | Status | Test | Problem |
 |--------|------|---------|
-| | `PASS password` - correct password | |
-| | `PASS wrongpass` - incorrect password (should reject) | |
-| | `PASS` - no parameter (should error) | |
-| | `PASS pass1 pass2` - extra parameters (should use first) | |
-| | Send commands before PASS (should require auth) | |
-| | Send PASS twice (should error: already registered) | |
+|✅| `PASS password` - correct password | |
+|✅| `PASS wrongpass` - incorrect password (should reject) | |
+|✅| `PASS` - no parameter (should error) | |
+|✅| `PASS pass1 pass2` - extra parameters (should use first) | |
+|✅| Send commands before PASS (should require auth) | |
+|❌| Send PASS twice (should error: already registered) | pass still work even after the first pass |
 
 ### NICK Command
 | Status | Test | Problem |
 |--------|------|---------|
-| | `NICK validnick` - valid nickname | |
-| | `NICK 123invalid` - starts with number (should reject) | |
-| | `NICK` - no parameter (should error) | |
-| | `NICK nick!invalid` - invalid character (should reject) | |
-| | `NICK existingnick` - nickname already in use (should reject) | |
-| | `NICK newnick` - change nickname while connected | |
-| | `NICK verylongnicknameover9chars` - too long nickname | |
-| | `NICK a` - single character nickname | |
+|✅| `NICK validnick` - valid nickname | |
+|✅| `NICK 123invalid` - starts with number (should reject) | |
+|✅| `NICK` - no parameter (should error) | |
+|✅| `NICK nick!invalid` - invalid character (should reject) | |
+|✅| `NICK existingnick` - nickname already in use (should reject) | |
+|✅| `NICK newnick` - change nickname while connected | |
+|✅| `NICK verylongnicknameover9chars` - too long nickname | Yes it works but should have a proper error message to be mroe readable|
+|✅| `NICK a` - single character nickname | |
 
 ### USER Command
 | Status | Test | Problem |
 |--------|------|---------|
-| | `USER username 0 * :Real Name` - valid registration | |
-| | `USER` - no parameters (should error) | |
-| | `USER user` - missing parameters (should error) | |
-| | `USER user 0 * :` - empty realname | |
-| | Send USER twice (should error: already registered) | |
-| | USER before PASS (should require auth first) | |
-| | USER before NICK (should work, wait for NICK) | |
+|✅| `USER username 0 * :Real Name` - valid registration | |
+|✅| `USER` - no parameters (should error) | |
+|✅| `USER user` - missing parameters (should error) | |
+|✅| `USER user 0 * :` - empty realname | Yes empty real name should work in a classic IRC |
+|✅| Send USER twice (should error: already registered) | |
+|✅| USER before PASS (should require auth first) | |
+|✅| USER before NICK (should work, wait for NICK) | |
 
 ### Full Registration Flow
 | Status | Test | Problem |
 |--------|------|---------|
-| | PASS → NICK → USER (correct order) | |
-| | PASS → USER → NICK (different order) | |
-| | Connect without completing registration, then disconnect | |
+|✅| PASS → NICK → USER (correct order) | |
+|✅| PASS → USER → NICK (different order) | |
+|✅| Connect without completing registration, then disconnect | |
 
 ---
 
@@ -75,65 +75,69 @@ irssi -c localhost -p 6667
 ### JOIN Command
 | Status | Test | Problem |
 |--------|------|---------|
-| | `JOIN #channel` - join new channel (become operator) | |
-| | `JOIN #channel` - join existing channel | |
-| | `JOIN #channel key` - join with correct key | |
-| | `JOIN #channel wrongkey` - join with wrong key (should reject) | |
-| | `JOIN #channel` - join channel with key without providing key | |
-| | `JOIN invalidchannel` - no # prefix (should reject) | |
-| | `JOIN` - no parameter (should error) | |
-| | `JOIN #chan1,#chan2` - join multiple channels | |
-| | `JOIN #channel` - join invite-only without invite (should reject) | |
-| | `JOIN #channel` - join invite-only with invite | |
-| | `JOIN #channel` - join full channel (+l limit reached) | |
-| | `JOIN #channel` when already in channel | |
-| | `JOIN 0` - leave all channels | |
+|✅| `JOIN #channel` - join new channel (become operator) | |
+|✅| `JOIN #channel` - join existing channel | |
+|⏳| `JOIN #channel key` - join with correct key | Cannot be tested since MODE is not implemented yet |
+|⏳| `JOIN #channel wrongkey` - join with wrong key (should reject) | Cannot be tested since MODE is not implemented yet |
+|⏳| `JOIN #channel` - join channel with key without providing key | Cannot be tested since MODE is not implemented yet |
+|✅| `JOIN invalidchannel` - no # prefix (should reject) | |
+|✅| `JOIN` - no parameter (should error) | |
+|✅| `JOIN #chan1,#chan2` - join multiple channels | |
+|⏳| `JOIN #channel` - join invite-only without invite (should reject) | Cannot be tested since MODE is not implemented yet |
+|⏳| `JOIN #channel` - join invite-only with invite | Cannot be tested since MODE is not implemented yet |
+|⏳| `JOIN #channel` - join full channel (+l limit reached) | Cannot be tested since MODE is not implemented yet |
+|✅| `JOIN #channel` when already in channel | Normal IRC does not send any error message for this case |
+|❌| `JOIN 0` - leave all channels | Not implemented (en cours) |
 
 ### PART Command
 | Status | Test | Problem |
 |--------|------|---------|
-| | `PART #channel` - leave channel | |
-| | `PART #channel :goodbye` - leave with message | |
-| | `PART #nonexistent` - part channel not in (should error) | |
-| | `PART` - no parameter (should error) | |
-| | `PART #chan1,#chan2` - part multiple channels | |
-| | PART last member (channel should be deleted) | |
+|✅| `PART #channel` - leave channel | |
+|✅| `PART #channel :goodbye` - leave with message | |
+|✅| `PART #nonexistent` - part channel not in (should error) | |
+|✅| `PART` - no parameter (should error) | |
+|✅| `PART #chan1,#chan2` - part multiple channels | |
+|❌| PART last member (channel should be deleted) | It works but there is an invalid read of sieze 8 (to check and correct) |
+
+NB : when the last operator PART the channel, oldest (first on the list) became operator, a channel should always have at least one operator
 
 ### TOPIC Command
 | Status | Test | Problem |
 |--------|------|---------|
-| | `TOPIC #channel` - view topic | |
-| | `TOPIC #channel :new topic` - set topic as operator | |
-| | `TOPIC #channel :new topic` - set topic as non-op (no +t) | |
-| | `TOPIC #channel :new topic` - set topic as non-op (+t set, should reject) | |
-| | `TOPIC #channel :` - clear topic | |
-| | `TOPIC #nonexistent` - channel doesn't exist (should error) | |
-| | `TOPIC #channel` - not in channel (should error) | |
+|✅| `TOPIC #channel` - view topic | |
+|✅| `TOPIC #channel :new topic` - set topic as operator | other client receive a weird string without the topicName[0] |
+|❌| `TOPIC #channel :new topic` - set topic as non-op (no +t) | Channel topic restriction should be set to false on it's creation + other client receive a weird string without the topicName[0] |
+|✅| `TOPIC #channel :new topic` - set topic as non-op (+t set, should reject) | other client receive a weird string without the topicName[0] |
+|❌| `TOPIC #channel :` - clear topic | Generate massive leaks and topic viewing stop working, same things if you're operator or not but the command work |
+|✅| `TOPIC #nonexistent` - channel doesn't exist (should error) | |
+|✅| `TOPIC #channel` - not in channel (should error) | |
 
 ### KICK Command
 | Status | Test | Problem |
 |--------|------|---------|
-| | `KICK #channel nick` - kick user as operator | |
-| | `KICK #channel nick :reason` - kick with reason | |
-| | `KICK #channel nick` - kick as non-operator (should reject) | |
-| | `KICK #channel nonexistent` - kick non-member (should error) | |
-| | `KICK #nonexistent nick` - channel doesn't exist (should error) | |
-| | `KICK #channel` - missing nick parameter (should error) | |
-| | `KICK` - no parameters (should error) | |
-| | Kick last other member (you remain alone) | |
-| | Self-kick attempt | |
+|✅| `KICK #channel nick` - kick user as operator | |
+|✅| `KICK #channel nick :reason` - kick with reason | |
+|✅| `KICK #channel nick` - kick as non-operator (should reject) | |
+|✅| `KICK #channel nonexistent` - kick non-member (should error) | |
+|✅| `KICK #nonexistent nick` - channel doesn't exist (should error) | |
+|✅| `KICK #channel` - missing nick parameter (should error) | |
+|✅| `KICK` - no parameters (should error) | |
+|✅| Kick last other member (you remain alone) | |
+|✅| Self-kick attempt | |
+
+NB : when the last operator AUTO KICK, oldest (first on the list) became operator, a channel should always have at least one operator
 
 ### INVITE Command
 | Status | Test | Problem |
 |--------|------|---------|
-| | `INVITE nick #channel` - invite user as operator | |
-| | `INVITE nick #channel` - invite as non-op (+i not set) | |
-| | `INVITE nick #channel` - invite as non-op (+i set, should reject) | |
-| | `INVITE nick #channel` - invite already-member (should error) | |
-| | `INVITE nonexistent #channel` - invite non-existent user (should error) | |
-| | `INVITE nick #nonexistent` - channel doesn't exist (should error) | |
-| | `INVITE` - no parameters (should error) | |
-| | Invited user can join invite-only channel | |
+|✅| `INVITE nick #channel` - invite user as operator | |
+|✅| `INVITE nick #channel` - invite as non-op (+i not set) | |
+|⏳| `INVITE nick #channel` - invite as non-op (+i set, should reject) | Cannot be tested since MODE is not implemented yet |
+|✅| `INVITE nick #channel` - invite already-member (should error) | |
+|✅| `INVITE nonexistent #channel` - invite non-existent user (should error) | |
+|✅| `INVITE nick #nonexistent` - channel doesn't exist (should error) | |
+|✅| `INVITE` - no parameters (should error) | |
+|⏳| Invited user can join invite-only channel | Cannot be tested since MODE is not implemented yet |
 
 ---
 
@@ -175,22 +179,22 @@ irssi -c localhost -p 6667
 ### PRIVMSG Command
 | Status | Test | Problem |
 |--------|------|---------|
-| | `PRIVMSG nick :hello` - private message to user | |
-| | `PRIVMSG #channel :hello` - message to channel | |
-| | `PRIVMSG nick` - no message (should error) | |
-| | `PRIVMSG` - no parameters (should error) | |
-| | `PRIVMSG nonexistent :hello` - message to non-existent user | |
-| | `PRIVMSG #nonexistent :hello` - message to non-existent channel | |
-| | `PRIVMSG #channel :hello` - message to channel not joined | |
-| | Message with special characters: `:`, `!`, `@` | |
-| | Empty message `PRIVMSG nick :` | |
-| | Very long message (>512 chars) | |
+|✅| `PRIVMSG nick :hello` - private message to user | |
+|✅| `PRIVMSG #channel :hello` - message to channel | |
+|✅| `PRIVMSG nick` - no message (should error) | |
+|✅| `PRIVMSG` - no parameters (should error) | |
+|✅| `PRIVMSG nonexistent :hello` - message to non-existent user | |
+|✅| `PRIVMSG #nonexistent :hello` - message to non-existent channel | |
+|✅| `PRIVMSG #channel :hello` - message to channel not joined | |
+|✅| Message with special characters: `:`, `!`, `@` | |
+|✅| Empty message `PRIVMSG nick :` | |
+|✅| Very long message (>512 chars) | |
 
 ### NOTICE Command (if implemented)
 | Status | Test | Problem |
 |--------|------|---------|
-| | `NOTICE nick :hello` - notice to user | |
-| | `NOTICE #channel :hello` - notice to channel | |
+|✅| `NOTICE nick :hello` - notice to user | |
+|✅| `NOTICE #channel :hello` - notice to channel | Should call an "you're not in channel error" |
 
 ---
 
@@ -198,10 +202,10 @@ irssi -c localhost -p 6667
 
 | Status | Test | Problem |
 |--------|------|---------|
-| | `PING server` - should receive PONG | |
-| | `PING` - no parameter | |
-| | `PING :with trailing` - with trailing parameter | |
-| | Server sends PING, client responds PONG | |
+|✅| `PING server` - should receive PONG | |
+|✅| `PING` - no parameter | |
+|✅| `PING :with trailing` - with trailing parameter | |
+|| Server sends PING, client responds PONG | Not implemented, not mandatory |
 
 ---
 
@@ -209,13 +213,13 @@ irssi -c localhost -p 6667
 
 | Status | Test | Problem |
 |--------|------|---------|
-| | `QUIT` - clean disconnect | |
-| | `QUIT :goodbye message` - quit with message | |
-| | Ctrl+C client while in channel | |
-| | Ctrl+C client while in channel (last member) | |
-| | Ctrl+C client while in multiple channels | |
-| | Close nc connection abruptly | |
-| | Client timeout (if implemented) | |
+|❌| `QUIT` - clean disconnect | invalid read of size 8 |
+|❌| `QUIT :goodbye message` - quit with message | invalid read of size 8 |
+|✅| Ctrl+C client while in channel | |
+|✅| Ctrl+C client while in channel (last member) | |
+|❌| Ctrl+C client while in multiple channels | massive leaks and segfault |
+|✅| Close nc connection abruptly | |
+| | Client timeout (if implemented) | Not implemented |
 
 ---
 
