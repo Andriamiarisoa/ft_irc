@@ -26,8 +26,8 @@ void NoticeCommand::execute() {
     std::string noticeMsg = prefix + " NOTICE " + target + " :" + message;
 
     // Channel message
-    if (target[0] == '#') {
-        Channel* channel = server->getOrCreateChannel(target);
+    if (target[0] == '#' || target[0] == '&') {
+        Channel* channel = server->getChannel(target);
         if (!channel)
             return;
         if (!channel->isMember(client))
