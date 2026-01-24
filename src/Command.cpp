@@ -29,27 +29,3 @@ std::string Command::getClientNick() {
         return client->getNickname();
     return "*";
 }
-
-void Command::sendReply(int code, const std::string& msg) {
-    std::ostringstream  oss;
-    std::string         hostname = "irc.example.com";
-
-    oss << ":" << hostname 
-        << " " << formatCode(code) 
-        << " " << getClientNick() 
-        << " " << msg 
-        << "\r\n";
-    client->sendMessage(oss.str());
-}
-
-void Command::sendError(int code, const std::string& msg) {
-    std::ostringstream  oss;
-    std::string         hostname = "irc.example.com";
-
-    oss << ":" << hostname 
-        << " " << formatCode(code) 
-        << " " << getClientNick() 
-        << " :" << msg 
-        << "\r\n";
-    client->sendMessage(oss.str());
-}

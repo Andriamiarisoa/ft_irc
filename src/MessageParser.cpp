@@ -72,7 +72,7 @@ Command* MessageParser::createCommand(const std::string& cmd, Server* srv, Clien
         cli->sendMessage(e.what());
         return NULL;
     }
-    cli->sendMessage(ERR_UNKNOWNCOMMAND(cli->getNickname(), cmd) );
+    cli->sendMessage(ERR_UNKNOWNCOMMAND(cli->getNickname(), cmd) + "\r\n");
     return NULL;
 }
 
@@ -151,7 +151,7 @@ Command* MessageParser::parse(const std::string& line, Server* srv, Client* cli)
     params = MessageParser::splitParams(line);
     if (params.empty())
     {
-        cli->sendMessage(ERR_UNKNOWNCOMMAND(cli->getNickname(), line));
+        cli->sendMessage(ERR_UNKNOWNCOMMAND(cli->getNickname(), line) + "\r\n");
         return NULL;
     }
     cmd = params.front();

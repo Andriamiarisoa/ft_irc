@@ -2,6 +2,7 @@
 #include "../includes/Server.hpp"
 #include "../includes/Client.hpp"
 #include "../includes/Channel.hpp"
+#include "../includes/Replies.hpp"
 #include <vector>
 #include <string>
 
@@ -13,41 +14,44 @@ InviteCommand::~InviteCommand() {
 }
 
 void InviteCommand::execute() {
+    std::string nick = client->getNickname();
+    if (nick.empty()) nick = "*";
+
     if (!client->isRegistered()) {
-        sendError(451, ":You have not registered");
+        client->sendMessage(ERR_NOTREGISTERED(nick) + "\r\n");
         return;
     }
     if (params.empty() || params[0].empty() || params.size() == 2) {
-        sendError(461, "INVITE :Wrong parameters");
+        client->sendMessage(ERR_NEEDMOREPARAMS(nick, "INVITE") + "\r\n");
         return;
     }
     std::string targetNick = params[0];;
     std::string channelName = params[1];
     Channel* channel = server->getChannel(channelName);
     if (!channel) {
-        sendError(403, channelName + " :No such channel");
+        client->sendMessage(ERR_NOSUCHCHANNEL(nick, channelName) + "\r\n");
         return;
     }
     if (!channel->isMember(client)) {
-        sendError(442, channelName + " :You're not on that channel");
+        client->sendMessage(ERR_NOTONCHANNEL(nick, channelName) + "\r\n");
         return;
     }
     if (channel->isChannelInvitOnly() && !channel->isOperator(client)) {
-        sendError(482, channelName + " :You're not channel operator");
+        client->sendMessage(ERR_CHANOPRIVSNEEDED(nick, channelName) + "\r\n");
         return;
     }
     Client* targetClient = server->getClientByNick(targetNick);
     if (!targetClient) {
-        sendError(401, targetNick + " :No such nick/channel");
+        client->sendMessage(ERR_NOSUCHNICK(nick, targetNick) + "\r\n");
         return;
     }
     if (channel->isMember(targetClient)) {
-        sendError(443, targetNick + " " + channelName + " :is already on channel");
+        client->sendMessage(ERR_USERONCHANNEL(nick, targetNick, channelName) + "\r\n");
         return;
     }
     channel->inviteUser(targetClient);
     std::string inviteMsg =client->getPrefix() + " INVITE " +
                           targetNick + " " + channelName + "\r\n";
     targetClient->sendMessage(inviteMsg);
-    sendReply(341, targetNick + " " + channelName);
+    client->sendMessage(RPL_INVITING(nick, targetNick, channelName) + "\r\n");
 }
