@@ -285,7 +285,15 @@ void Channel::kickMember(Client* kicker, Client* client, const std::string& reas
                                     client->getNickname() + " :" + reason + "\r\n";
     
     broadcast(kickMsg, NULL);
-    removeMember(client);
+
+    members.erase(client);
+    operators.erase(client);
+    invitedUsers.erase(client);
+    client->removeFromChannel(this);
+    
+    if (members.empty() && server != NULL) {
+        server->removeChannel(getName());
+    }
 }
 
 std::set<Client*> Channel::getMembers() const {

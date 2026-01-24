@@ -6,7 +6,7 @@
 /*   By: herrakot <herrakot@student.42antananari    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 08:20:18 by herrakot          #+#    #+#             */
-/*   Updated: 2026/01/22 20:19:16 by herrakot         ###   ########.fr       */
+/*   Updated: 2026/01/22 19:18:19 by herrakot         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -452,4 +452,17 @@ bool    Server::channelExistOrNot(const std::string& name) {
         }
     }
     return (false);
+}
+
+Channel* Server::getChannel(const std::string& name) {
+    std::map<std::string, Channel*>::iterator it;
+
+    for (it = channels.begin() ; it != channels.end() ; it++) {
+        std::string lowerName = toLower(name);
+        Channel* channel = it->second;
+        if (toLower(channel->getName()) == lowerName) {
+            return (channel);
+        }
+    }
+    return (NULL);
 }

@@ -23,8 +23,8 @@ KickCommand(Server* srv, Client* cli, const std::vector<std::string>& params)
 **Objectif** : Initialiser la commande KICK
 
 **TODO** :
-- [ ] Appeler le constructeur de la classe de base
-- [ ] Aucune initialisation supplémentaire nécessaire
+- [x] Appeler le constructeur de la classe de base
+- [x] Aucune initialisation supplémentaire nécessaire
 
 ---
 
@@ -38,8 +38,8 @@ void execute()
 **TODO** :
 
 #### Étape 1 : Vérifier l'Enregistrement
-- [ ] Vérifier que le client est complètement enregistré
-- [ ] Sinon : envoyer ERR_NOTREGISTERED (451)
+- [x] Vérifier que le client est complètement enregistré
+- [x] Sinon : envoyer ERR_NOTREGISTERED (451)
   ```cpp
   if (!client->isRegistered()) {
       sendError(451, ":You have not registered");
@@ -48,53 +48,53 @@ void execute()
   ```
 
 #### Étape 2 : Valider les Paramètres
-- [ ] Vérifier si params a au moins 2 éléments (canal et utilisateur)
-- [ ] Sinon : envoyer ERR_NEEDMOREPARAMS (461)
+- [x] Vérifier si params a au moins 2 éléments (canal et utilisateur)
+- [x] Sinon : envoyer ERR_NEEDMOREPARAMS (461)
   ```cpp
   sendError(461, "KICK :Not enough parameters");
   return;
   ```
 
 #### Étape 3 : Extraire les Paramètres
-- [ ] Nom du canal : params[0]
-- [ ] Pseudo cible : params[1]
-- [ ] Raison de l'expulsion : params[2] (optionnel, par défaut : pseudo expulsé)
+- [x] Nom du canal : params[0]
+- [x] Pseudo cible : params[1]
+- [x] Raison de l'expulsion : params[2] (optionnel, par défaut : pseudo expulsé)
 
 #### Étape 4 : Obtenir le Canal
-- [ ] Appeler server->getChannel(channelName)
-- [ ] Si le canal n'existe pas : envoyer ERR_NOSUCHCHANNEL (403)
+- [x] Appeler server->getChannel(channelName)
+- [x] Si le canal n'existe pas : envoyer ERR_NOSUCHCHANNEL (403)
   ```cpp
   sendError(403, channelName + " :No such channel");
   return;
   ```
 
 #### Étape 5 : Vérifier que l'Expulseur est dans le Canal
-- [ ] Vérifier si le client (expulseur) est membre du canal
-- [ ] Sinon : envoyer ERR_NOTONCHANNEL (442)
+- [x] Vérifier si le client (expulseur) est membre du canal
+- [x] Sinon : envoyer ERR_NOTONCHANNEL (442)
   ```cpp
   sendError(442, channelName + " :You're not on that channel");
   return;
   ```
 
 #### Étape 6 : Vérifier que l'Expulseur est Opérateur
-- [ ] Vérifier si le client est opérateur du canal
-- [ ] Sinon : envoyer ERR_CHANOPRIVSNEEDED (482)
+- [x] Vérifier si le client est opérateur du canal
+- [x] Sinon : envoyer ERR_CHANOPRIVSNEEDED (482)
   ```cpp
   sendError(482, channelName + " :You're not channel operator");
   return;
   ```
 
 #### Étape 7 : Obtenir le Client Cible
-- [ ] Appeler server->getClientByNick(targetNick)
-- [ ] Si non trouvé : envoyer ERR_NOSUCHNICK (401)
+- [x] Appeler server->getClientByNick(targetNick)
+- [x] Si non trouvé : envoyer ERR_NOSUCHNICK (401)
   ```cpp
   sendError(401, targetNick + " :No such nick/channel");
   return;
   ```
 
 #### Étape 8 : Vérifier que la Cible est dans le Canal
-- [ ] Vérifier si la cible est membre du canal
-- [ ] Sinon : envoyer ERR_USERNOTINCHANNEL (441)
+- [x] Vérifier si la cible est membre du canal
+- [x] Sinon : envoyer ERR_USERNOTINCHANNEL (441)
   ```cpp
   sendError(441, targetNick + " " + channelName + 
             " :They aren't on that channel");
@@ -102,8 +102,8 @@ void execute()
   ```
 
 #### Étape 9 : Diffuser le Message KICK
-- [ ] Format : ":expulseur!user@host KICK #canal cible :raison"
-- [ ] Diffuser à TOUS les membres (y compris l'expulseur et l'expulsé)
+- [x] Format : ":expulseur!user@host KICK #canal cible :raison"
+- [x] Diffuser à TOUS les membres (y compris l'expulseur et l'expulsé)
   ```cpp
   std::string kickMsg = ":" + client->getNickname() + "!" +
                         client->getUsername() + "@host KICK " +
@@ -113,12 +113,12 @@ void execute()
   ```
 
 #### Étape 10 : Retirer la Cible du Canal
-- [ ] Appeler channel->removeMember(targetClient)
-- [ ] Mettre à jour la liste des canaux de la cible
+- [x] Appeler channel->removeMember(targetClient)
+- [x] Mettre à jour la liste des canaux de la cible
 
 #### Étape 11 : Supprimer le Canal Vide
-- [ ] Vérifier si le canal est maintenant vide
-- [ ] Si vide : supprimer le canal
+- [x] Vérifier si le canal est maintenant vide
+- [x] Si vide : supprimer le canal
 
 ---
 
@@ -151,18 +151,18 @@ void execute()
 
 ## Liste de Vérification des Tests
 
-- [ ] KICK #canal utilisateur expulse avec succès
-- [ ] KICK #canal utilisateur :raison inclut la raison
-- [ ] KICK sans paramètres envoie l'erreur 461
-- [ ] KICK #inexistant utilisateur envoie l'erreur 403
-- [ ] KICK par un non-membre envoie l'erreur 442
-- [ ] KICK par un non-opérateur envoie l'erreur 482
-- [ ] KICK utilisateur inexistant envoie l'erreur 401
-- [ ] KICK utilisateur pas dans le canal envoie l'erreur 441
-- [ ] KICK diffuse à tous les membres
-- [ ] L'utilisateur expulsé est retiré du canal
-- [ ] Le canal vide est supprimé après le kick
-- [ ] L'utilisateur expulsé peut rejoindre (pas banni)
+- [x] KICK #canal utilisateur expulse avec succès
+- [x] KICK #canal utilisateur :raison inclut la raison
+- [x] KICK sans paramètres envoie l'erreur 461
+- [x] KICK #inexistant utilisateur envoie l'erreur 403
+- [x] KICK par un non-membre envoie l'erreur 442
+- [x] KICK par un non-opérateur envoie l'erreur 482
+- [x] KICK utilisateur inexistant envoie l'erreur 401
+- [x] KICK utilisateur pas dans le canal envoie l'erreur 441
+- [x] KICK diffuse à tous les membres
+- [x] L'utilisateur expulsé est retiré du canal
+- [x] Le canal vide est supprimé après le kick
+- [x] L'utilisateur expulsé peut rejoindre (pas banni)
 
 ---
 
