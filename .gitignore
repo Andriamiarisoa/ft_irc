@@ -14,3 +14,4 @@ tests/test_topic_command
 tests/test_kick_command
 tests/test_channel
 tests/test_ping_pong_command
+tests/test_mode_command
