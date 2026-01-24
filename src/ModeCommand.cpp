@@ -2,6 +2,7 @@
 #include "../includes/Server.hpp"
 #include "../includes/Client.hpp"
 #include "../includes/Channel.hpp"
+#include "../includes/Replies.hpp"
 #include <vector>
 #include <string>
 
@@ -13,22 +14,25 @@ ModeCommand::~ModeCommand() {
 }
 
 void ModeCommand::execute() {
+    std::string nick = client->getNickname();
+    if (nick.empty()) nick = "*";
+
     if (!client->isRegistered()) {
-        sendError(451, ":You have not registered");
+        client->sendMessage(ERR_NOTREGISTERED(nick) + "\r\n");
         return;
     }
-    if (params.empty() || params[0].empty()) {
-        sendError(461, "MODE :Not enough parameters");
+    if (params.size() < 2) {
+        client->sendMessage(ERR_NEEDMOREPARAMS(nick, "KICK") + "\r\n");
         return;
     }
     std::string channelName = params[0];
     Channel* channel = server->getChannel(channelName);
     if(channel == NULL) {
-        sendError(403, channelName + " :No such channel");
+        client->sendMessage(ERR_NOSUCHCHANNEL(nick, channelName) + "\r\n");
         return;
     }
     if (!channel->isMember(client)) {
-        sendError(442, channelName + " :You're not on that channel");
+        client->sendMessage(ERR_NOTONCHANNEL(nick, channelName) + "\r\n");
         return;
     }
     if (params.size() == 1) {
@@ -36,11 +40,11 @@ void ModeCommand::execute() {
         if (channel->isChannelInvitOnly()) modeStr += "i";
         if (channel->hasKey()) modeStr += "k";
         if (channel->getUserLimit() > 0) modeStr += ("l " + channel->getUserLimit());
-        sendReply(324, channelName + " " + modeStr);
+        client->sendMessage(RPL_CHANNELMODEIS(nick, channelName, modeStr, "") + "\r\n");
         return;
     }
     if (!channel->isOperator(client)) {
-        sendError(482, channelName + " :You're not channel operator");
+        client->sendMessage(ERR_CHANOPRIVSNEEDED(nick, channelName) + "\r\n");
         return;
     }
 }
