@@ -43,6 +43,10 @@ std::string Client::getUsername() const {
     return username;
 }
 
+std::string Client::getPrefix() const {
+    return ":" + nickname + "!" + username + "@" + hostname;
+}
+
 std::set<Channel*> Client::getChannels() const {
     return channels;
 }

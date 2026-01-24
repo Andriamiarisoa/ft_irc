@@ -42,11 +42,14 @@ static Command* parse(const std::string& line, Server* srv, Client* cli)
 - "JOIN" → new JoinCommand(srv, cli, params)
 - "PART" → new PartCommand(srv, cli, params)
 - "PRIVMSG" → new PrivmsgCommand(srv, cli, params)
+- "NOTICE" → new NoticeCommand(srv, cli, params)
 - "KICK" → new KickCommand(srv, cli, params)
 - "INVITE" → new InviteCommand(srv, cli, params)
 - "TOPIC" → new TopicCommand(srv, cli, params)
 - "MODE" → new ModeCommand(srv, cli, params)
 - "QUIT" → new QuitCommand(srv, cli, params)
+- "PING" → new PingCommand(srv, cli, params)
+- "PONG" → new PongCommand(srv, cli, params)
 - Inconnue → NULL
 
 **Exemples de Messages**:

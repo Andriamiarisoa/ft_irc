@@ -13,6 +13,9 @@
 #include "../includes/QuitCommand.hpp"
 #include "../includes/TopicCommand.hpp"
 #include "../includes/UserCommand.hpp"
+#include "../includes/NoticeCommand.hpp"
+#include "../includes/PingCommand.hpp"
+#include "../includes/PongCommand.hpp"
 #include <iostream>
 #include <string>
 #include <exception>
@@ -58,6 +61,15 @@ Command* MessageParser::createCommand(const std::string& cmd, Server* srv, Clien
         }
         else if (cmd == "USER") {
             return new UserCommand(srv, cli, params);
+        }
+        else if (cmd == "NOTICE") {
+            return new NoticeCommand(srv, cli, params);
+        }
+        else if (cmd == "PING") {
+            return new PingCommand(srv, cli, params);
+        }
+        else if (cmd == "PONG") {
+            return new PongCommand(srv, cli, params);
         }
     }
     catch (std::exception& e) {
@@ -118,11 +130,12 @@ std::vector<std::string> MessageParser::splitParams(const std::string& str) {
     }
     if (!cmdLine.empty())
     {
-        if (cmdLine[0] == ' ')
-            result.clear();
+        if (cmdLine.size() > 1 &&cmdLine[1] == ' ')
+            return std::vector<std::string>();
         else
             result.push_back(cmdLine);
     }
+    result.back() = result.back().substr(0, result.back().size() - 2);
     return result;
 }
 

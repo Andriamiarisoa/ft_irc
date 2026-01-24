@@ -10,7 +10,7 @@
 ## Architecture de base
 
 - [ ] Implémenter la classe Server
-- [ ] Implémenter la classe Client
+- [x] Implémenter la classe Client
 - [ ] Implémenter la classe Channel
 - [ ] Gérer les arguments : `./ircserv <port> <password>`
 - [ ] Valider le port et le mot de passe au démarrage
@@ -47,32 +47,39 @@
 
 - [ ] Vérifier le mot de passe de connexion
 - [ ] Implémenter la commande PASS
-- [ ] Implémenter la commande NICK (définir le pseudo)
+- [x] Implémenter la commande NICK (définir le pseudo)
 - [ ] Implémenter la commande USER (définir le username)
 - [ ] Gérer l'ordre d'authentification
 - [ ] Envoyer les messages de bienvenue (RPL_WELCOME, etc.)
 
 ## Gestion des canaux
 
-- [ ] Implémenter la commande JOIN (rejoindre un canal)
-- [ ] Implémenter la commande PART (quitter un canal)
-- [ ] Créer automatiquement les canaux si inexistants
-- [ ] Définir le premier utilisateur comme opérateur
-- [ ] Transmettre les messages à tous les membres du canal
-- [ ] Gérer la liste des membres par canal
+- [x] Implémenter la commande JOIN (rejoindre un canal)
+- [x] Implémenter la commande PART (quitter un canal)
+- [x] Créer automatiquement les canaux si inexistants
+- [x] Définir le premier utilisateur comme opérateur
+- [x] Transmettre les messages à tous les membres du canal
+- [x] Gérer la liste des membres par canal
 
 ## Messages privés
 
 - [ ] Implémenter la commande PRIVMSG (messages privés)
+- [ ] Implémenter la commande NOTICE (notifications sans réponse)
 - [ ] Supporter les messages utilisateur à utilisateur
 - [ ] Supporter les messages vers les canaux
 - [ ] Vérifier l'existence du destinataire
+
+## Keep-Alive (PING/PONG)
+
+- [ ] Implémenter la commande PING (client → server)
+- [ ] Implémenter la commande PONG (réponse au PING)
+- [ ] Détecter les clients inactifs (timeout)
 
 ## Opérateurs de canal
 
 - [ ] Gérer les privilèges d'opérateur (operator vs regular user)
 - [ ] Implémenter la commande KICK (éjecter un client)
-- [ ] Implémenter la commande INVITE (inviter un client)
+- [x] Implémenter la commande INVITE (inviter un client)
 - [ ] Implémenter la commande TOPIC (changer/voir le topic)
 - [ ] Implémenter la commande MODE avec les modes suivants :
   - [ ] `i` : Mode invite-only (invitation seulement)
@@ -121,6 +128,8 @@
 - [ ] Gestion d'erreur robuste
 - [ ] Pas de forking
 - [ ] Utiliser les versions C++ des fonctions (<cstring> au lieu de <string.h>)
+- [ ] Utiliser Replies.hpp pour les codes numériques IRC
+- [ ] Utiliser Client::getPrefix() pour les préfixes utilisateur
 
 ## Bonus (seulement si la partie obligatoire est PARFAITE)
 

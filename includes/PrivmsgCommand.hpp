@@ -2,6 +2,8 @@
 #define PRIVMSGCOMMAND_HPP
 
 #include "Command.hpp"
+#include "Client.hpp"
+#include "Server.hpp"
 
 class PrivmsgCommand : public Command {
 public:

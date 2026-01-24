@@ -239,8 +239,38 @@ In RPL_NAMREPLY (353), user prefixes indicate status:
 | Leave channel | `PART #chan :bye` | `:nick!u@h PART #chan :bye` |
 | Quit server | `QUIT :bye` | `:nick!u@h QUIT :bye` |
 | Send message | `PRIVMSG #chan :hi` | `:nick!u@h PRIVMSG #chan :hi` |
+| Send notice | `NOTICE #chan :hi` | `:nick!u@h NOTICE #chan :hi` |
 | Set topic | `TOPIC #chan :new` | `:nick!u@h TOPIC #chan :new` |
 | Kick user | `KICK #chan bob` | `:nick!u@h KICK #chan bob` |
 | Invite user | `INVITE bob #chan` | `:nick!u@h INVITE bob #chan` |
 | Give op | `MODE #chan +o bob` | `:nick!u@h MODE #chan +o bob` |
 | Take op | `MODE #chan -o bob` | `:nick!u@h MODE #chan -o bob` |
+| Keep-alive | `PING :token` | `:server PONG server :token` |
+
+---
+
+## 9. État d'Implémentation
+
+| Commande | Fichier | État |
+|----------|---------|------|
+| PASS | `PassCommand.cpp` | ✅ Implémenté |
+| NICK | `NickCommand.cpp` | ✅ Implémenté |
+| USER | `UserCommand.cpp` | ✅ Implémenté |
+| JOIN | `JoinCommand.cpp` | ✅ Implémenté |
+| PART | `PartCommand.cpp` | ✅ Implémenté |
+| QUIT | `QuitCommand.cpp` | ✅ Implémenté |
+| KICK | `KickCommand.cpp` | ✅ Implémenté |
+| INVITE | `InviteCommand.cpp` | ✅ Implémenté |
+| TOPIC | `TopicCommand.cpp` | ✅ Implémenté |
+| MODE | `ModeCommand.cpp` | ✅ Implémenté |
+| PRIVMSG | `PrivmsgCommand.cpp` | ✅ Implémenté |
+| NOTICE | `NoticeCommand.cpp` | ✅ Nouveau (22/01) |
+| PING | `PingCommand.cpp` | ✅ Nouveau (22/01) |
+| PONG | `PongCommand.cpp` | ✅ Nouveau (22/01) |
+
+### Fichiers Utilitaires Ajoutés
+
+| Fichier | Description |
+|---------|-------------|
+| `Replies.hpp` | Macros pour codes numériques IRC (001-4xx) |
+| `Client::getPrefix()` | Méthode pour générer `:nick!user@host` |

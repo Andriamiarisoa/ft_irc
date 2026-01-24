@@ -23,8 +23,8 @@ InviteCommand(Server* srv, Client* cli, const std::vector<std::string>& params)
 **Objectif** : Initialiser la commande INVITE
 
 **TODO** :
-- [ ] Appeler le constructeur de la classe de base
-- [ ] Aucune initialisation supplémentaire nécessaire
+- [x] Appeler le constructeur de la classe de base
+- [x] Aucune initialisation supplémentaire nécessaire
 
 ---
 
@@ -38,8 +38,8 @@ void execute()
 **TODO** :
 
 #### Étape 1 : Vérifier l'Enregistrement
-- [ ] Vérifier que le client est complètement enregistré
-- [ ] Sinon : envoyer ERR_NOTREGISTERED (451)
+- [x] Vérifier que le client est complètement enregistré
+- [x] Sinon : envoyer ERR_NOTREGISTERED (451)
   ```cpp
   if (!client->isRegistered()) {
       sendError(451, ":You have not registered");
@@ -48,35 +48,35 @@ void execute()
   ```
 
 #### Étape 2 : Valider les Paramètres
-- [ ] Vérifier si params a au moins 2 éléments (pseudo et canal)
-- [ ] Sinon : envoyer ERR_NEEDMOREPARAMS (461)
+- [x] Vérifier si params a au moins 2 éléments (pseudo et canal)
+- [x] Sinon : envoyer ERR_NEEDMOREPARAMS (461)
   ```cpp
   sendError(461, "INVITE :Not enough parameters");
   return;
   ```
 
 #### Étape 3 : Extraire les Paramètres
-- [ ] Pseudo cible : params[0]
-- [ ] Nom du canal : params[1]
+- [x] Pseudo cible : params[0]
+- [x] Nom du canal : params[1]
 
 #### Étape 4 : Obtenir le Canal
-- [ ] Appeler server->getChannel(channelName)
-- [ ] Si le canal n'existe pas : envoyer ERR_NOSUCHCHANNEL (403)
+- [x] Appeler server->getChannel(channelName)
+- [x] Si le canal n'existe pas : envoyer ERR_NOSUCHCHANNEL (403)
   ```cpp
   sendError(403, channelName + " :No such channel");
   return;
   ```
 
 #### Étape 5 : Vérifier que l'Inviteur est dans le Canal
-- [ ] Vérifier si le client (inviteur) est membre du canal
-- [ ] Sinon : envoyer ERR_NOTONCHANNEL (442)
+- [x] Vérifier si le client (inviteur) est membre du canal
+- [x] Sinon : envoyer ERR_NOTONCHANNEL (442)
   ```cpp
   sendError(442, channelName + " :You're not on that channel");
   return;
   ```
 
 #### Étape 6 : Vérifier le Statut d'Opérateur (pour les canaux +i)
-- [ ] Si le canal est sur invitation uniquement (+i) :
+- [x] Si le canal est sur invitation uniquement (+i) :
   - Vérifier si le client est opérateur du canal
   - Sinon : envoyer ERR_CHANOPRIVSNEEDED (482)
   ```cpp
@@ -87,16 +87,16 @@ void execute()
   ```
 
 #### Étape 7 : Obtenir le Client Cible
-- [ ] Appeler server->getClientByNick(targetNick)
-- [ ] Si non trouvé : envoyer ERR_NOSUCHNICK (401)
+- [x] Appeler server->getClientByNick(targetNick)
+- [x] Si non trouvé : envoyer ERR_NOSUCHNICK (401)
   ```cpp
   sendError(401, targetNick + " :No such nick/channel");
   return;
   ```
 
 #### Étape 8 : Vérifier que la Cible n'est pas Déjà dans le Canal
-- [ ] Vérifier si la cible est déjà membre du canal
-- [ ] Si oui : envoyer ERR_USERONCHANNEL (443)
+- [x] Vérifier si la cible est déjà membre du canal
+- [x] Si oui : envoyer ERR_USERONCHANNEL (443)
   ```cpp
   sendError(443, targetNick + " " + channelName + 
             " :is already on channel");
@@ -104,18 +104,18 @@ void execute()
   ```
 
 #### Étape 9 : Ajouter à la Liste des Invités
-- [ ] Appeler channel->inviteUser(targetClient)
-- [ ] Cela ajoute la cible à l'ensemble des invités du canal
+- [x] Appeler channel->inviteUser(targetClient)
+- [x] Cela ajoute la cible à l'ensemble des invités du canal
 
 #### Étape 10 : Envoyer une Confirmation à l'Inviteur
-- [ ] Envoyer RPL_INVITING (341) à l'inviteur
+- [x] Envoyer RPL_INVITING (341) à l'inviteur
   ```cpp
   sendReply(341, channelName + " " + targetNick);
   ```
 
 #### Étape 11 : Envoyer INVITE à la Cible
-- [ ] Format : ":inviter!user@host INVITE target #channel"
-- [ ] Envoyer au client cible
+- [x] Format : ":inviter!user@host INVITE target #channel"
+- [x] Envoyer au client cible
   ```cpp
   std::string inviteMsg = ":" + client->getNickname() + "!" +
                           client->getUsername() + "@host INVITE " +

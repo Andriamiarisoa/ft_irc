@@ -15,12 +15,10 @@ void QuitCommand::execute() {
     std::string quitMsg;
 
     if (params.empty()) {
-        quitMsg = ":" + client->getNickname() + "!" + 
-                      client->getUsername() + "@host QUIT" + "\r\n";
+        quitMsg = client->getPrefix() + " QUIT" + "\r\n";
     }
     else {
-        quitMsg = ":" + client->getNickname() + "!" + 
-                      client->getUsername() + "@host QUIT :" + 
+        quitMsg = client->getPrefix() + " QUIT :" + 
                       params[0] + "\r\n";
     }    
     std::vector<Channel*> channels = server->getClientChannels(client);    
