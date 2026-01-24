@@ -34,6 +34,18 @@ void JoinCommand::execute() {
         sendError(461, "JOIN :Not enough parameters");
         return;
     }
+    if (params[0] == "0") {
+        std::set<Channel*> clientChannels = client->getChannels();
+        for (std::set<Channel*>::iterator it = clientChannels.begin(); it != clientChannels.end(); ++it) {
+            Channel* channel = *it;
+            channel->removeMember(client);
+            std::string partMsg = client->getPrefix() + " PART " + channel->getName() + "\r\n";
+            client->sendMessage(partMsg);
+            channel->broadcast(partMsg, client);
+        }
+        return;
+    }
+
     std::vector<std::string> channelsToJoin = split(params[0], ',');
     std::vector<std::string> channelKeys = split(params.size() > 1 ? params[1] : "", ',');
 
