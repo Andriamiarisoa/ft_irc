@@ -130,6 +130,7 @@ void Channel::removeMember(Client* client) {
     client->removeFromChannel(this);
     if (members.empty() && server != NULL) {
         server->removeChannel(getName());
+        return;
     }
 }
 
@@ -293,6 +294,7 @@ void Channel::kickMember(Client* kicker, Client* client, const std::string& reas
     
     if (members.empty() && server != NULL) {
         server->removeChannel(getName());
+        return;
     }
 }
 
