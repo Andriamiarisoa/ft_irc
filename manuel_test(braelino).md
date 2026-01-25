@@ -31,42 +31,42 @@ irssi -c localhost -p 6667
 ### PASS Command
 | Status | Test | Problem |
 |--------|------|---------|
-| | `PASS password` - correct password | |
-| | `PASS wrongpass` - incorrect password (should reject) | |
-| | `PASS` - no parameter (should error) | |
-| | `PASS pass1 pass2` - extra parameters (should use first) | |
-| | Send commands before PASS (should require auth) | |
-| | Send PASS twice (should error: already registered) | pass still work even after the first pass |
+| ✅ | `PASS password` - correct password | |
+| ✅ | `PASS wrongpass` - incorrect password (should reject) | |
+| ✅ | `PASS` - no parameter (should error) | |
+| ✅ | `PASS pass1 pass2` - extra parameters (should use first) | |
+| ✅ | Send commands before PASS (should require auth) | |
+| ❌ | Send PASS twice (should error: already registered) |  PASS twice before registered: should overwrite the old password |
 
 ### NICK Command
 | Status | Test | Problem |
 |--------|------|---------|
-| | `NICK validnick` - valid nickname | |
-| | `NICK 123invalid` - starts with number (should reject) | |
-| | `NICK` - no parameter (should error) | |
-| | `NICK nick!invalid` - invalid character (should reject) | |
-| | `NICK existingnick` - nickname already in use (should reject) | |
-| | `NICK newnick` - change nickname while connected | |
-| | `NICK verylongnicknameover9chars` - too long nickname | Yes it works but should have a proper error message to be mroe readable|
-| | `NICK a` - single character nickname | |
+| ✅ | `NICK validnick` - valid nickname | |
+| ✅ | `NICK 123invalid` - starts with number (should reject) | |
+| ✅ | `NICK` - no parameter (should error) | |
+| ✅ | `NICK nick!invalid` - invalid character (should reject) | |
+| ✅ | `NICK existingnick` - nickname already in use (should reject) | client ignored by the server when using a already used nickname before being registered |
+| ✅ | `NICK newnick` - change nickname while connected | |
+| ✅ | `NICK verylongnicknameover9chars` - too long nickname | Yes it works but should have a proper error message to be mroe readable|
+| ✅ | `NICK a` - single character nickname | |
 
 ### USER Command
 | Status | Test | Problem |
 |--------|------|---------|
-| | `USER username 0 * :Real Name` - valid registration | |
-| | `USER` - no parameters (should error) | |
-| | `USER user` - missing parameters (should error) | |
-| | `USER user 0 * :` - empty realname | Yes empty real name should work in a classic IRC |
-| | Send USER twice (should error: already registered) | |
-| | USER before PASS (should require auth first) | |
-| | USER before NICK (should work, wait for NICK) | |
+| ✅ | `USER username 0 * :Real Name` - valid registration | |
+| ✅ | `USER` - no parameters (should error) | |
+| ✅ | `USER user` - missing parameters (should error) | |
+| ✅ | `USER user 0 * :` - empty realname | Yes empty real name should work in a classic IRC |
+| ✅ | Send USER twice (should error: already registered) | |
+| ✅ | USER before PASS (should require auth first) | |
+| ✅ | USER before NICK (should work, wait for NICK) | |
 
 ### Full Registration Flow
 | Status | Test | Problem |
 |--------|------|---------|
-| | PASS → NICK → USER (correct order) | |
-| | PASS → USER → NICK (different order) | |
-| | Connect without completing registration, then disconnect | |
+| ✅ | PASS → NICK → USER (correct order) | |
+| ✅ | PASS → USER → NICK (different order) | |
+| ✅ | Connect without completing registration, then disconnect | |
 
 ---
 
