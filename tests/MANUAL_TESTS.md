@@ -149,28 +149,28 @@ NB : when the last operator AUTO KICK, oldest (first on the list) became operato
 |✅| `MODE #channel` - view current modes | |
 |✅| `MODE #channel +i` - set invite-only | |
 |✅| `MODE #channel -i` - remove invite-only | |
-| | `MODE #channel +t` - set topic restricted | |
-| | `MODE #channel -t` - remove topic restricted | |
-| | `MODE #channel +k secretkey` - set channel key | |
-| | `MODE #channel -k` - remove channel key | |
-| | `MODE #channel +o nick` - give operator status | |
-| | `MODE #channel -o nick` - remove operator status | |
-| | `MODE #channel +l 10` - set user limit | |
-| | `MODE #channel -l` - remove user limit | |
-| | `MODE #channel +itk key` - multiple modes at once | |
-| | `MODE #channel +o nonexistent` - op non-member (should error) | |
-| | MODE as non-operator (should reject) | |
-| | `MODE #nonexistent +i` - channel doesn't exist | |
+|✅| `MODE #channel +t` - set topic restricted | |
+|✅| `MODE #channel -t` - remove topic restricted | |
+|✅| `MODE #channel +k secretkey` - set channel key | |
+|✅| `MODE #channel -k` - remove channel key | |
+|✅| `MODE #channel +o nick` - give operator status | |
+|✅| `MODE #channel -o nick` - remove operator status | |
+|✅| `MODE #channel +l 10` - set user limit | |
+|✅| `MODE #channel -l` - remove user limit | |
+|✅| `MODE #channel +itk key` - multiple modes at once | |
+|❌| `MODE #channel +o nonexistent` - op non-member (should error) | Works but does not return an error |
+|✅| MODE as non-operator (should reject) | |
+|✅| `MODE #nonexistent +i` - channel doesn't exist | |
 
 ### Edge Cases
 | Status | Test | Problem |
 |--------|------|---------|
-| | `MODE #channel +k` - key mode without key param | |
-| | `MODE #channel +l` - limit mode without number | |
-| | `MODE #channel +l abc` - limit with non-numeric | |
-| | `MODE #channel +l -5` - limit with negative number | |
-| | `MODE #channel +oo nick1 nick2` - op multiple users | |
-| | Remove last operator from channel | |
+|❌| `MODE #channel +k` - key mode without key param | Works but does not return an error |
+|❌| `MODE #channel +l` - limit mode without number | Works but does not return an error |
+|❌| `MODE #channel +l abc` - limit with non-numeric | Should return an error |
+|❌| `MODE #channel +l -5` - limit with negative number | Should return an error |
+|✅| `MODE #channel +oo nick1 nick2` - op multiple users | |
+|❌| Remove last operator from channel | still need to implement that we need to make the first in the list operator if the last operator is removed |
 
 ---
 

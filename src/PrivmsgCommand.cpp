@@ -14,7 +14,7 @@ void PrivmsgCommand::execute() {
         this->client->sendMessage(ERR_NOTREGISTERED(this->client->getNickname()) + "\r\n");
         return;
     }
-    if (this->params.size() != 2) {
+    if (this->params.size() < 2) {
         this->client->sendMessage(ERR_NEEDMOREPARAMS(this->client->getNickname(), "PRIVMSG") + "\r\n");
         return;
     }
