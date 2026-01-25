@@ -61,6 +61,9 @@
 #define ERR_TOOMANYCHANNELS(nick, chan) \
     (":" SERVER_NAME " 405 " + (nick) + " " + (chan) + " :You have joined too many channels")
 
+#define ERR_NOORIGIN(nick) \
+    (":" SERVER_NAME " 409 " + (nick) + " :No origin specified")
+
 #define ERR_NORECIPIENT(nick, cmd) \
     (":" SERVER_NAME " 411 " + (nick) + " :No recipient given (" + (cmd) + ")")
 

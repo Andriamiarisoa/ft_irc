@@ -2,6 +2,7 @@
 #include "../includes/Client.hpp"
 #include "../includes/Server.hpp"
 #include "../includes/Channel.hpp"
+#include "../includes/Replies.hpp"
 
 NickCommand::NickCommand(Server* srv, Client* cli, const std::vector<std::string>& params)
     : Command(srv, cli, params) {
@@ -13,22 +14,24 @@ NickCommand::~NickCommand() {
 bool NickCommand::checkErrors() {
     std::string newNick = params.empty() ? "" : params[0];
     std::string currentNick = client->getNickname();
+    std::string nick = client->getNickname();
+    if (nick.empty()) nick = "*";
 
     if (!client->isAuthenticated()) {
-        sendError(464, ":You must send PASS first");
+        client->sendMessage(ERR_NOTREGISTERED(nick) + "\r\n");
         return true;
     }
     if (params.empty() || params.size() < 1 || params[0].empty()) {
-        sendError(431, ":No nickname given");
+        client->sendMessage(ERR_NONICKNAMEGIVEN(nick) + "\r\n");
         return true;
     }
     if (server->getClientByNick(newNick) != NULL && newNick != currentNick) {
-        sendError(433, newNick + " :Nickname is already in use");
+        client->sendMessage(ERR_NICKNAMEINUSE(nick) + "\r\n");
         return true;
     }
     client->setNickname(newNick);
     if (client->getNickname() != newNick) {
-        sendError(432, newNick + " :Erroneous nickname");
+        client->sendMessage(ERR_ERRONEUSNICKNAME(nick, newNick) + "\r\n");
         return true;
     }
     return false;
@@ -55,9 +58,9 @@ void NickCommand::execute() {
         std::string version = "1.0";
 
         client->registerClient();
-        sendReply(001, ":Welcome to the IRC Network " + client->getPrefix());
-        sendReply(002, ":Your host is " + serverName + ", running version " + version);
-        sendReply(003, ":This server was created just now");
-        sendReply(004, serverName + " " + version + " o o");
+        client->sendMessage(RPL_WELCOME(newNick, client->getUsername(), client->getHostname()) + "\r\n");
+        client->sendMessage(RPL_YOURHOST(newNick) + "\r\n");
+        client->sendMessage(RPL_CREATED(newNick, " just now") + "\r\n");
+        client->sendMessage(RPL_MYINFO(newNick) + "\r\n");
     }
 }

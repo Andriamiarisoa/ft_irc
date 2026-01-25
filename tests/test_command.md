@@ -1,195 +1,268 @@
-# Tests de la Classe Command
+# Command Class Test Suite Documentation
 
 ## Vue d'ensemble
 
-Ce fichier de test valide le bon fonctionnement de la classe abstraite `Command`, qui est la classe de base pour toutes les commandes IRC (NICK, JOIN, PRIVMSG, etc.).
+Ce document décrit la suite de tests isolés pour la classe `Command` du projet ft_irc.  
+Les tests sont **autonomes** et ne nécessitent pas de serveur en cours d'exécution.
 
-## Compilation et Exécution
+---
 
-### Compiler les tests
+## Compilation
+
 ```bash
-g++ -std=c++98 -Wall -Wextra -Werror -I includes \
-    tests/test_command.cpp \
-    src/Command.cpp \
-    src/Client.cpp \
-    src/Server.cpp \
-    src/Channel.cpp \
-    src/MessageParser.cpp \
-    -o tests/test_command
+cd tests/
+g++ -Wall -Wextra -Werror -std=c++98 -I../includes \
+    test_command.cpp \
+    ../src/Command.cpp \
+    ../src/Channel.cpp \
+    ../src/Client.cpp \
+    ../src/Server.cpp \
+    ../src/MessageParser.cpp \
+    ../src/JoinCommand.cpp \
+    ../src/PassCommand.cpp \
+    ../src/NickCommand.cpp \
+    ../src/UserCommand.cpp \
+    ../src/PartCommand.cpp \
+    ../src/PrivmsgCommand.cpp \
+    ../src/InviteCommand.cpp \
+    ../src/TopicCommand.cpp \
+    ../src/ModeCommand.cpp \
+    ../src/KickCommand.cpp \
+    ../src/QuitCommand.cpp \
+    ../src/PingCommand.cpp \
+    ../src/PongCommand.cpp \
+    ../src/NoticeCommand.cpp \
+    -o test_command
 ```
 
-### Exécuter les tests
+## Utilisation
+
 ```bash
-./tests/test_command
-```
+# Exécuter tous les tests
+./test_command
 
-### Vérifier les fuites mémoire
-```bash
-valgrind --leak-check=full ./tests/test_command
-```
-
----
-
-## Architecture de Test
-
-### TestCommand
-Classe concrète dérivée de `Command` qui :
-- Implémente `execute()` (vide, pour les tests)
-- Expose les méthodes protégées via des wrappers publics :
-  - `testSendReply()`
-  - `testSendError()`
-- Fournit des getters pour les attributs protégés
-
-### Socket Pair
-Les tests utilisent `socketpair()` pour créer une paire de sockets :
-- Le client envoie sur `writeFd`
-- Les tests lisent sur `readFd`
-- Permet de vérifier le contenu réel des messages envoyés
-
----
-
-## Tests Implémentés
-
-### 1. `test_constructor_valid`
-Vérifie que le constructeur stocke correctement :
-- Pointeur `server`
-- Pointeur `client`
-- Vecteur `params`
-
-### 2. `test_constructor_null_server`
-Vérifie que le constructeur lance une exception si `server == NULL`.
-
-### 3. `test_constructor_null_client`
-Vérifie que le constructeur lance une exception si `client == NULL`.
-
-### 4. `test_constructor_empty_params`
-Vérifie que le constructeur accepte un vecteur de paramètres vide.
-
-### 5. `test_sendReply_format_unregistered`
-Vérifie le format de réponse pour un client non enregistré :
-```
-:irc.example.com 001 * :Welcome to IRC\r\n
-```
-- Le nickname est `*` pour les clients non enregistrés
-
-### 6. `test_sendReply_format_registered`
-Vérifie le format de réponse pour un client enregistré :
-```
-:irc.example.com 332 TestUser #channel :This is the topic\r\n
-```
-- Le nickname réel est utilisé
-
-### 7. `test_sendReply_code_padding`
-Vérifie que les codes numériques sont formatés sur 3 chiffres :
-
-| Code | Formaté |
-|------|---------|
-| 1    | 001     |
-| 42   | 042     |
-| 461  | 461     |
-
-### 8. `test_sendError_format`
-Vérifie le format d'erreur avec `:` avant le message :
-```
-:irc.example.com 461 * :Not enough parameters\r\n
-```
-
-### 9. `test_sendReply_ends_with_crlf`
-Vérifie que `sendReply()` termine toujours par `\r\n`.
-
-### 10. `test_sendError_ends_with_crlf`
-Vérifie que `sendError()` termine toujours par `\r\n`.
-
-### 11. `test_polymorphic_destruction`
-Vérifie que le destructeur virtuel fonctionne correctement :
-```cpp
-Command* basePtr = new TestCommand(...);
-delete basePtr;  // Doit appeler le bon destructeur
+# Exécuter un test spécifique (ex: test 5)
+./test_command 5
 ```
 
 ---
 
-## Format des Messages IRC
+## Cas de Test
 
-### sendReply (réponses)
-```
-:hostname code nickname message\r\n
-```
-Exemple : `:irc.example.com 001 john :Welcome to the IRC network\r\n`
+### Tests du Constructeur
 
-### sendError (erreurs)
-```
-:hostname code nickname :message\r\n
-```
-Exemple : `:irc.example.com 461 john :Not enough parameters\r\n`
+| # | Nom du Test | Description | Comportement Attendu |
+|---|-------------|-------------|----------------------|
+| 01 | Constructor Stores Server | Vérifier stockage du pointeur server | Pointeur server stocké correctement |
+| 02 | Constructor Stores Client | Vérifier stockage du pointeur client | Pointeur client stocké correctement |
+| 03 | Constructor Stores Params | Vérifier stockage du vecteur params | Vecteur params copié correctement |
+| 04 | Empty Params | Constructeur avec params vide | Vecteur vide accepté |
+| 05 | NULL Server | Constructeur avec server NULL | Exception `std::invalid_argument` lancée |
+| 06 | NULL Client | Constructeur avec client NULL | Exception `std::invalid_argument` lancée |
 
-**Note** : `sendError` ajoute automatiquement `:` devant le message.
+### Tests de Polymorphisme
 
----
+| # | Nom du Test | Description | Comportement Attendu |
+|---|-------------|-------------|----------------------|
+| 07 | Execute Polymorphism | Appel execute() via pointeur base | Méthode dérivée appelée correctement |
+| 08 | Virtual Destructor | Suppression via pointeur base | Pas de fuite mémoire |
 
-## Sortie Attendue
+### Tests de Robustesse
 
-```
-=== Tests de la classe Command ===
-
-Testing Constructor with valid pointers... PASS
-Testing Constructor with NULL server throws exception... PASS
-Testing Constructor with NULL client throws exception... PASS
-Testing Constructor with empty params... PASS
-Testing sendReply format for unregistered client... PASS
-Testing sendReply format for registered client... PASS
-Testing sendReply code padding (3 digits)... PASS
-Testing sendError format (with colon before message)... PASS
-Testing sendReply ends with CRLF... PASS
-Testing sendError ends with CRLF... PASS
-Testing Polymorphic destruction (virtual destructor)... PASS
-
-=== Tous les tests sont passés ! ===
-```
+| # | Nom du Test | Description | Comportement Attendu |
+|---|-------------|-------------|----------------------|
+| 09 | Special Characters | Params avec caractères spéciaux | Caractères préservés |
+| 10 | Many Params | 100 paramètres | Tous stockés correctement |
+| 11 | formatCode | Formatage des codes numériques | Padding à 3 chiffres (001, 042, 451) |
+| 12 | getClientNick Registered | Nickname client enregistré | Retourne le nickname |
+| 13 | getClientNick Unregistered | Client non enregistré | Retourne "*" |
+| 14 | Multiple Commands | Plusieurs commandes même client | Isolation correcte |
+| 15 | Extended ASCII | Caractères ASCII étendus | Gestion correcte |
 
 ---
 
-## Ajouter un Nouveau Test
+## Classe TestCommand
+
+Pour tester la classe abstraite `Command`, nous utilisons une classe concrète de test :
 
 ```cpp
-void test_mon_nouveau_test() {
-    TEST("Description du test");
+class TestCommand : public Command {
+public:
+    bool executed;
     
-    int readFd, writeFd;
-    assert(createTestSocketPair(readFd, writeFd) == 0);
+    TestCommand(Server* srv, Client* cli, const std::vector<std::string>& params)
+        : Command(srv, cli, params), executed(false) {}
     
-    Server server(6667, "password");
-    Client client(writeFd);
-    std::vector<std::string> params;
+    void execute() {
+        executed = true;
+    }
     
-    TestCommand cmd(&server, &client, params);
-    
-    // Votre logique de test
-    cmd.testSendReply(200, ":message");
-    std::string received = readFromSocket(readFd);
-    assert(/* votre condition */);
-    
-    close(readFd);
-    close(writeFd);
-    PASS();
+    // Expose protected members for testing
+    Server* getServer() { return server; }
+    Client* getClient() { return client; }
+    std::vector<std::string> getParams() { return params; }
+};
+```
+
+Cette classe nous permet de :
+- Accéder aux membres protégés (`server`, `client`, `params`)
+- Vérifier que `execute()` est appelé correctement
+- Tester le polymorphisme
+
+---
+
+## Architecture de la Classe Command
+
+### Diagramme UML
+
+```
+┌─────────────────────────────────────────┐
+│              Command                     │
+├─────────────────────────────────────────┤
+│ # server: Server*                        │
+│ # client: Client*                        │
+│ # params: std::vector<std::string>       │
+├─────────────────────────────────────────┤
+│ + Command(srv, cli, params)              │
+│ + virtual ~Command()                     │
+│ + virtual execute() = 0                  │
+│ # formatCode(int): std::string           │
+│ # getClientNick(): std::string           │
+└─────────────────────────────────────────┘
+              △
+              │ hérite
+    ┌─────────┼─────────┬─────────┐
+    │         │         │         │
+┌───┴───┐ ┌───┴───┐ ┌───┴───┐ ┌───┴───┐
+│ Pass  │ │ Nick  │ │ Join  │ │ Mode  │
+│Command│ │Command│ │Command│ │Command│
+└───────┘ └───────┘ └───────┘ └───────┘
+```
+
+### Membres Protégés
+
+| Membre | Type | Description |
+|--------|------|-------------|
+| `server` | `Server*` | Pointeur vers l'instance du serveur |
+| `client` | `Client*` | Pointeur vers le client exécutant la commande |
+| `params` | `std::vector<std::string>` | Paramètres de la commande |
+
+### Méthodes Protégées
+
+| Méthode | Retour | Description |
+|---------|--------|-------------|
+| `formatCode(int)` | `std::string` | Formate un code numérique IRC (ex: 1 → "001") |
+| `getClientNick()` | `std::string` | Retourne le nickname ou "*" si non enregistré |
+
+---
+
+## Patron de Conception Command
+
+### Avantages
+
+1. **Encapsulation** : Chaque commande encapsule sa propre logique
+2. **Polymorphisme** : Le serveur appelle `execute()` sans connaître le type
+3. **Extensibilité** : Facile d'ajouter de nouvelles commandes
+4. **Testabilité** : Commandes testables indépendamment
+
+### Flux d'Utilisation
+
+```
+1. Client envoie: "JOIN #channel"
+2. MessageParser crée: JoinCommand(server, client, params)
+3. Serveur appelle: command->execute()
+4. JoinCommand exécute la logique spécifique
+5. Commande supprimée après exécution
+```
+
+---
+
+## Vérifications de Sécurité
+
+### Validation du Constructeur
+
+```cpp
+Command::Command(Server* srv, Client* cli, const std::vector<std::string>& params)
+    : server(srv), client(cli), params(params) {
+    if (srv == NULL || cli == NULL) {
+        throw std::invalid_argument("Server or Client pointer is null");
+    }
 }
+```
 
-// Dans main(), ajouter :
-test_mon_nouveau_test();
+### Pourquoi c'est important
+
+- Évite les segfaults dans les méthodes
+- Détection précoce des erreurs de programmation
+- Facilite le débogage
+
+---
+
+## Légende des Résultats
+
+| Symbole | Signification |
+|---------|---------------|
+| `[PASS]` | Test réussi |
+| `[FAIL]` | Test échoué - bug détecté |
+| `[SKIP]` | Test ignoré - fonctionnalité non implémentée |
+| `[INFO]` | Information - comportement variable |
+
+---
+
+## Notes pour les Développeurs
+
+### Erreurs "Bad file descriptor" Attendues
+
+Les tests utilisent des **descripteurs de fichier factices** (10, 11, 12...).  
+Quand `sendMessage()` essaie d'envoyer via `send()`, cela échoue.  
+**C'est un comportement attendu** - les tests vérifient la logique, pas l'I/O réseau.
+
+### Extension de la Classe Command
+
+Pour ajouter une nouvelle commande :
+
+```cpp
+class NewCommand : public Command {
+public:
+    NewCommand(Server* srv, Client* cli, const std::vector<std::string>& params)
+        : Command(srv, cli, params) {}
+    
+    void execute() {
+        // 1. Vérifier l'enregistrement
+        // 2. Valider les paramètres
+        // 3. Exécuter la logique
+        // 4. Envoyer les réponses
+    }
+};
 ```
 
 ---
 
-## Dépendances
+## Fichiers Associés
 
-- `Command.hpp` / `Command.cpp`
-- `Client.hpp` / `Client.cpp`
-- `Server.hpp` / `Server.cpp`
-- `Channel.hpp` / `Channel.cpp`
-- `MessageParser.hpp` / `MessageParser.cpp`
+| Fichier | Description |
+|---------|-------------|
+| `includes/Command.hpp` | Déclaration de la classe |
+| `src/Command.cpp` | Implémentation |
+| `tests/test_command.cpp` | Suite de tests |
+| `tasks/YASSER/Command.md` | Documentation de la tâche |
 
-## Notes
+---
 
-- Les tests utilisent `socketpair()` pour simuler des connexions réseau
-- Les sockets sont fermés après chaque test pour éviter les fuites de descripteurs
-- Valgrind confirme : **0 fuites mémoire**
+## Checklist des Tests
+
+- [x] Constructeur stocke server correctement
+- [x] Constructeur stocke client correctement
+- [x] Constructeur stocke params correctement
+- [x] Params vide géré
+- [x] NULL server lance exception
+- [x] NULL client lance exception
+- [x] Polymorphisme fonctionne
+- [x] Destructeur virtuel
+- [x] Caractères spéciaux préservés
+- [x] Grand nombre de params géré
+- [x] formatCode fonctionne
+- [x] getClientNick enregistré
+- [x] getClientNick non enregistré
+- [x] Commandes multiples isolées
+- [x] ASCII étendu géré
