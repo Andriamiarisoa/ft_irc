@@ -37,6 +37,7 @@ public:
     void setNickname(const std::string& nick);
     void setUsername(const std::string& user);
     void authenticate();
+    void unauthenticate();
     void registerClient();
     void addToChannel(Channel* channel);
     void removeFromChannel(Channel* channel);
