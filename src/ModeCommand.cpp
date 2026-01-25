@@ -22,8 +22,8 @@ Channel*    ModeCommand::checkErrorModes() {
         client->sendMessage(ERR_NOTREGISTERED(nick) + "\r\n");
         return NULL;
     }
-    if (params.size() < 2) {
-        client->sendMessage(ERR_NEEDMOREPARAMS(nick, "KICK") + "\r\n");
+    if (params.size() == 0) {
+        client->sendMessage(ERR_NEEDMOREPARAMS(nick, "MODE") + "\r\n");
         return NULL;
     }
 
