@@ -227,14 +227,14 @@ NB : when the last operator AUTO KICK, oldest (first on the list) became operato
 
 | Status | Test | Problem |
 |--------|------|---------|
-| | Two clients join same channel | |
-| | Client A messages Client B in channel | |
-| | Client A kicks Client B | |
-| | Client A changes topic, Client B sees it | |
-| | Client A quits, Client B receives quit message | |
-| | Multiple clients join, one becomes op (first joiner) | |
-| | Transfer operator status between clients | |
-| | 10+ clients in same channel | |
+|✅| Two clients join same channel | |
+|✅| Client A messages Client B in channel | |
+|✅| Client A kicks Client B | |
+|✅| Client A changes topic, Client B sees it | Topic on client B become topic without the topic[0]|
+|✅| Client A quits, Client B receives quit message | massive leaks on quit command |
+|✅| Multiple clients join, one becomes op (first joiner) | |
+|✅| Transfer operator status between clients | |
+|✅| 10+ clients in same channel | |
 
 ---
 
@@ -242,17 +242,17 @@ NB : when the last operator AUTO KICK, oldest (first on the list) became operato
 
 | Status | Test | Problem |
 |--------|------|---------|
-| | Start server, stop immediately - no leaks | |
-| | One client connects, disconnects - no leaks | |
-| | Client joins channel, parts - no leaks | |
-| | Client joins channel, quits - no leaks | |
-| | Last client leaves channel (channel deleted) - no leaks | |
-| | Multiple clients connect/disconnect rapidly - no leaks | |
-| | Client kicked from channel - no leaks | |
-| | Ctrl+C while last in channel - no crash | |
-| | QUIT while last in channel - no crash | |
-| | Invalid commands spam - no crash | |
-| | Partial commands (incomplete \r\n) - no crash | |
+|✅| Start server, stop immediately - no leaks | |
+|✅| One client connects, disconnects - no leaks | |
+|❌| Client joins channel, parts - no leaks | Invalid read of size 8 |
+|❌| Client joins channel, quits - no leaks | Invalid read of size 8 |
+|❌| Last client leaves channel (channel deleted) - no leaks | channel is deleted but again the invalid read of size from part |
+|✅| Multiple clients connect/disconnect rapidly - no leaks | |
+|✅| Client kicked from channel - no leaks | |
+|✅| Ctrl+C while last in channel - no crash | |
+|❌| QUIT while last in channel - no crash | invalid read of size 8 |
+|❌| Invalid commands spam - no crash | When I spam a command and after write a valid one it sometime bug |
+|✅| Partial commands (incomplete \r\n) - no crash | |
 
 ---
 
@@ -260,17 +260,17 @@ NB : when the last operator AUTO KICK, oldest (first on the list) became operato
 
 | Status | Test | Problem |
 |--------|------|---------|
-| | Send empty line | |
-| | Send only `\r\n` | |
-| | Send command without `\r\n` (partial) | |
-| | Send very long line (>512 chars) | |
-| | Send binary data | |
-| | Send UTF-8 characters | |
-| | Rapid connect/disconnect | |
-| | Send commands before registration complete | |
-| | Case sensitivity: `JOIN` vs `join` vs `Join` | |
-| | Channel name case: `#Channel` vs `#channel` | |
-| | Nickname case sensitivity | |
+|✅| Send empty line | |
+|✅| Send only `\r\n` | |
+|✅| Send command without `\r\n` (partial) | |
+|✅| Send very long line (>512 chars) | |
+|✅| Send binary data | |
+|✅| Send UTF-8 characters | |
+|✅| Rapid connect/disconnect | |
+|✅| Send commands before registration complete | |
+|✅| Case sensitivity: `JOIN` vs `join` vs `Join` | |
+|✅| Channel name case: `#Channel` vs `#channel` | |
+|✅| Nickname case sensitivity | |
 
 ---
 
