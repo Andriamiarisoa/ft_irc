@@ -27,6 +27,7 @@ public:
     std::string getName() const;
     std::string getTopic() const;
     std::set<Client*> getMembers() const;
+    bool        getRestriction() const;
     
     void setTopic(const std::string& topic, Client* client);
     void setKey(const std::string& key);
