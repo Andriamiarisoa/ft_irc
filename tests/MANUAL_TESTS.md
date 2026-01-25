@@ -77,15 +77,15 @@ irssi -c localhost -p 6667
 |--------|------|---------|
 |✅| `JOIN #channel` - join new channel (become operator) | |
 |✅| `JOIN #channel` - join existing channel | |
-|⏳| `JOIN #channel key` - join with correct key | Cannot be tested since MODE is not implemented yet |
-|⏳| `JOIN #channel wrongkey` - join with wrong key (should reject) | Cannot be tested since MODE is not implemented yet |
-|⏳| `JOIN #channel` - join channel with key without providing key | Cannot be tested since MODE is not implemented yet |
+|✅| `JOIN #channel key` - join with correct key | |
+|✅| `JOIN #channel wrongkey` - join with wrong key (should reject) | |
+|✅| `JOIN #channel` - join channel with key without providing key | |
 |✅| `JOIN invalidchannel` - no # prefix (should reject) | |
 |✅| `JOIN` - no parameter (should error) | |
 |✅| `JOIN #chan1,#chan2` - join multiple channels | |
-|⏳| `JOIN #channel` - join invite-only without invite (should reject) | Cannot be tested since MODE is not implemented yet |
-|⏳| `JOIN #channel` - join invite-only with invite | Cannot be tested since MODE is not implemented yet |
-|⏳| `JOIN #channel` - join full channel (+l limit reached) | Cannot be tested since MODE is not implemented yet |
+|✅| `JOIN #channel` - join invite-only without invite (should reject) | |
+|✅| `JOIN #channel` - join invite-only with invite | |
+|✅| `JOIN #channel` - join full channel (+l limit reached) | |
 |✅| `JOIN #channel` when already in channel | Normal IRC does not send any error message for this case |
 |❌| `JOIN 0` - leave all channels | Not implemented (en cours) |
 
@@ -132,12 +132,12 @@ NB : when the last operator AUTO KICK, oldest (first on the list) became operato
 |--------|------|---------|
 |✅| `INVITE nick #channel` - invite user as operator | |
 |✅| `INVITE nick #channel` - invite as non-op (+i not set) | |
-|⏳| `INVITE nick #channel` - invite as non-op (+i set, should reject) | Cannot be tested since MODE is not implemented yet |
+|✅| `INVITE nick #channel` - invite as non-op (+i set, should reject) | |
 |✅| `INVITE nick #channel` - invite already-member (should error) | |
 |✅| `INVITE nonexistent #channel` - invite non-existent user (should error) | |
 |✅| `INVITE nick #nonexistent` - channel doesn't exist (should error) | |
 |✅| `INVITE` - no parameters (should error) | |
-|⏳| Invited user can join invite-only channel | Cannot be tested since MODE is not implemented yet |
+|✅| Invited user can join invite-only channel | |
 
 ---
 

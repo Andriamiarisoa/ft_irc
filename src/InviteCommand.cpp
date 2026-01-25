@@ -21,7 +21,7 @@ void InviteCommand::execute() {
         client->sendMessage(ERR_NOTREGISTERED(nick) + "\r\n");
         return;
     }
-    if (params.empty() || params[0].empty() || params.size() == 2) {
+    if (params.empty() || params[0].empty()) {
         client->sendMessage(ERR_NEEDMOREPARAMS(nick, "INVITE") + "\r\n");
         return;
     }
