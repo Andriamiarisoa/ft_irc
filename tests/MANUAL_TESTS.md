@@ -146,9 +146,9 @@ NB : when the last operator AUTO KICK, oldest (first on the list) became operato
 ### Channel Modes
 | Status | Test | Problem |
 |--------|------|---------|
-| | `MODE #channel` - view current modes | |
-| | `MODE #channel +i` - set invite-only | |
-| | `MODE #channel -i` - remove invite-only | |
+|✅| `MODE #channel` - view current modes | |
+|✅| `MODE #channel +i` - set invite-only | |
+|✅| `MODE #channel -i` - remove invite-only | |
 | | `MODE #channel +t` - set topic restricted | |
 | | `MODE #channel -t` - remove topic restricted | |
 | | `MODE #channel +k secretkey` - set channel key | |

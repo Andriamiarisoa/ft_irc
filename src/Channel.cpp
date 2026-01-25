@@ -7,7 +7,7 @@
 
 
 Channel::Channel(const std::string& name, Server* srv) 
-    : name(name), userLimit(0), inviteOnly(false), topicRestricted(true), server(srv) {
+    : name(name), userLimit(0), inviteOnly(false), topicRestricted(false), server(srv) {
         this->topic = "";
         this->key = "";
 }
@@ -57,6 +57,12 @@ bool Channel::hasKey() const {
         return (true);
 }
 
+bool    Channel::getRestriction() const {
+    if (this->topicRestricted)
+        return (true);
+    else
+        return (false);
+}
 bool Channel::checkKey(const std::string& key) const {
     if (this->key == key)
         return (true);

@@ -45,7 +45,7 @@ void    ModeCommand::showModes(Channel* channel) {
     std::string modeStr = "+";
     if (channel->isChannelInvitOnly())
         modeStr += "i";
-    if (channel->getTopic() == "+t")
+    if (channel->getRestriction())
         modeStr += "t";
     if (channel->hasKey())
         modeStr += "k";
