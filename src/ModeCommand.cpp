@@ -50,7 +50,11 @@ void    ModeCommand::showModes(Channel* channel) {
     if (channel->hasKey())
         modeStr += "k";
     if (channel->getUserLimit() > 0)
-        modeStr += ("l " + channel->getUserLimit());
+    {
+        std::stringstream ss;
+        ss << channel->getUserLimit();
+        modeStr += ("l " + ss.str());
+    }
     client->sendMessage(RPL_CHANNELMODEIS(client->getNickname(), channel->getName(), modeStr, "") + "\r\n");
 }
 
