@@ -191,8 +191,8 @@ irssi -c localhost -p 6667
 ### NOTICE Command (if implemented)
 | Status | Test | Problem |
 |--------|------|---------|
-|✅| `NOTICE nick :hello` - notice to user | |
-|✅| `NOTICE #channel :hello` - notice to channel | Should call an "you're not in channel error" |
+|✅| `NOTICE nick :hello` - notice to user | in RFC 1459 NOTICE never send an error replies |
+|✅| `NOTICE #channel :hello` - notice to channel | in RFC 1459 NOTICE never send an error replies |
 
 ---
 
@@ -211,11 +211,11 @@ irssi -c localhost -p 6667
 
 | Status | Test | Problem |
 |--------|------|---------|
-|❌| `QUIT` - clean disconnect | invalid read of size 8 |
-|❌| `QUIT :goodbye message` - quit with message | invalid read of size 8 |
+|✅| `QUIT` - clean disconnect | |
+|✅| `QUIT :goodbye message` - quit with message | |
 |✅| Ctrl+C client while in channel | |
 |✅| Ctrl+C client while in channel (last member) | |
-|❌| Ctrl+C client while in multiple channels | massive leaks and segfault |
+|✅| Ctrl+C client while in multiple channels | |
 |✅| Close nc connection abruptly | |
 | | Client timeout (if implemented) | Not implemented |
 
@@ -242,14 +242,14 @@ irssi -c localhost -p 6667
 |--------|------|---------|
 |✅| Start server, stop immediately - no leaks | |
 |✅| One client connects, disconnects - no leaks | |
-|❌| Client joins channel, parts - no leaks | Invalid read of size 8 |
-|❌| Client joins channel, quits - no leaks | Invalid read of size 8 |
-|❌| Last client leaves channel (channel deleted) - no leaks | channel is deleted but again the invalid read of size from part |
+|✅| Client joins channel, parts - no leaks | Invalid read of size 8 |
+|✅| Client joins channel, quits - no leaks | Invalid read of size 8 |
+|✅| Last client leaves channel (channel deleted) - no leaks | channel is deleted but again the invalid read of size from part |
 |✅| Multiple clients connect/disconnect rapidly - no leaks | |
 |✅| Client kicked from channel - no leaks | |
 |✅| Ctrl+C while last in channel - no crash | |
-|❌| QUIT while last in channel - no crash | invalid read of size 8 |
-|❌| Invalid commands spam - no crash | When I spam a command and after write a valid one it sometime bug |
+|✅| QUIT while last in channel - no crash | invalid read of size 8 |
+|✅| Invalid commands spam - no crash | |
 |✅| Partial commands (incomplete \r\n) - no crash | |
 
 ---
@@ -276,14 +276,14 @@ irssi -c localhost -p 6667
 
 | Status | Test | Problem |
 |--------|------|---------|
-| | Connect with irssi | |
-| | Register with irssi (auto PASS/NICK/USER) | |
-| | Join channel with irssi | |
-| | Send messages with irssi | |
-| | /kick /ban /mode commands from irssi | |
-| | /quit from irssi | |
-| | Connect with HexChat (if available) | |
-| | Connect with WeeChat (if available) | |
+|✅| Connect with irssi | |
+|✅| Register with irssi (auto PASS/NICK/USER) | |
+|✅| Join channel with irssi | |
+|✅| Send messages with irssi | |
+|✅| /kick /ban /mode commands from irssi | |
+|✅| /quit from irssi | |
+|✅| Connect with HexChat (if available) | |
+|✅| Connect with WeeChat (if available) | |
 
 ---
 
@@ -291,17 +291,17 @@ irssi -c localhost -p 6667
 
 | Category | Passed | Failed | Not Tested |
 |----------|--------|--------|------------|
-| Connection & Auth | | | |
-| Channel Operations | | | |
-| Mode Command | | | |
-| Messaging | | | |
-| Ping/Pong | | | |
-| Quit & Disconnect | | | |
-| Multi-Client | | | |
-| Memory (Valgrind) | | | |
-| Edge Cases | | | |
-| Real Client | | | |
-| **TOTAL** | | | |
+| Connection & Auth | ALL | | |
+| Channel Operations | ALL | | |
+| Mode Command | ALL | | |
+| Messaging | ALL | | |
+| Ping/Pong | ALL | | |
+| Quit & Disconnect | ALL | | |
+| Multi-Client | ALL | | |
+| Memory (Valgrind) | ALL | | |
+| Edge Cases | ALL | | |
+| Real Client | ALL | | |
+| **TOTAL** | ALL PASSED | | |
 
 ---
 
