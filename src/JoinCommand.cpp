@@ -56,6 +56,7 @@ void JoinCommand::execute() {
     for (size_t i = 0; i < channelsToJoin.size(); i++) {
         std::string channelName = channelsToJoin[i];
         if (!server->isValidName(channelName)) {
+            client->sendMessage(":ircserv 403 Invalid channel name\r\n");
             client->sendMessage(ERR_NOSUCHCHANNEL(nick, channelName) + "\r\n");
             continue;
         }

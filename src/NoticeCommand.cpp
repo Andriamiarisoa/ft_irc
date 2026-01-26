@@ -13,17 +13,17 @@ NoticeCommand::~NoticeCommand() {
 
 void NoticeCommand::execute() {
     // NOTICE does not generate error replies (RFC 1459)
-    if (params.size() != 2)
+    if (params.size() < 2)
         return;
 
     std::string target = params[0];
     std::string message = params[1];
     
-    if (message.empty() || message[0] != ':')
+    if (message.empty())
         return;
 
     std::string prefix = USER_PREFIX(client->getNickname(), client->getUsername(), client->getHostname());
-    std::string noticeMsg = prefix + " NOTICE " + target + " :" + message;
+    std::string noticeMsg = prefix + " NOTICE " + target + " " + message;
 
     // Channel message
     if (target[0] == '#' || target[0] == '&') {
