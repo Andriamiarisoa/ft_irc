@@ -2,55 +2,55 @@
 
 ## Configuration du projet
 
-- [ ] Créer le Makefile avec les règles : `$(NAME)`, `all`, `clean`, `fclean`, `re`
-- [ ] Configurer les flags de compilation : `-Wall -Wextra -Werror -std=c++98`
-- [ ] Structurer les fichiers sources (*.cpp, *.hpp)
-- [ ] Créer fichier de configuration optionnel
+- [x] Créer le Makefile avec les règles : `$(NAME)`, `all`, `clean`, `fclean`, `re`
+- [x] Configurer les flags de compilation : `-Wall -Wextra -Werror -std=c++98`
+- [x] Structurer les fichiers sources (*.cpp, *.hpp)
+- [x] Créer fichier de configuration optionnel
 
 ## Architecture de base
 
-- [ ] Implémenter la classe Server
+- [x] Implémenter la classe Server
 - [x] Implémenter la classe Client
-- [ ] Implémenter la classe Channel
-- [ ] Gérer les arguments : `./ircserv <port> <password>`
-- [ ] Valider le port et le mot de passe au démarrage
+- [x] Implémenter la classe Channel
+- [x] Gérer les arguments : `./ircserv <port> <password>`
+- [x] Valider le port et le mot de passe au démarrage
 
 ## Gestion réseau (TCP/IP)
 
-- [ ] Créer le socket serveur avec `socket()`
-- [ ] Configurer le socket avec `setsockopt()`
-- [ ] Lier le socket au port avec `bind()`
-- [ ] Mettre le serveur en écoute avec `listen()`
-- [ ] Accepter les connexions avec `accept()`
-- [ ] Configurer tous les file descriptors en mode non-bloquant (`fcntl()` pour MacOS)
+- [x] Créer le socket serveur avec `socket()`
+- [x] Configurer le socket avec `setsockopt()`
+- [x] Lier le socket au port avec `bind()`
+- [x] Mettre le serveur en écoute avec `listen()`
+- [x] Accepter les connexions avec `accept()`
+- [x] Configurer tous les file descriptors en mode non-bloquant (`fcntl()` pour MacOS)
 
 ## Multiplexage I/O
 
-- [ ] Implémenter `select()` (ou équivalent : poll, kqueue, epoll)
-- [ ] Gérer multiple clients simultanément sans blocage
-- [ ] UN SEUL `select()` pour toutes les opérations (read, write, listen)
-- [ ] Préparer les fd_set avec FD_ZERO et FD_SET avant chaque appel
-- [ ] Calculer max_fd (plus grand descripteur + 1) pour nfds
-- [ ] Vérifier les descripteurs prêts avec FD_ISSET après select()
-- [ ] Gérer les timeout avec struct timeval
-- [ ] Reconstruire les fd_set à chaque itération (modifiés par select)
+- [x] Implémenter `select()` (ou équivalent : poll, kqueue, epoll)
+- [x] Gérer multiple clients simultanément sans blocage
+- [x] UN SEUL `select()` pour toutes les opérations (read, write, listen)
+- [x] Préparer les fd_set avec FD_ZERO et FD_SET avant chaque appel
+- [x] Calculer max_fd (plus grand descripteur + 1) pour nfds
+- [x] Vérifier les descripteurs prêts avec FD_ISSET après select()
+- [x] Gérer les timeout avec struct timeval
+- [x] Reconstruire les fd_set à chaque itération (modifiés par select)
 
 ## Gestion des messages
 
-- [ ] Parser les commandes IRC reçues
-- [ ] Gérer la réception de données partielles (buffer)
-- [ ] Reconstruire les commandes complètes à partir des packets
-- [ ] Gérer les messages terminés par `\r\n`
+- [x] Parser les commandes IRC reçues
+- [x] Gérer la réception de données partielles (buffer)
+- [x] Reconstruire les commandes complètes à partir des packets
+- [x] Gérer les messages terminés par `\r\n`
 - [ ] Tester avec `nc -C` et ctrl+D pour envoyer des données partielles
 
 ## Authentification
 
-- [ ] Vérifier le mot de passe de connexion
-- [ ] Implémenter la commande PASS
+- [x] Vérifier le mot de passe de connexion
+- [x] Implémenter la commande PASS
 - [x] Implémenter la commande NICK (définir le pseudo)
-- [ ] Implémenter la commande USER (définir le username)
-- [ ] Gérer l'ordre d'authentification
-- [ ] Envoyer les messages de bienvenue (RPL_WELCOME, etc.)
+- [x] Implémenter la commande USER (définir le username)
+- [x] Gérer l'ordre d'authentification
+- [x] Envoyer les messages de bienvenue (RPL_WELCOME, etc.)
 
 ## Gestion des canaux
 
@@ -63,73 +63,73 @@
 
 ## Messages privés
 
-- [ ] Implémenter la commande PRIVMSG (messages privés)
-- [ ] Implémenter la commande NOTICE (notifications sans réponse)
-- [ ] Supporter les messages utilisateur à utilisateur
-- [ ] Supporter les messages vers les canaux
-- [ ] Vérifier l'existence du destinataire
+- [x] Implémenter la commande PRIVMSG (messages privés)
+- [x] Implémenter la commande NOTICE (notifications sans réponse)
+- [x] Supporter les messages utilisateur à utilisateur
+- [x] Supporter les messages vers les canaux
+- [x] Vérifier l'existence du destinataire
 
 ## Keep-Alive (PING/PONG)
 
-- [ ] Implémenter la commande PING (client → server)
-- [ ] Implémenter la commande PONG (réponse au PING)
+- [x] Implémenter la commande PING (client → server)
+- [x] Implémenter la commande PONG (réponse au PING)
 - [ ] Détecter les clients inactifs (timeout)
 
 ## Opérateurs de canal
 
-- [ ] Gérer les privilèges d'opérateur (operator vs regular user)
-- [ ] Implémenter la commande KICK (éjecter un client)
+- [x] Gérer les privilèges d'opérateur (operator vs regular user)
+- [x] Implémenter la commande KICK (éjecter un client)
 - [x] Implémenter la commande INVITE (inviter un client)
-- [ ] Implémenter la commande TOPIC (changer/voir le topic)
-- [ ] Implémenter la commande MODE avec les modes suivants :
-  - [ ] `i` : Mode invite-only (invitation seulement)
-  - [ ] `t` : Restriction TOPIC aux opérateurs
-  - [ ] `k` : Clé du canal (mot de passe)
-  - [ ] `o` : Donner/retirer privilège d'opérateur
-  - [ ] `l` : Limite d'utilisateurs dans le canal
+- [x] Implémenter la commande TOPIC (changer/voir le topic)
+- [x] Implémenter la commande MODE avec les modes suivants :
+  - [x] `i` : Mode invite-only (invitation seulement)
+  - [x] `t` : Restriction TOPIC aux opérateurs
+  - [x] `k` : Clé du canal (mot de passe)
+  - [x] `o` : Donner/retirer privilège d'opérateur
+  - [x] `l` : Limite d'utilisateurs dans le canal
 
 ## Gestion des erreurs
 
-- [ ] Gérer la perte de connexion client
-- [ ] Gérer les erreurs de réception/envoi
+- [x] Gérer la perte de connexion client
+- [x] Gérer les erreurs de réception/envoi
 - [ ] Gérer le manque de mémoire sans crash
-- [ ] Gérer les commandes invalides
-- [ ] Envoyer les codes d'erreur IRC appropriés
+- [x] Gérer les commandes invalides
+- [x] Envoyer les codes d'erreur IRC appropriés
 - [ ] Tester la bande passante faible
 - [ ] Tester avec des données partielles
 
 ## Nettoyage et déconnexion
 
-- [ ] Implémenter la commande QUIT
-- [ ] Nettoyer les ressources à la déconnexion
-- [ ] Retirer le client de tous ses canaux
-- [ ] Notifier les autres utilisateurs
-- [ ] Fermer proprement les sockets avec `close()`
-- [ ] Gérer les signaux (SIGINT, SIGTERM) avec `signal()`/`sigaction()`
+- [x] Implémenter la commande QUIT
+- [x] Nettoyer les ressources à la déconnexion
+- [x] Retirer le client de tous ses canaux
+- [x] Notifier les autres utilisateurs
+- [x] Fermer proprement les sockets avec `close()`
+- [x] Gérer les signaux (SIGINT, SIGTERM) avec `signal()`/`sigaction()`
 
 ## Tests et validation
 
 - [ ] Choisir un client IRC de référence (ex: irssi, WeeChat, HexChat)
-- [ ] Tester la connexion au serveur
-- [ ] Tester l'authentification
-- [ ] Tester la création/jointure de canaux
-- [ ] Tester les messages privés
-- [ ] Tester les commandes d'opérateur
-- [ ] Tester avec plusieurs clients simultanés
+- [x] Tester la connexion au serveur
+- [x] Tester l'authentification
+- [x] Tester la création/jointure de canaux
+- [x] Tester les messages privés
+- [x] Tester les commandes d'opérateur
+- [x] Tester avec plusieurs clients simultanés
 - [ ] Tester la stabilité (pas de crash, pas de quit inattendu)
 - [ ] Vérifier le comportement identique à un serveur IRC officiel
 
 ## Code quality
 
-- [ ] Respecter la norme C++98
+- [x] Respecter la norme C++98
 - [ ] Pas de fuite mémoire
-- [ ] Code propre et bien structuré
-- [ ] Commentaires appropriés
-- [ ] Gestion d'erreur robuste
-- [ ] Pas de forking
-- [ ] Utiliser les versions C++ des fonctions (<cstring> au lieu de <string.h>)
-- [ ] Utiliser Replies.hpp pour les codes numériques IRC
-- [ ] Utiliser Client::getPrefix() pour les préfixes utilisateur
+- [x] Code propre et bien structuré
+- [x] Commentaires appropriés
+- [x] Gestion d'erreur robuste
+- [x] Pas de forking
+- [x] Utiliser les versions C++ des fonctions (<cstring> au lieu de <string.h>)
+- [x] Utiliser Replies.hpp pour les codes numériques IRC
+- [x] Utiliser Client::getPrefix() pour les préfixes utilisateur
 
 ## Bonus (seulement si la partie obligatoire est PARFAITE)
 

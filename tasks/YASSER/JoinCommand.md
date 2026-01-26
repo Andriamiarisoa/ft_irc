@@ -166,19 +166,19 @@ bool isValidChannelName(const std::string& name) {
 
 ## Liste de Vérification des Tests
 
-- [ ] JOIN #channel crée un nouveau canal
-- [ ] JOIN #channel rejoint un canal existant
-- [ ] JOIN sans paramètre envoie l'erreur 461
-- [ ] JOIN nom invalide envoie l'erreur 403
-- [ ] JOIN avant l'enregistrement envoie l'erreur 451
-- [ ] JOIN #channel key utilise la clé fournie
-- [ ] JOIN #foo,#bar rejoint plusieurs canaux
-- [ ] JOIN canal +k sans clé envoie l'erreur 475
-- [ ] JOIN canal +i sans invitation envoie l'erreur 473
-- [ ] JOIN canal plein envoie l'erreur 471
-- [ ] Le premier membre devient opérateur
-- [ ] JOIN diffuse à tous les membres du canal
-- [ ] Le client reçoit le sujet et la liste des noms
+- [x] JOIN #channel crée un nouveau canal
+- [x] JOIN #channel rejoint un canal existant
+- [x] JOIN sans paramètre envoie l'erreur 461
+- [x] JOIN nom invalide envoie l'erreur 403
+- [x] JOIN avant l'enregistrement envoie l'erreur 451
+- [x] JOIN #channel key utilise la clé fournie
+- [x] JOIN #foo,#bar rejoint plusieurs canaux
+- [x] JOIN canal +k sans clé envoie l'erreur 475
+- [x] JOIN canal +i sans invitation envoie l'erreur 473
+- [x] JOIN canal plein envoie l'erreur 471
+- [x] Le premier membre devient opérateur
+- [x] JOIN diffuse à tous les membres du canal
+- [x] Le client reçoit le sujet et la liste des noms
 
 ---
 

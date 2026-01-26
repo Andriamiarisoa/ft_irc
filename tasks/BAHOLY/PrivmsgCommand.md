@@ -23,8 +23,8 @@ PrivmsgCommand(Server* srv, Client* cli, const std::vector<std::string>& params)
 **Objectif** : Initialiser la commande PRIVMSG
 
 **TODO** :
-- [ ] Appeler le constructeur de la classe de base
-- [ ] Aucune initialisation supplémentaire nécessaire
+- [x] Appeler le constructeur de la classe de base
+- [x] Aucune initialisation supplémentaire nécessaire
 
 ---
 
@@ -38,8 +38,8 @@ void execute()
 **TODO** :
 
 #### Étape 1 : Vérifier l'Enregistrement
-- [ ] Vérifier que le client est complètement enregistré
-- [ ] Si ce n'est pas le cas : envoyer ERR_NOTREGISTERED (451)
+- [x] Vérifier que le client est complètement enregistré
+- [x] Si ce n'est pas le cas : envoyer ERR_NOTREGISTERED (451)
   ```cpp
   if (!client->isRegistered()) {
       sendError(451, ":You have not registered");
@@ -48,47 +48,47 @@ void execute()
   ```
 
 #### Étape 2 : Valider les Paramètres
-- [ ] Vérifier si params contient au moins 2 éléments (cible et message)
-- [ ] Si la cible manque : envoyer ERR_NORECIPIENT (411)
+- [x] Vérifier si params contient au moins 2 éléments (cible et message)
+- [x] Si la cible manque : envoyer ERR_NORECIPIENT (411)
   ```cpp
   sendError(411, ":No recipient given (PRIVMSG)");
   return;
   ```
-- [ ] Si le message manque : envoyer ERR_NOTEXTTOSEND (412)
+- [x] Si le message manque : envoyer ERR_NOTEXTTOSEND (412)
   ```cpp
   sendError(412, ":No text to send");
   return;
   ```
 
 #### Étape 3 : Extraire la Cible et le Message
-- [ ] Cible : params[0]
-- [ ] Message : params[1] (tout ce qui suit le premier ':')
-- [ ] Exemple : "PRIVMSG #general :Bonjour tout le monde"
+- [x] Cible : params[0]
+- [x] Message : params[1] (tout ce qui suit le premier ':')
+- [x] Exemple : "PRIVMSG #general :Bonjour tout le monde"
   - Cible : "#general"
   - Message : "Bonjour tout le monde"
 
 #### Étape 4 : Déterminer le Type de Cible
-- [ ] Vérifier si la cible commence par # ou & → Canal
-- [ ] Sinon → Pseudonyme d'utilisateur
+- [x] Vérifier si la cible commence par # ou & → Canal
+- [x] Sinon → Pseudonyme d'utilisateur
 
 #### Étape 5a : Message de Canal
 Si la cible est un canal :
-- [ ] Récupérer le canal depuis le serveur
-- [ ] Si le canal n'existe pas : envoyer ERR_NOSUCHCHANNEL (403)
-- [ ] Vérifier si le client est membre du canal
-- [ ] Si pas membre : envoyer ERR_CANNOTSENDTOCHAN (404)
-- [ ] Formater le message : ":nick!user@host PRIVMSG #channel :message"
-- [ ] Diffuser au canal, EXCLURE l'expéditeur
+- [x] Récupérer le canal depuis le serveur
+- [x] Si le canal n'existe pas : envoyer ERR_NOSUCHCHANNEL (403)
+- [x] Vérifier si le client est membre du canal
+- [x] Si pas membre : envoyer ERR_CANNOTSENDTOCHAN (404)
+- [x] Formater le message : ":nick!user@host PRIVMSG #channel :message"
+- [x] Diffuser au canal, EXCLURE l'expéditeur
   ```cpp
   channel->broadcast(msg, client); // client est exclu
   ```
 
 #### Étape 5b : Message Privé
 Si la cible est un pseudonyme :
-- [ ] Trouver le client cible par pseudonyme
-- [ ] Si non trouvé : envoyer ERR_NOSUCHNICK (401)
-- [ ] Formater le message : ":nick!user@host PRIVMSG targetnick :message"
-- [ ] Envoyer au client cible
+- [x] Trouver le client cible par pseudonyme
+- [x] Si non trouvé : envoyer ERR_NOSUCHNICK (401)
+- [x] Formater le message : ":nick!user@host PRIVMSG targetnick :message"
+- [x] Envoyer au client cible
   ```cpp
   targetClient->sendMessage(msg);
   ```
@@ -122,17 +122,17 @@ Si la cible est un pseudonyme :
 
 ## Liste de Vérification des Tests
 
-- [ ] PRIVMSG #channel :texte envoie au canal
-- [ ] PRIVMSG nick :texte envoie à l'utilisateur
-- [ ] PRIVMSG sans cible envoie l'erreur 411
-- [ ] PRIVMSG cible (pas de message) envoie l'erreur 412
-- [ ] PRIVMSG #inexistant envoie l'erreur 403
-- [ ] PRIVMSG pseudoinconnu envoie l'erreur 401
-- [ ] PRIVMSG #pasmembre envoie l'erreur 404
-- [ ] PRIVMSG avant l'enregistrement envoie l'erreur 451
-- [ ] L'expéditeur ne reçoit pas son propre message de canal
-- [ ] Le format du message inclut le préfixe de l'expéditeur
-- [ ] Le message préserve les espaces et la ponctuation
+- [x] PRIVMSG #channel :texte envoie au canal
+- [x] PRIVMSG nick :texte envoie à l'utilisateur
+- [x] PRIVMSG sans cible envoie l'erreur 411
+- [x] PRIVMSG cible (pas de message) envoie l'erreur 412
+- [x] PRIVMSG #inexistant envoie l'erreur 403
+- [x] PRIVMSG pseudoinconnu envoie l'erreur 401
+- [x] PRIVMSG #pasmembre envoie l'erreur 404
+- [x] PRIVMSG avant l'enregistrement envoie l'erreur 451
+- [x] L'expéditeur ne reçoit pas son propre message de canal
+- [x] Le format du message inclut le préfixe de l'expéditeur
+- [x] Le message préserve les espaces et la ponctuation
 
 ---
 

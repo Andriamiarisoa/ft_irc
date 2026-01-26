@@ -38,15 +38,15 @@ Channel(const std::string& name)
 **Objectif** : Créer un canal avec le nom donné
 
 **TODO** :
-- [ ] Stocker le nom dans la variable membre
-- [ ] Initialiser le sujet à une chaîne vide
-- [ ] Initialiser la clé à une chaîne vide
-- [ ] Initialiser l'ensemble des membres vide
-- [ ] Initialiser l'ensemble des opérateurs vide
-- [ ] Initialiser l'ensemble des invités vide
-- [ ] Définir inviteOnly à false
-- [ ] Définir topicRestricted à true (comportement IRC par défaut)
-- [ ] Définir userLimit à 0 (aucune limite)
+- [x] Stocker le nom dans la variable membre
+- [x] Initialiser le sujet à une chaîne vide
+- [x] Initialiser la clé à une chaîne vide
+- [x] Initialiser l'ensemble des membres vide
+- [x] Initialiser l'ensemble des opérateurs vide
+- [x] Initialiser l'ensemble des invités vide
+- [x] Définir inviteOnly à false
+- [x] Définir topicRestricted à true (comportement IRC par défaut)
+- [x] Définir userLimit à 0 (aucune limite)
 
 ---
 
@@ -58,9 +58,9 @@ Channel(const std::string& name)
 **Objectif** : Nettoyer les ressources du canal
 
 **TODO** :
-- [ ] Vider tous les ensembles (members, operators, invited)
-- [ ] Note : Ne pas supprimer les objets Client (appartiennent au Server)
-- [ ] Vider les chaînes topic et key
+- [x] Vider tous les ensembles (members, operators, invited)
+- [x] Note : Ne pas supprimer les objets Client (appartiennent au Server)
+- [x] Vider les chaînes topic et key
 
 ---
 
@@ -72,8 +72,8 @@ std::string getName() const
 **Objectif** : Obtenir le nom du canal
 
 **TODO** :
-- [ ] Retourner la chaîne name
-- [ ] Inclure le préfixe # dans le nom
+- [x] Retourner la chaîne name
+- [x] Inclure le préfixe # dans le nom
 
 ---
 
@@ -85,8 +85,8 @@ std::string getTopic() const
 **Objectif** : Obtenir le sujet du canal
 
 **TODO** :
-- [ ] Retourner la chaîne topic
-- [ ] Retourner une chaîne vide si aucun sujet n'est défini
+- [x] Retourner la chaîne topic
+- [x] Retourner une chaîne vide si aucun sujet n'est défini
 
 ---
 
@@ -98,17 +98,17 @@ void setTopic(const std::string& topic, Client* client)
 **Objectif** : Définir le sujet du canal avec vérification des permissions
 
 **TODO** :
-- [ ] Vérifier si le mode topicRestricted est activé
-- [ ] Si restreint : vérifier que le client est opérateur
-- [ ] Si pas opérateur et restreint : envoyer l'erreur ERR_CHANOPRIVSNEEDED (482)
+- [x] Vérifier si le mode topicRestricted est activé
+- [x] Si restreint : vérifier que le client est opérateur
+- [x] Si pas opérateur et restreint : envoyer l'erreur ERR_CHANOPRIVSNEEDED (482)
   ```cpp
   #include "Replies.hpp"
   
   client->sendMessage(ERR_CHANOPRIVSNEEDED(client->getNickname(), name) + "\r\n");
   ```
-- [ ] Stocker le nouveau sujet
-- [ ] Diffuser le changement de sujet à tous les membres
-- [ ] Envoyer RPL_TOPIC (332) au canal
+- [x] Stocker le nouveau sujet
+- [x] Diffuser le changement de sujet à tous les membres
+- [x] Envoyer RPL_TOPIC (332) au canal
   ```cpp
   client->sendMessage(RPL_TOPIC(client->getNickname(), name, topic) + "\r\n");
   ```
@@ -123,9 +123,9 @@ void setKey(const std::string& key)
 **Objectif** : Définir le mot de passe du canal (mode +k)
 
 **TODO** :
-- [ ] Stocker la clé dans la variable membre
-- [ ] Une clé vide signifie aucun mot de passe
-- [ ] Appelé par la commande MODE +k
+- [x] Stocker la clé dans la variable membre
+- [x] Une clé vide signifie aucun mot de passe
+- [x] Appelé par la commande MODE +k
 
 ---
 
@@ -137,8 +137,8 @@ bool hasKey() const
 **Objectif** : Vérifier si le canal a un mot de passe
 
 **TODO** :
-- [ ] Retourner true si la clé n'est pas vide
-- [ ] Retourner false si la clé est vide
+- [x] Retourner true si la clé n'est pas vide
+- [x] Retourner false si la clé est vide
 
 ---
 
@@ -150,10 +150,10 @@ bool checkKey(const std::string& key) const
 **Objectif** : Vérifier que la clé fournie correspond à la clé du canal
 
 **TODO** :
-- [ ] Comparer le paramètre avec la clé stockée
-- [ ] Retourner true si correspondance
-- [ ] Retourner false si pas de correspondance
-- [ ] Retourner true si aucune clé définie (pas de mot de passe)
+- [x] Comparer le paramètre avec la clé stockée
+- [x] Retourner true si correspondance
+- [x] Retourner false si pas de correspondance
+- [x] Retourner true si aucune clé définie (pas de mot de passe)
 
 ---
 
@@ -165,11 +165,11 @@ void addMember(Client* client)
 **Objectif** : Ajouter un client aux membres du canal
 
 **TODO** :
-- [ ] Vérifier que le client n'est pas NULL
-- [ ] Inserér le client dans l'ensemble members
-- [ ] Appeler client->addToChannel(this)
-- [ ] Si c'est le premier membre : le faire opérateur
-- [ ] Diffuser le message JOIN à tous les membres
+- [x] Vérifier que le client n'est pas NULL
+- [x] Inserér le client dans l'ensemble members
+- [x] Appeler client->addToChannel(this)
+- [x] Si c'est le premier membre : le faire opérateur
+- [x] Diffuser le message JOIN à tous les membres
   ```cpp
   #include "Replies.hpp"
   
@@ -178,7 +178,7 @@ void addMember(Client* client)
                         " JOIN " + name + "\r\n";
   broadcast(joinMsg, NULL);
   ```
-- [ ] Envoyer les informations du canal au nouveau membre :
+- [x] Envoyer les informations du canal au nouveau membre :
   - Sujet (RPL_TOPIC 332, RPL_NOTOPIC 331)
     ```cpp
     if (topic.empty()) {
@@ -203,12 +203,12 @@ void removeMember(Client* client)
 **Objectif** : Retirer un client du canal
 
 **TODO** :
-- [ ] Vérifier si le client est membre
-- [ ] Retirer de l'ensemble members
-- [ ] Retirer de l'ensemble operators si opérateur
-- [ ] Retirer de l'ensemble invited si invité
-- [ ] Appeler client->removeFromChannel(this)
-- [ ] Diffuser le message PART aux membres restants
+- [x] Vérifier si le client est membre
+- [x] Retirer de l'ensemble members
+- [x] Retirer de l'ensemble operators si opérateur
+- [x] Retirer de l'ensemble invited si invité
+- [x] Appeler client->removeFromChannel(this)
+- [x] Diffuser le message PART aux membres restants
   ```cpp
   #include "Replies.hpp"
   
@@ -217,7 +217,7 @@ void removeMember(Client* client)
                         " PART " + name + "\r\n";
   broadcast(partMsg, NULL);
   ```
-- [ ] Si le canal devient vide : le Server doit supprimer le canal
+- [x] Si le canal devient vide : le Server doit supprimer le canal
 
 ---
 
@@ -229,10 +229,10 @@ void addOperator(Client* client)
 **Objectif** : Donner le statut d'opérateur à un client
 
 **TODO** :
-- [ ] Vérifier si le client est membre du canal
-- [ ] Si pas membre : envoyer une erreur
-- [ ] Insérer le client dans l'ensemble operators
-- [ ] Diffuser le message MODE +o au canal
+- [x] Vérifier si le client est membre du canal
+- [x] Si pas membre : envoyer une erreur
+- [x] Insérer le client dans l'ensemble operators
+- [x] Diffuser le message MODE +o au canal
 
 ---
 
@@ -244,10 +244,10 @@ void removeOperator(Client* client)
 **Objectif** : Retirer le statut d'opérateur à un client
 
 **TODO** :
-- [ ] Vérifier si le client est opérateur
-- [ ] Retirer de l'ensemble operators
-- [ ] Diffuser le message MODE -o au canal
-- [ ] S'assurer qu'au moins un opérateur reste
+- [x] Vérifier si le client est opérateur
+- [x] Retirer de l'ensemble operators
+- [x] Diffuser le message MODE -o au canal
+- [x] S'assurer qu'au moins un opérateur reste
 
 ---
 
@@ -259,9 +259,9 @@ bool isOperator(Client* client) const
 **Objectif** : Vérifier si le client est opérateur du canal
 
 **TODO** :
-- [ ] Vérifier si le client existe dans l'ensemble operators
-- [ ] Retourner true si trouvé
-- [ ] Retourner false sinon
+- [x] Vérifier si le client existe dans l'ensemble operators
+- [x] Retourner true si trouvé
+- [x] Retourner false sinon
 
 ---
 
@@ -273,9 +273,9 @@ bool isMember(Client* client) const
 **Objectif** : Vérifier si le client est membre du canal
 
 **TODO** :
-- [ ] Vérifier si le client existe dans l'ensemble members
-- [ ] Retourner true si trouvé
-- [ ] Retourner false sinon
+- [x] Vérifier si le client existe dans l'ensemble members
+- [x] Retourner true si trouvé
+- [x] Retourner false sinon
 
 ---
 
@@ -287,12 +287,12 @@ void broadcast(const std::string& msg, Client* exclude)
 **Objectif** : Envoyer un message à tous les membres du canal sauf un
 
 **TODO** :
-- [ ] Itérer à travers l'ensemble members
-- [ ] Pour chaque membre :
+- [x] Itérer à travers l'ensemble members
+- [x] Pour chaque membre :
   - Ignorer si membre == exclude
   - Appeler member->sendMessage(msg)
-- [ ] Gérer les erreurs d'envoi avec élégance
-- [ ] Ne pas lever d'exceptions sur les échecs individuels
+- [x] Gérer les erreurs d'envoi avec élégance
+- [x] Ne pas lever d'exceptions sur les échecs individuels
 
 ---
 
@@ -304,9 +304,9 @@ void setInviteOnly(bool mode)
 **Objectif** : Définir le mode invitation uniquement (+i/-i)
 
 **TODO** :
-- [ ] Définir le flag inviteOnly au paramètre mode
-- [ ] Si désactivation : vider l'ensemble invited
-- [ ] Diffuser le message MODE au canal
+- [x] Définir le flag inviteOnly au paramètre mode
+- [x] Si désactivation : vider l'ensemble invited
+- [x] Diffuser le message MODE au canal
 
 ---
 
@@ -318,8 +318,8 @@ void setTopicRestricted(bool mode)
 **Objectif** : Définir le mode de restriction du sujet (+t/-t)
 
 **TODO** :
-- [ ] Définir le flag topicRestricted au paramètre mode
-- [ ] Diffuser le message MODE au canal
+- [x] Définir le flag topicRestricted au paramètre mode
+- [x] Diffuser le message MODE au canal
 
 ---
 
@@ -331,10 +331,10 @@ void setUserLimit(int limit)
 **Objectif** : Définir la limite maximum d'utilisateurs (+l/-l)
 
 **TODO** :
-- [ ] Valider la limite (>= 0)
-- [ ] Définir userLimit au paramètre limit
-- [ ] 0 signifie aucune limite
-- [ ] Diffuser le message MODE au canal
+- [x] Valider la limite (>= 0)
+- [x] Définir userLimit au paramètre limit
+- [x] 0 signifie aucune limite
+- [x] Diffuser le message MODE au canal
 
 ---
 
@@ -346,16 +346,16 @@ void inviteUser(Client* client)
 **Objectif** : Inviter un utilisateur à un canal sur invitation uniquement
 
 **TODO** :
-- [ ] Vérifier si le canal est en mode invitation uniquement
-- [ ] Ajouter le client à l'ensemble invited
-- [ ] Envoyer RPL_INVITING (341) à celui qui invite
+- [x] Vérifier si le canal est en mode invitation uniquement
+- [x] Ajouter le client à l'ensemble invited
+- [x] Envoyer RPL_INVITING (341) à celui qui invite
   ```cpp
   #include "Replies.hpp"
   
   inviter->sendMessage(RPL_INVITING(inviter->getNickname(), 
                                     target->getNickname(), name) + "\r\n");
   ```
-- [ ] Envoyer le message INVITE au client invité
+- [x] Envoyer le message INVITE au client invité
   ```cpp
   std::string inviteMsg = USER_PREFIX(inviter->getNickname(),
                                       inviter->getUsername(), "host") +
@@ -363,7 +363,7 @@ void inviteUser(Client* client)
                           " " + name + "\r\n";
   target->sendMessage(inviteMsg);
   ```
-- [ ] L'invitation est à usage unique (effacée après le join)
+- [x] L'invitation est à usage unique (effacée après le join)
 
 ---
 
@@ -375,10 +375,10 @@ bool isInvited(Client* client) const
 **Objectif** : Vérifier si le client est invité
 
 **TODO** :
-- [ ] Vérifier si le client existe dans l'ensemble invited
-- [ ] Retourner true si trouvé
-- [ ] Retourner false sinon
-- [ ] Utilisé quand un client essaie de JOIN un canal +i
+- [x] Vérifier si le client existe dans l'ensemble invited
+- [x] Retourner true si trouvé
+- [x] Retourner false sinon
+- [x] Utilisé quand un client essaie de JOIN un canal +i
 
 ---
 
@@ -390,15 +390,15 @@ void kickMember(Client* client, const std::string& reason)
 **Objectif** : Expulser un membre du canal
 
 **TODO** :
-- [ ] Vérifier si le client est membre
-- [ ] Si pas membre : envoyer une erreur
+- [x] Vérifier si le client est membre
+- [x] Si pas membre : envoyer une erreur
   ```cpp
   #include "Replies.hpp"
   
   kicker->sendMessage(ERR_USERNOTINCHANNEL(kicker->getNickname(), 
                                            target->getNickname(), name) + "\r\n");
   ```
-- [ ] Diffuser le message KICK avec la raison à tous les membres
+- [x] Diffuser le message KICK avec la raison à tous les membres
   ```cpp
   std::string kickMsg = USER_PREFIX(kicker->getNickname(),
                                     kicker->getUsername(), "host") +
@@ -406,7 +406,7 @@ void kickMember(Client* client, const std::string& reason)
                         " :" + reason + "\r\n";
   broadcast(kickMsg, NULL);  // Inclure le client expulsé
   ```
-- [ ] Retirer le membre du canal (appeler removeMember)
+- [x] Retirer le membre du canal (appeler removeMember)
 
 ---
 
@@ -466,17 +466,17 @@ void kickMember(Client* client, const std::string& reason)
 
 ## Liste de vérification des tests
 
-- [ ] Canal créé avec un nom valide
-- [ ] Le premier membre devient opérateur automatiquement
-- [ ] Les membres peuvent rejoindre et partir
-- [ ] Les opérateurs peuvent modifier le sujet quand +t est activé
-- [ ] Les non-opérateurs ne peuvent pas modifier le sujet quand +t est activé
-- [ ] La clé du canal bloque les joins non autorisés
-- [ ] Le mode invitation uniquement fonctionne correctement
-- [ ] La limite d'utilisateurs empêche les joins excessifs
-- [ ] Kick retire le membre correctement
-- [ ] Broadcast envoie à tous les membres sauf celui exclu
-- [ ] Gestion des canaux vides
+- [x] Canal créé avec un nom valide
+- [x] Le premier membre devient opérateur automatiquement
+- [x] Les membres peuvent rejoindre et partir
+- [x] Les opérateurs peuvent modifier le sujet quand +t est activé
+- [x] Les non-opérateurs ne peuvent pas modifier le sujet quand +t est activé
+- [x] La clé du canal bloque les joins non autorisés
+- [x] Le mode invitation uniquement fonctionne correctement
+- [x] La limite d'utilisateurs empêche les joins excessifs
+- [x] Kick retire le membre correctement
+- [x] Broadcast envoie à tous les membres sauf celui exclu
+- [x] Gestion des canaux vides
 
 ---
 

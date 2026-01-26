@@ -143,17 +143,17 @@ void execute()
 
 ## Liste de tests
 
-- [ ] PART #channel quitte le canal
-- [ ] PART sans paramètre envoie l'erreur 461
-- [ ] PART #nonexistent envoie l'erreur 403
-- [ ] PART #notmember envoie l'erreur 442
-- [ ] PART avant l'enregistrement envoie l'erreur 451
-- [ ] PART #foo,#bar quitte plusieurs canaux
-- [ ] PART #channel :Goodbye inclut la raison
-- [ ] PART diffuse à tous les membres
-- [ ] Les canaux vides sont supprimés
-- [ ] Le client est retiré des membres du canal
-- [ ] Le canal est retiré des canaux du client
+- [x] PART #channel quitte le canal
+- [x] PART sans paramètre envoie l'erreur 461
+- [x] PART #nonexistent envoie l'erreur 403
+- [x] PART #notmember envoie l'erreur 442
+- [x] PART avant l'enregistrement envoie l'erreur 451
+- [x] PART #foo,#bar quitte plusieurs canaux
+- [x] PART #channel :Goodbye inclut la raison
+- [x] PART diffuse à tous les membres
+- [x] Les canaux vides sont supprimés
+- [x] Le client est retiré des membres du canal
+- [x] Le canal est retiré des canaux du client
 
 ---
 

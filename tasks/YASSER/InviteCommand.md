@@ -147,17 +147,17 @@ void execute()
 
 ## Liste de Vérification des Tests
 
-- [ ] INVITE user #channel invite avec succès
-- [ ] INVITE sans paramètres envoie l'erreur 461
-- [ ] INVITE vers un canal inexistant envoie l'erreur 403
-- [ ] INVITE d'un utilisateur inexistant envoie l'erreur 401
-- [ ] INVITE par un non-membre envoie l'erreur 442
-- [ ] INVITE vers un canal +i par un non-op envoie l'erreur 482
-- [ ] INVITE d'un utilisateur déjà dans le canal envoie l'erreur 443
-- [ ] RPL_INVITING envoyé à l'inviteur
-- [ ] Message INVITE envoyé à l'utilisateur invité
-- [ ] L'utilisateur invité peut rejoindre un canal +i
-- [ ] Invitation effacée après la jonction
+- [x] INVITE user #channel invite avec succès
+- [x] INVITE sans paramètres envoie l'erreur 461
+- [x] INVITE vers un canal inexistant envoie l'erreur 403
+- [x] INVITE d'un utilisateur inexistant envoie l'erreur 401
+- [x] INVITE par un non-membre envoie l'erreur 442
+- [x] INVITE vers un canal +i par un non-op envoie l'erreur 482
+- [x] INVITE d'un utilisateur déjà dans le canal envoie l'erreur 443
+- [x] RPL_INVITING envoyé à l'inviteur
+- [x] Message INVITE envoyé à l'utilisateur invité
+- [x] L'utilisateur invité peut rejoindre un canal +i
+- [x] Invitation effacée après la jonction
 
 ---
 

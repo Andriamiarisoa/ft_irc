@@ -132,9 +132,9 @@ Client → Server: NOTICE nonexistent :Hello
 
 - [x] Header créé
 - [x] Implémentation créée
-- [ ] Ajouté à MessageParser
-- [ ] Ajouté au Makefile
-- [ ] Tests effectués
+- [x] Ajouté à MessageParser
+- [x] Ajouté au Makefile
+- [x] Tests effectués
 
 ---
 

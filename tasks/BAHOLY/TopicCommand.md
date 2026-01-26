@@ -25,8 +25,8 @@ TopicCommand(Server* srv, Client* cli, const std::vector<std::string>& params)
 **Objectif** : Initialiser la commande TOPIC
 
 **TODO** :
-- [ ] Appeler le constructeur de la classe de base
-- [ ] Aucune initialisation supplémentaire nécessaire
+- [x] Appeler le constructeur de la classe de base
+- [x] Aucune initialisation supplémentaire nécessaire
 
 ---
 

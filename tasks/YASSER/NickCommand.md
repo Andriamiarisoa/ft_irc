@@ -67,9 +67,9 @@ void execute()
   ```
 
 #### Étape 4 : Vérifier la Disponibilité du Pseudonyme
-- [ ] Appeler server->getClientByNick(params[0])
-- [ ] Vérifier si le client retourné est différent du client actuel
-- [ ] Si le pseudonyme est déjà utilisé : envoyer ERR_NICKNAMEINUSE (433)
+- [x] Appeler server->getClientByNick(params[0])
+- [x] Vérifier si le client retourné est différent du client actuel
+- [x] Si le pseudonyme est déjà utilisé : envoyer ERR_NICKNAMEINUSE (433)
   ```cpp
   sendError(433, params[0] + " :Nickname is already in use");
   return;
@@ -78,7 +78,7 @@ void execute()
 #### Étape 5 : Définir le Pseudonyme
 - [x] Stocker l'ancien pseudonyme si le client en avait un
 - [x] Appeler client->setNickname(params[0])
-- [ ] Si le client est déjà enregistré (changement de pseudo) :
+- [x] Si le client est déjà enregistré (changement de pseudo) :
   - Diffuser le changement NICK à tous les canaux
   - Format : ":oldnick!user@host NICK :newnick"
 - [x] Si cela complète l'enregistrement (a aussi le nom d'utilisateur) :
@@ -156,16 +156,16 @@ bool isValidNickname(const std::string& nick) {
 
 ## Liste de Vérification des Tests
 
-- [ ] NICK avec un pseudonyme valide définit le pseudonyme du client
-- [ ] NICK sans paramètre envoie l'erreur 431
-- [ ] NICK avec un format invalide envoie l'erreur 432
-- [ ] NICK avec un pseudonyme déjà pris envoie l'erreur 433
-- [ ] NICK avant PASS est rejeté
-- [ ] NICK + USER complète l'enregistrement
-- [ ] Le changement NICK est diffusé aux canaux
-- [ ] Comparaison de pseudonyme insensible à la casse
-- [ ] Maximum de 9 caractères appliqué
-- [ ] Caractères spéciaux gérés correctement
+- [x] NICK avec un pseudonyme valide définit le pseudonyme du client
+- [x] NICK sans paramètre envoie l'erreur 431
+- [x] NICK avec un format invalide envoie l'erreur 432
+- [x] NICK avec un pseudonyme déjà pris envoie l'erreur 433
+- [x] NICK avant PASS est rejeté
+- [x] NICK + USER complète l'enregistrement
+- [x] Le changement NICK est diffusé aux canaux
+- [x] Comparaison de pseudonyme insensible à la casse
+- [x] Maximum de 9 caractères appliqué
+- [x] Caractères spéciaux gérés correctement
 
 ---
 

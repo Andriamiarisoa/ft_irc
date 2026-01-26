@@ -127,8 +127,8 @@ void execute()
   ```
 
 #### Étape 8b: Parser la Chaîne de Mode
-- [ ] Chaîne de mode: params[1]
-- [ ] Exemple: "+it", "-k", "+o alice", "+kl password 50"
+- [x] Chaîne de mode: params[1]
+- [x] Exemple: "+it", "-k", "+o alice", "+kl password 50"
 
 #### Étape 9b: Initialiser le Parseur de Mode
 ```cpp
@@ -176,9 +176,9 @@ if (mode == 'i') {
 ```
 
 **TODO**:
-- [ ] Définir/retirer le flag sur invitation uniquement
-- [ ] Aucun paramètre requis
-- [ ] Ajouter à la chaîne des modes appliqués
+- [x] Définir/retirer le flag sur invitation uniquement
+- [x] Aucun paramètre requis
+- [x] Ajouter à la chaîne des modes appliqués
 
 ---
 
@@ -198,9 +198,9 @@ if (mode == 't') {
 ```
 
 **TODO**:
-- [ ] Définir/retirer le flag de protection du sujet
-- [ ] Aucun paramètre requis
-- [ ] Ajouter à la chaîne des modes appliqués
+- [x] Définir/retirer le flag de protection du sujet
+- [x] Aucun paramètre requis
+- [x] Ajouter à la chaîne des modes appliqués
 
 ---
 
@@ -235,11 +235,11 @@ if (mode == 'k') {
 ```
 
 **TODO**:
-- [ ] Vérifier que le paramètre existe
-- [ ] +k: Définir la clé du canal (mot de passe)
-- [ ] -k: Retirer la clé (vérifier qu'elle correspond)
-- [ ] Ajouter la clé aux paramètres appliqués
-- [ ] Envoyer l'erreur 467 si la clé ne correspond pas
+- [x] Vérifier que le paramètre existe
+- [x] +k: Définir la clé du canal (mot de passe)
+- [x] -k: Retirer la clé (vérifier qu'elle correspond)
+- [x] Ajouter la clé aux paramètres appliqués
+- [x] Envoyer l'erreur 467 si la clé ne correspond pas
 
 ---
 
@@ -283,13 +283,13 @@ if (mode == 'o') {
 ```
 
 **TODO**:
-- [ ] Vérifier que le paramètre existe (pseudonyme)
-- [ ] Obtenir le client cible
-- [ ] Vérifier que la cible existe (erreur 401)
-- [ ] Vérifier que la cible est dans le canal (erreur 441)
-- [ ] +o: Ajouter à l'ensemble des opérateurs
-- [ ] -o: Retirer de l'ensemble des opérateurs
-- [ ] Ajouter le pseudonyme aux paramètres appliqués
+- [x] Vérifier que le paramètre existe (pseudonyme)
+- [x] Obtenir le client cible
+- [x] Vérifier que la cible existe (erreur 401)
+- [x] Vérifier que la cible est dans le canal (erreur 441)
+- [x] +o: Ajouter à l'ensemble des opérateurs
+- [x] -o: Retirer de l'ensemble des opérateurs
+- [x] Ajouter le pseudonyme aux paramètres appliqués
 
 ---
 
@@ -326,11 +326,11 @@ if (mode == 'l') {
 ```
 
 **TODO**:
-- [ ] +l: Vérifier que le paramètre existe (nombre limite)
-- [ ] +l: Valider que la limite est un entier positif
-- [ ] +l: Définir la limite d'utilisateurs
-- [ ] -l: Retirer la limite (pas de paramètre)
-- [ ] Ajouter la limite aux paramètres appliqués (seulement pour +l)
+- [x] +l: Vérifier que le paramètre existe (nombre limite)
+- [x] +l: Valider que la limite est un entier positif
+- [x] +l: Définir la limite d'utilisateurs
+- [x] -l: Retirer la limite (pas de paramètre)
+- [x] Ajouter la limite aux paramètres appliqués (seulement pour +l)
 
 ---
 
@@ -342,14 +342,14 @@ continue;
 ```
 
 **TODO**:
-- [ ] Envoyer ERR_UNKNOWNMODE (472) pour les modes invalides
-- [ ] Continuer le traitement des modes restants
+- [x] Envoyer ERR_UNKNOWNMODE (472) pour les modes invalides
+- [x] Continuer le traitement des modes restants
 
 ---
 
 ### Étape 12: Diffuser les Changements de Mode
-- [ ] Diffuser seulement si des modes ont été effectivement changés
-- [ ] Format: ":nick!user@host MODE #channel +modes paramètres"
+- [x] Diffuser seulement si des modes ont été effectivement changés
+- [x] Format: ":nick!user@host MODE #channel +modes paramètres"
   ```cpp
   if (!appliedModes.empty()) {
       std::string modeMsg = ":" + client->getNickname() + "!" +
@@ -407,52 +407,52 @@ continue;
 ## Liste de Vérification des Tests
 
 ### Visualiser les Modes
-- [ ] MODE #channel affiche les modes actuels
-- [ ] Les modes vides affichent "+"
-- [ ] Les modes avec paramètres sont affichés correctement
+- [x] MODE #channel affiche les modes actuels
+- [x] Les modes vides affichent "+"
+- [x] Les modes avec paramètres sont affichés correctement
 
 ### Modes Simples
-- [ ] MODE #channel +i définit sur invitation uniquement
-- [ ] MODE #channel -i retire sur invitation uniquement
-- [ ] MODE #channel +t définit la protection du sujet
-- [ ] MODE #channel -t retire la protection du sujet
-- [ ] MODE #channel +it définit les deux
+- [x] MODE #channel +i définit sur invitation uniquement
+- [x] MODE #channel -i retire sur invitation uniquement
+- [x] MODE #channel +t définit la protection du sujet
+- [x] MODE #channel -t retire la protection du sujet
+- [x] MODE #channel +it définit les deux
 
 ### Mode Clé
-- [ ] MODE #channel +k password définit la clé
-- [ ] JOIN nécessite la clé après +k
-- [ ] MODE #channel -k password retire la clé
-- [ ] MODE #channel -k wrongpass échoue (erreur 467)
+- [x] MODE #channel +k password définit la clé
+- [x] JOIN nécessite la clé après +k
+- [x] MODE #channel -k password retire la clé
+- [x] MODE #channel -k wrongpass échoue (erreur 467)
 
 ### Mode Opérateur
-- [ ] MODE #channel +o alice donne l'opérateur
-- [ ] MODE #channel -o alice retire l'opérateur
-- [ ] MODE #channel +o nonexistent envoie l'erreur 401
-- [ ] MODE #channel +o notinchannel envoie l'erreur 441
-- [ ] Le nouvel opérateur peut définir les modes
+- [x] MODE #channel +o alice donne l'opérateur
+- [x] MODE #channel -o alice retire l'opérateur
+- [x] MODE #channel +o nonexistent envoie l'erreur 401
+- [x] MODE #channel +o notinchannel envoie l'erreur 441
+- [x] Le nouvel opérateur peut définir les modes
 
 ### Mode Limite
-- [ ] MODE #channel +l 50 définit la limite
-- [ ] MODE #channel -l retire la limite
-- [ ] JOIN échoue quand la limite est atteinte
-- [ ] MODE #channel +l 0 échoue (invalide)
-- [ ] MODE #channel +l abc échoue (invalide)
+- [x] MODE #channel +l 50 définit la limite
+- [x] MODE #channel -l retire la limite
+- [x] JOIN échoue quand la limite est atteinte
+- [x] MODE #channel +l 0 échoue (invalide)
+- [x] MODE #channel +l abc échoue (invalide)
 
 ### Tests de Permission
-- [ ] Le changement MODE par un non-opérateur échoue (erreur 482)
-- [ ] Le changement MODE par un opérateur réussit
-- [ ] MODE par un non-membre échoue (erreur 442)
+- [x] Le changement MODE par un non-opérateur échoue (erreur 482)
+- [x] Le changement MODE par un opérateur réussit
+- [x] MODE par un non-membre échoue (erreur 442)
 
 ### Modes Multiples
-- [ ] MODE #channel +it définit les deux
-- [ ] MODE #channel +kl pass 50 définit les deux avec params
-- [ ] MODE #channel +o-o alice bob donne/retire les ops
-- [ ] MODE #channel -itk pass retire tous
+- [x] MODE #channel +it définit les deux
+- [x] MODE #channel +kl pass 50 définit les deux avec params
+- [x] MODE #channel +o-o alice bob donne/retire les ops
+- [x] MODE #channel -itk pass retire tous
 
 ### Tests de Diffusion
-- [ ] Tous les membres voient la diffusion MODE
-- [ ] La diffusion inclut les paramètres
-- [ ] L'expéditeur reçoit la diffusion
+- [x] Tous les membres voient la diffusion MODE
+- [x] La diffusion inclut les paramètres
+- [x] L'expéditeur reçoit la diffusion
 
 ---
 

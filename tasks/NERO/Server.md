@@ -236,12 +236,12 @@ void executeCommand(Client* client, const std::string& cmd)
 **Objectif** : Analyser et exécuter une commande IRC
 
 **TODO** :
-- [ ] Appeler MessageParser::parse(cmd, this, client)
-- [ ] Vérifier si l'objet Command a été créé (NULL = invalide)
-- [ ] Appeler command->execute()
-- [ ] Supprimer l'objet command (nettoyage)
-- [ ] Gérer les exceptions de l'exécution de commande
-- [ ] Enregistrer l'exécution de commande (mode debug)
+- [x] Appeler MessageParser::parse(cmd, this, client)
+- [x] Vérifier si l'objet Command a été créé (NULL = invalide)
+- [x] Appeler command->execute()
+- [x] Supprimer l'objet command (nettoyage)
+- [x] Gérer les exceptions de l'exécution de commande
+- [x] Enregistrer l'exécution de commande (mode debug)
 
 ---
 

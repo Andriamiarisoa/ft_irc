@@ -152,16 +152,16 @@ static std::string extractPrefix(const std::string& line)
 
 ## Liste de Vérification des Tests
 
-- [ ] Commandes de base analysées correctement (PASS, NICK, USER)
-- [ ] Commandes avec plusieurs paramètres (USER)
-- [ ] Paramètre final avec espaces (PRIVMSG)
-- [ ] Commandes de canal (JOIN, PART)
-- [ ] Commandes de mode avec drapeaux (MODE)
-- [ ] Commandes inconnues retournent NULL
-- [ ] Messages vides gérés
-- [ ] Noms de commandes insensibles à la casse
-- [ ] Espaces multiples consécutifs gérés
-- [ ] Extraction du préfixe fonctionne
+- [x] Commandes de base analysées correctement (PASS, NICK, USER)
+- [x] Commandes avec plusieurs paramètres (USER)
+- [x] Paramètre final avec espaces (PRIVMSG)
+- [x] Commandes de canal (JOIN, PART)
+- [x] Commandes de mode avec drapeaux (MODE)
+- [x] Commandes inconnues retournent NULL
+- [x] Messages vides gérés
+- [x] Noms de commandes insensibles à la casse
+- [x] Espaces multiples consécutifs gérés
+- [x] Extraction du préfixe fonctionne
 
 ---
 

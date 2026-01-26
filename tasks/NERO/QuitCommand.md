@@ -23,8 +23,8 @@ QuitCommand(Server* srv, Client* cli, const std::vector<std::string>& params)
 **Objectif**: Initialiser la commande QUIT
 
 **TODO**:
-- [ ] Appeler le constructeur de la classe de base
-- [ ] Aucune initialisation supplémentaire nécessaire
+- [x] Appeler le constructeur de la classe de base
+- [x] Aucune initialisation supplémentaire nécessaire
 
 ---
 
@@ -38,18 +38,18 @@ void execute()
 **TODO**:
 
 #### Étape 1: Extraire le Message de Déconnexion
-- [ ] Si params[0] existe, l'utiliser comme message de déconnexion
-- [ ] Sinon, utiliser un message par défaut
-- [ ] Exemple: "QUIT :Leaving" ou "QUIT"
-- [ ] Par défaut: "Client quit" ou le surnom du client
+- [x] Si params[0] existe, l'utiliser comme message de déconnexion
+- [x] Sinon, utiliser un message par défaut
+- [x] Exemple: "QUIT :Leaving" ou "QUIT"
+- [x] Par défaut: "Client quit" ou le surnom du client
 
 #### Étape 2: Diffuser à Tous les Canaux
-- [ ] Obtenir tous les canaux dont le client est membre
-- [ ] Pour chaque canal:
+- [x] Obtenir tous les canaux dont le client est membre
+- [x] Pour chaque canal:
   - Formater le message QUIT
   - Diffuser à tous les membres du canal
   - Ne pas exclure le client (il devrait aussi le voir)
-- [ ] Format du message: ":nick!user@host QUIT :message de déconnexion"
+- [x] Format du message: ":nick!user@host QUIT :message de déconnexion"
   ```cpp
   #include "Replies.hpp"
   
@@ -59,26 +59,26 @@ void execute()
   ```
 
 #### Étape 3: Retirer de Tous les Canaux
-- [ ] Itérer à travers les canaux du client
-- [ ] Appeler channel->removeMember(client) pour chacun
-- [ ] Vider l'ensemble des canaux du client
+- [x] Itérer à travers les canaux du client
+- [x] Appeler channel->removeMember(client) pour chacun
+- [x] Vider l'ensemble des canaux du client
 
 #### Étape 4: Supprimer les Canaux Vides
-- [ ] Pour chaque canal dans lequel le client était:
+- [x] Pour chaque canal dans lequel le client était:
   - Vérifier si le canal est maintenant vide
   - Si vide, supprimer le canal
 
 #### Étape 5: Déconnecter le Client
-- [ ] Appeler server->disconnectClient(client->getFd())
-- [ ] Cela va:
+- [x] Appeler server->disconnectClient(client->getFd())
+- [x] Cela va:
   - Fermer le socket
   - Retirer de la map des clients
   - Supprimer l'objet Client
 
 #### Étape 6: Note Importante
-- [ ] Après disconnectClient(), le pointeur client est INVALIDE
-- [ ] Ne pas accéder au client après ce point
-- [ ] Retourner immédiatement après la déconnexion
+- [x] Après disconnectClient(), le pointeur client est INVALIDE
+- [x] Ne pas accéder au client après ce point
+- [x] Retourner immédiatement après la déconnexion
 
 ---
 
@@ -107,16 +107,16 @@ void execute()
 
 ## Liste de Vérification des Tests
 
-- [ ] QUIT déconnecte le client
-- [ ] QUIT :message inclut un message personnalisé
-- [ ] QUIT sans message utilise le message par défaut
-- [ ] QUIT diffuse à tous les canaux
-- [ ] Client retiré de tous les canaux
-- [ ] Canaux vides supprimés après QUIT
-- [ ] Socket fermé correctement
-- [ ] Pas de fuites mémoire (valgrind)
-- [ ] Objet Client supprimé
-- [ ] Les autres clients voient le message QUIT
+- [x] QUIT déconnecte le client
+- [x] QUIT :message inclut un message personnalisé
+- [x] QUIT sans message utilise le message par défaut
+- [x] QUIT diffuse à tous les canaux
+- [x] Client retiré de tous les canaux
+- [x] Canaux vides supprimés après QUIT
+- [x] Socket fermé correctement
+- [x] Pas de fuites mémoire (valgrind)
+- [x] Objet Client supprimé
+- [x] Les autres clients voient le message QUIT
 
 ---
 

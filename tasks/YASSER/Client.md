@@ -163,7 +163,7 @@ void setNickname(const std::string& nick)
   - Maximum 9 caractères
 - [x] Stocker nickname dans la variable membre
 - [x] Vérifier si le client devient enregistré après avoir défini le pseudonyme
-- [ ] Si déjà enregistré, envoyer la réponse NICK aux canaux
+- [x] Si déjà enregistré, envoyer la réponse NICK aux canaux
 
 ---
 
@@ -177,7 +177,7 @@ void setUsername(const std::string& user)
 **TODO**:
 - [x] Stocker username dans la variable membre
 - [x] Vérifier si le client devient enregistré après avoir défini le nom d'utilisateur
-- [ ] Envoyer les messages de bienvenue (001-004) si nouvellement enregistré
+- [x] Envoyer les messages de bienvenue (001-004) si nouvellement enregistré
 - [x] Marquer l'indicateur registered comme true
 
 ---
@@ -324,17 +324,17 @@ void sendMessage(const std::string& msg)
 
 ## Liste de Vérification des Tests
 
-- [ ] Création d'objet Client avec un fd valide
-- [ ] L'état initial est non authentifié et non enregistré
-- [ ] authenticate() définit l'indicateur correctement
-- [ ] setNickname() stocke le pseudonyme
-- [ ] setUsername() stocke le nom d'utilisateur et définit l'indicateur registered
-- [ ] Le buffer accumule les données correctement
-- [ ] extractCommand() extrait les messages complets
-- [ ] extractCommand() gère les messages incomplets
-- [ ] sendMessage() envoie les données au socket
-- [ ] L'appartenance aux canaux est correctement suivie
-- [ ] Pas de fuites mémoire (valgrind)
+- [x] Création d'objet Client avec un fd valide
+- [x] L'état initial est non authentifié et non enregistré
+- [x] authenticate() définit l'indicateur correctement
+- [x] setNickname() stocke le pseudonyme
+- [x] setUsername() stocke le nom d'utilisateur et définit l'indicateur registered
+- [x] Le buffer accumule les données correctement
+- [x] extractCommand() extrait les messages complets
+- [x] extractCommand() gère les messages incomplets
+- [x] sendMessage() envoie les données au socket
+- [x] L'appartenance aux canaux est correctement suivie
+- [x] Pas de fuites mémoire (valgrind)
 
 ---
 
