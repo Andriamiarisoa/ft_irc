@@ -36,6 +36,8 @@ void PassCommand::execute() {
         return;
     }
     else {
+        if (client->isAuthenticated())
+            client->unauthenticate();
         client->sendMessage(ERR_PASSWDMISMATCH(nick) + "\r\n");
         return;
     }

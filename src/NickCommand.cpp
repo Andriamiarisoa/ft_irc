@@ -29,6 +29,10 @@ bool NickCommand::checkErrors() {
         client->sendMessage(ERR_NICKNAMEINUSE(nick) + "\r\n");
         return true;
     }
+    if (newNick.length() > 9) {
+        client->sendMessage("nickname should not be more than 9 characters\r\n");
+        return true;
+    }
     client->setNickname(newNick);
     if (client->getNickname() != newNick) {
         client->sendMessage(ERR_ERRONEUSNICKNAME(nick, newNick) + "\r\n");

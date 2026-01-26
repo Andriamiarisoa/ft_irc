@@ -81,6 +81,10 @@ void Client::authenticate() {
     this->authenticated = true;
 }
 
+void Client::unauthenticate() {
+    this->authenticated = false;
+}
+
 void Client::registerClient() {
     this->registered = true;
 }
