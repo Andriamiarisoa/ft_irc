@@ -125,6 +125,13 @@ void Channel::removeMember(Client* client) {
         server->removeChannel(getName());
         return;
     }
+    if (operators.empty() && !members.empty()) {
+        Client* newOp = *(members.begin());
+        operators.insert(newOp);
+        std::string msg = ":server MODE " + name + " +o " + 
+                          newOp->getNickname() + "\r\n";
+        broadcast(msg, NULL);
+    }
 }
 
 void Channel::addOperator(Client* client) {
@@ -285,6 +292,14 @@ void Channel::kickMember(Client* kicker, Client* client, const std::string& reas
     if (members.empty() && server != NULL) {
         server->removeChannel(getName());
         return;
+    }
+    // If no operators left, promote the first member (oldest) to operator
+    if (operators.empty() && !members.empty()) {
+        Client* newOp = *(members.begin());
+        operators.insert(newOp);
+        std::string msg = ":server MODE " + name + " +o " + 
+                          newOp->getNickname() + "\r\n";
+        broadcast(msg, NULL);
     }
 }
 
