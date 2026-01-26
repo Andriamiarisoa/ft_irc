@@ -24,20 +24,8 @@ void QuitCommand::execute() {
                               client->getUsername(), "host") + " QUIT :" + 
                   params[0] + "\r\n";
     }    
-    std::vector<std::string> channelNames;
-    std::vector<Channel*> channels = server->getClientChannels(client);
-    for (std::vector<Channel*>::iterator it = channels.begin(); it != channels.end(); ++it) {
-        channelNames.push_back((*it)->getName());
-    }
     
     server->broadcastQuitNotification(client, quitMsg);
-    
-    for (size_t i = 0; i < channelNames.size(); i++) {
-        Channel* channel = server->getChannel(channelNames[i]);
-        if (channel && channel->getMembers().empty()) {
-            server->removeChannel(channelNames[i]);
-        }
-    }
     server->disconnectClient(client->getFd());
     return;
 }

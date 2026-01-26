@@ -41,10 +41,11 @@ void JoinCommand::execute() {
         std::set<Channel*> clientChannels = client->getChannels();
         for (std::set<Channel*>::iterator it = clientChannels.begin(); it != clientChannels.end(); ++it) {
             Channel* channel = *it;
-            channel->removeMember(client);
-            std::string partMsg = client->getPrefix() + " PART " + channel->getName() + "\r\n";
-            client->sendMessage(partMsg);
+            std::string channelName = channel->getName();
+            std::string partMsg = client->getPrefix() + " PART " + channelName + "\r\n";
             channel->broadcast(partMsg, client);
+            client->sendMessage(partMsg);
+            channel->removeMember(client);
         }
         return;
     }

@@ -116,11 +116,7 @@ void Channel::addMember(Client* client) {
 void Channel::removeMember(Client* client) {
     if (!isMember(client))
         return;
-    std::string partMsg = USER_PREFIX(client->getNickname(), 
-                                      client->getUsername(), "host") + 
-                          " PART " + name + "\r\n";
-
-    broadcast(partMsg, NULL);
+    
     members.erase(client);
     operators.erase(client);      
     invitedUsers.erase(client);   

@@ -36,7 +36,7 @@ irssi -c localhost -p 6667
 |✅| `PASS` - no parameter (should error) | |
 |✅| `PASS pass1 pass2` - extra parameters (should use first) | |
 |✅| Send commands before PASS (should require auth) | |
-|❌| Send PASS twice (should error: already registered) | pass still work even after the first pass |
+|✅| Send PASS twice (should error: already registered) |  |
 
 ### NICK Command
 | Status | Test | Problem |
@@ -47,7 +47,7 @@ irssi -c localhost -p 6667
 |✅| `NICK nick!invalid` - invalid character (should reject) | |
 |✅| `NICK existingnick` - nickname already in use (should reject) | |
 |✅| `NICK newnick` - change nickname while connected | |
-|✅| `NICK verylongnicknameover9chars` - too long nickname | Yes it works but should have a proper error message to be mroe readable|
+|✅| `NICK verylongnicknameover9chars` - too long nickname | |
 |✅| `NICK a` - single character nickname | |
 
 ### USER Command
@@ -87,7 +87,7 @@ irssi -c localhost -p 6667
 |✅| `JOIN #channel` - join invite-only with invite | |
 |✅| `JOIN #channel` - join full channel (+l limit reached) | |
 |✅| `JOIN #channel` when already in channel | Normal IRC does not send any error message for this case |
-|❌| `JOIN 0` - leave all channels | Not implemented (en cours) |
+|✅| `JOIN 0` - leave all channels | |
 
 ### PART Command
 | Status | Test | Problem |
@@ -97,7 +97,7 @@ irssi -c localhost -p 6667
 |✅| `PART #nonexistent` - part channel not in (should error) | |
 |✅| `PART` - no parameter (should error) | |
 |✅| `PART #chan1,#chan2` - part multiple channels | |
-|❌| PART last member (channel should be deleted) | It works but there is an invalid read of sieze 8 (to check and correct) |
+|✅| PART last member (channel should be deleted) | |
 
 NB : when the last operator PART the channel, oldest (first on the list) became operator, a channel should always have at least one operator
 
@@ -105,10 +105,10 @@ NB : when the last operator PART the channel, oldest (first on the list) became 
 | Status | Test | Problem |
 |--------|------|---------|
 |✅| `TOPIC #channel` - view topic | |
-|✅| `TOPIC #channel :new topic` - set topic as operator | other client receive a weird string without the topicName[0] |
-|❌| `TOPIC #channel :new topic` - set topic as non-op (no +t) | Channel topic restriction should be set to false on it's creation + other client receive a weird string without the topicName[0] |
-|✅| `TOPIC #channel :new topic` - set topic as non-op (+t set, should reject) | other client receive a weird string without the topicName[0] |
-|❌| `TOPIC #channel :` - clear topic | Generate massive leaks and topic viewing stop working, same things if you're operator or not but the command work |
+|✅| `TOPIC #channel :new topic` - set topic as operator | |
+|✅| `TOPIC #channel :new topic` - set topic as non-op (no +t) | |
+|✅| `TOPIC #channel :new topic` - set topic as non-op (+t set, should reject) | |
+|✅| `TOPIC #channel :` - clear topic | |
 |✅| `TOPIC #nonexistent` - channel doesn't exist (should error) | |
 |✅| `TOPIC #channel` - not in channel (should error) | |
 

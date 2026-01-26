@@ -14,8 +14,7 @@ void TopicCommand::execute() {
         this->client->sendMessage(ERR_NOTREGISTERED(this->client->getNickname()) + "\r\n");
         return;
     }
-    if (((this->params.size() != 1) && (this->params.size() != 2)) ||
-    (this->params.size() == 2 && this->params[1][0] != ':')) {
+    if (this->params.empty()) {
         this->client->sendMessage(ERR_NEEDMOREPARAMS(this->client->getNickname(), "TOPIC") + "\r\n");
         return;
     }
@@ -37,12 +36,14 @@ void TopicCommand::execute() {
         this->client->sendMessage(RPL_TOPIC(this->client->getNickname(), this->params[0], topic) + "\r\n");
     }
     else {
-        std::string topic = this->params[1].substr(1);
-        if (channel->getTopic() == "+t" && !channel->isOperator(client)) {
+        std::string topic = this->params[1];
+        if (!topic.empty() && topic[0] == ':') {
+            topic = topic.substr(1);
+        }
+        if (channel->getRestriction() && !channel->isOperator(client)) {
             this->client->sendMessage(ERR_CHANOPRIVSNEEDED(this->client->getNickname(), this->params[0]) + "\r\n");
             return;
         }
         channel->setTopic(topic, this->client);
-        channel->broadcast(this->client->getPrefix() + " TOPIC " + this->params[0] + " :" + topic.substr(1) + "\r\n", this->client);
     }
 }

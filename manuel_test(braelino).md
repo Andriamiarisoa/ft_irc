@@ -36,7 +36,7 @@ irssi -c localhost -p 6667
 | ✅ | `PASS` - no parameter (should error) | |
 | ✅ | `PASS pass1 pass2` - extra parameters (should use first) | |
 | ✅ | Send commands before PASS (should require auth) | |
-| ❌ | Send PASS twice (should error: already registered) |  PASS twice before registered: should overwrite the old password |
+| ✅ | Send PASS twice (should error: already registered) |  |
 
 ### NICK Command
 | Status | Test | Problem |
@@ -45,9 +45,9 @@ irssi -c localhost -p 6667
 | ✅ | `NICK 123invalid` - starts with number (should reject) | |
 | ✅ | `NICK` - no parameter (should error) | |
 | ✅ | `NICK nick!invalid` - invalid character (should reject) | |
-| ✅ | `NICK existingnick` - nickname already in use (should reject) | client ignored by the server when using a already used nickname before being registered |
+| ✅ | `NICK existingnick` - nickname already in use (should reject) | client ignored by the server when using a already used nickname before being registered (normal behavior and should just overwrite) |
 | ✅ | `NICK newnick` - change nickname while connected | |
-| ✅ | `NICK verylongnicknameover9chars` - too long nickname | Yes it works but should have a proper error message to be mroe readable|
+| ✅ | `NICK verylongnicknameover9chars` - too long nickname | |
 | ✅ | `NICK a` - single character nickname | |
 
 ### USER Command

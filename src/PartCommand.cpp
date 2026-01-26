@@ -40,16 +40,17 @@ void PartCommand::execute() {
     std::vector<std::string> channelsToPart = split(params[0], ',');
     std::string partReason = (params.size() > 1) ? params[1] : "";
     for (size_t i = 0; i < channelsToPart.size(); i++) {
-        Channel* channel = server->getChannel(channelsToPart[i]);
+        std::string channelName = channelsToPart[i];
+        Channel* channel = server->getChannel(channelName);
         if (!channel) {
-            client->sendMessage(ERR_NOSUCHCHANNEL(nick, channelsToPart[i]) + "\r\n");
+            client->sendMessage(ERR_NOSUCHCHANNEL(nick, channelName) + "\r\n");
             continue;
         }
         if (!channel->isMember(client)) {
-            client->sendMessage(ERR_NOTONCHANNEL(nick, channelsToPart[i]) + "\r\n");
+            client->sendMessage(ERR_NOTONCHANNEL(nick, channelName) + "\r\n");
             continue;
         }
-        std::string partMsg = client->getPrefix() + " PART " + channelsToPart[i];
+        std::string partMsg = client->getPrefix() + " PART " + channelName;
         if (!partReason.empty()) {
             if (partReason[0] == ':') {
                 partMsg += " " + partReason;
@@ -59,9 +60,8 @@ void PartCommand::execute() {
         }
         partMsg += "\r\n";
         channel->broadcast(partMsg, client);
+        client->sendMessage(partMsg);
         channel->removeMember(client);
-        if (channel->getMembers().empty()) {
-            server->removeChannel(channelsToPart[i]);
-        }
+        // Note: removeMember() already handles removing empty channels internally
     }
 }
