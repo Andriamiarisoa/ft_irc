@@ -11,7 +11,7 @@ UserCommand::~UserCommand() {
 void UserCommand::execute() {
 
     if (!this->client->isAuthenticated()) {
-        this->client->sendMessage(ERR_PASSWDMISMATCH(this->client->getNickname()) + "\r\n");
+        this->client->sendMessage(":ircserv 451 * :You must authenticate first\r\n");
         return;
     }
     if (this->params.size() != 4 || this->params[3][0] != ':') {

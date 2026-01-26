@@ -18,7 +18,7 @@ bool NickCommand::checkErrors() {
     if (nick.empty()) nick = "*";
 
     if (!client->isAuthenticated()) {
-        client->sendMessage(ERR_NOTREGISTERED(nick) + "\r\n");
+        client->sendMessage(":ircserv 451 * :You must authenticate first\r\n");
         return true;
     }
     if (params.empty() || params.size() < 1 || params[0].empty()) {
@@ -30,7 +30,7 @@ bool NickCommand::checkErrors() {
         return true;
     }
     if (newNick.length() > 9) {
-        client->sendMessage("nickname should not be more than 9 characters\r\n");
+        client->sendMessage(":ircserv 432 * :nickname should not be more than 9 characters\r\n");
         return true;
     }
     client->setNickname(newNick);
@@ -63,8 +63,5 @@ void NickCommand::execute() {
 
         client->registerClient();
         client->sendMessage(RPL_WELCOME(newNick, client->getUsername(), client->getHostname()) + "\r\n");
-        client->sendMessage(RPL_YOURHOST(newNick) + "\r\n");
-        client->sendMessage(RPL_CREATED(newNick, " just now") + "\r\n");
-        client->sendMessage(RPL_MYINFO(newNick) + "\r\n");
     }
 }
