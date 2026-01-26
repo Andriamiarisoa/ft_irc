@@ -121,6 +121,9 @@
 #define ERR_CHANOPRIVSNEEDED(nick, chan) \
     (":" SERVER_NAME " 482 " + (nick) + " " + (chan) + " :You're not channel operator")
 
+#define ERR_INVALIDMODEPARAM(nick, chan, mode, param, reason) \
+    (":" SERVER_NAME " 696 " + (nick) + " " + (chan) + " " + (mode) + " " + (param) + " :" + (reason))
+
 // ============================================================================
 // PREFIX HELPER
 // ============================================================================

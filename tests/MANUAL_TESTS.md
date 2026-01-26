@@ -99,7 +99,6 @@ irssi -c localhost -p 6667
 |✅| `PART #chan1,#chan2` - part multiple channels | |
 |✅| PART last member (channel should be deleted) | |
 
-NB : when the last operator PART the channel, oldest (first on the list) became operator, a channel should always have at least one operator
 
 ### TOPIC Command
 | Status | Test | Problem |
@@ -125,7 +124,6 @@ NB : when the last operator PART the channel, oldest (first on the list) became 
 |✅| Kick last other member (you remain alone) | |
 |✅| Self-kick attempt | |
 
-NB : when the last operator AUTO KICK, oldest (first on the list) became operator, a channel should always have at least one operator
 
 ### INVITE Command
 | Status | Test | Problem |
@@ -158,19 +156,19 @@ NB : when the last operator AUTO KICK, oldest (first on the list) became operato
 |✅| `MODE #channel +l 10` - set user limit | |
 |✅| `MODE #channel -l` - remove user limit | |
 |✅| `MODE #channel +itk key` - multiple modes at once | |
-|❌| `MODE #channel +o nonexistent` - op non-member (should error) | Works but does not return an error |
+|✅| `MODE #channel +o nonexistent` - op non-member (should error) | |
 |✅| MODE as non-operator (should reject) | |
 |✅| `MODE #nonexistent +i` - channel doesn't exist | |
 
 ### Edge Cases
 | Status | Test | Problem |
 |--------|------|---------|
-|❌| `MODE #channel +k` - key mode without key param | Works but does not return an error |
-|❌| `MODE #channel +l` - limit mode without number | Works but does not return an error |
-|❌| `MODE #channel +l abc` - limit with non-numeric | Should return an error |
-|❌| `MODE #channel +l -5` - limit with negative number | Should return an error |
+|✅| `MODE #channel +k` - key mode without key param | |
+|✅| `MODE #channel +l` - limit mode without number | |
+|✅| `MODE #channel +l abc` - limit with non-numeric | |
+|✅| `MODE #channel +l -5` - limit with negative number | |
 |✅| `MODE #channel +oo nick1 nick2` - op multiple users | |
-|❌| Remove last operator from channel | still need to implement that we need to make the first in the list operator if the last operator is removed |
+|✅| Remove last operator from channel | |
 
 ---
 

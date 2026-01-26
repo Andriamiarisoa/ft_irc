@@ -293,7 +293,6 @@ void Channel::kickMember(Client* kicker, Client* client, const std::string& reas
         server->removeChannel(getName());
         return;
     }
-    // If no operators left, promote the first member (oldest) to operator
     if (operators.empty() && !members.empty()) {
         Client* newOp = *(members.begin());
         operators.insert(newOp);

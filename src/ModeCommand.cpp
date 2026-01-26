@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <cctype>
 
 ModeCommand::ModeCommand(Server* srv, Client* cli, const std::vector<std::string>& params)
     : Command(srv, cli, params) {
@@ -89,6 +90,9 @@ void ModeCommand::handleModeK(Channel* channel, bool adding, size_t& paramIndex,
             appliedParams += " " + params[paramIndex];
             paramIndex++;
         }
+        else {
+            client->sendMessage(ERR_NEEDMOREPARAMS(client->getNickname(), "MODE +k") + "\r\n");
+        }
     }
     else {
         channel->setKey("");
@@ -98,21 +102,34 @@ void ModeCommand::handleModeK(Channel* channel, bool adding, size_t& paramIndex,
 
 void ModeCommand::handleModeO(Channel* channel, bool adding, size_t& paramIndex,
                               std::string& appliedModes, std::string& appliedParams) {
-    if (paramIndex >= params.size())
+    if (paramIndex >= params.size()) {
+        client->sendMessage(ERR_NEEDMOREPARAMS(client->getNickname(), "MODE +o") + "\r\n");
         return;
-
-    Client* target = server->getClientByNick(params[paramIndex]);
-    if (target && channel->isMember(target)) {
-        if (adding) {
-            channel->addOperator(target);
-            appliedModes += "+o";
-        }
-        else {
-            channel->removeOperator(target);
-            appliedModes += "-o";
-        }
-        appliedParams += " " + params[paramIndex];
     }
+
+    std::string targetNick = params[paramIndex];
+    Client* target = server->getClientByNick(targetNick);
+    
+    if (target == NULL) {
+        client->sendMessage(ERR_NOSUCHNICK(client->getNickname(), targetNick) + "\r\n");
+        paramIndex++;
+        return;
+    }
+    if (!channel->isMember(target)) {
+        client->sendMessage(ERR_USERNOTINCHANNEL(client->getNickname(), targetNick, channel->getName()) + "\r\n");
+        paramIndex++;
+        return;
+    }
+    
+    if (adding) {
+        channel->addOperator(target);
+        appliedModes += "+o";
+    }
+    else {
+        channel->removeOperator(target);
+        appliedModes += "-o";
+    }
+    appliedParams += " " + targetNick;
     paramIndex++;
 }
 
@@ -120,15 +137,36 @@ void ModeCommand::handleModeL(Channel* channel, bool adding, size_t& paramIndex,
                               std::string& appliedModes, std::string& appliedParams) {
     if (adding) {
         if (paramIndex < params.size()) {
-            std::istringstream iss(params[paramIndex]);
+            std::string limitStr = params[paramIndex];
+            bool isValid = !limitStr.empty();
+            for (size_t i = 0; i < limitStr.length() && isValid; ++i) {
+                if (i == 0 && limitStr[i] == '-') {
+                    continue;
+                }
+                if (!isdigit(limitStr[i])) {
+                    isValid = false;
+                }
+            }
+            if (!isValid) {
+                client->sendMessage(ERR_INVALIDMODEPARAM(client->getNickname(), channel->getName(), "l", limitStr, "Invalid limit value (must be a positive number)") + "\r\n");
+                paramIndex++;
+                return;
+            }
+            std::istringstream iss(limitStr);
             int limit;
             iss >> limit;
-            if (limit > 0) {
-                channel->setUserLimit(limit);
-                appliedModes += "+l";
-                appliedParams += " " + params[paramIndex];
+            if (limit <= 0) {
+                client->sendMessage(ERR_INVALIDMODEPARAM(client->getNickname(), channel->getName(), "l", limitStr, "Limit must be a positive number") + "\r\n");
+                paramIndex++;
+                return;
             }
+            channel->setUserLimit(limit);
+            appliedModes += "+l";
+            appliedParams += " " + params[paramIndex];
             paramIndex++;
+        }
+        else {
+            client->sendMessage(ERR_NEEDMOREPARAMS(client->getNickname(), "MODE +l") + "\r\n");
         }
     }
     else {
