@@ -20,9 +20,13 @@ void QuitCommand::execute() {
                               client->getUsername(), "host") + " QUIT\r\n";
     }
     else {
+        std::string msg = params[0];
+        if (params[0][0] == ':') {
+            msg = params[0].substr(1);
+        }
         quitMsg = USER_PREFIX(client->getNickname(), 
                               client->getUsername(), "host") + " QUIT :" + 
-                  params[0] + "\r\n";
+                  msg + "\r\n";
     }    
     
     server->broadcastQuitNotification(client, quitMsg);

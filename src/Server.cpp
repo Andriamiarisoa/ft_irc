@@ -294,6 +294,8 @@ void Server::handleClientMessage(int fd) {
     while ((command = client->extractCommand()) != "") {
         std::cout << "  [CMD] " << command << std::endl;
         executeCommand(client, command);
+        if (clients.find(fd) == clients.end())
+            return;
     }
 }
 
