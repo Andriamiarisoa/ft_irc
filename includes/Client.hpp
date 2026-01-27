@@ -23,14 +23,22 @@ public:
     ~Client();
     
     int getFd() const;
+    std::string getRealname() const;
+    std::string getHostname() const;    
     std::string getNickname() const;
     std::string getUsername() const;
+    std::string getPrefix() const;
+    std::set<Channel*> getChannels() const;
     bool isAuthenticated() const;
     bool isRegistered() const;
     
+    void setRealname(const std::string& real);
+    void setHostname(const std::string& host);
     void setNickname(const std::string& nick);
     void setUsername(const std::string& user);
     void authenticate();
+    void unauthenticate();
+    void registerClient();
     void addToChannel(Channel* channel);
     void removeFromChannel(Channel* channel);
     void appendToBuffer(const std::string& data);

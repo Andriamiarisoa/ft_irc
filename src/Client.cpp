@@ -2,12 +2,12 @@
 #include "../includes/Client.hpp"
 #include "../includes/Channel.hpp"
 #include <sys/socket.h>
-#include <cerrno>
 #include <cstring>
 #include <iostream>
 
 Client::Client(int fd) 
     : fd(fd), authenticated(false), registered(false) {
+        this->hostname = "unknown.host";
 }
 
 Client::~Client() {
@@ -19,12 +19,36 @@ int Client::getFd() const {
     return fd;
 }
 
+std::string Client::getRealname() const {
+    return realname;
+}
+
+std::string Client::getHostname() const {
+    return hostname;
+}
+
+void Client::setRealname(const std::string& real) {
+    this->realname = real;
+}
+
+void Client::setHostname(const std::string& host) {
+    this->hostname = host;
+}
+
 std::string Client::getNickname() const {
     return nickname;
 }
 
 std::string Client::getUsername() const {
     return username;
+}
+
+std::string Client::getPrefix() const {
+    return ":" + nickname + "!" + username + "@" + hostname;
+}
+
+std::set<Channel*> Client::getChannels() const {
+    return channels;
 }
 
 bool Client::isAuthenticated() const {
@@ -36,36 +60,36 @@ bool Client::isRegistered() const {
 }
 
 void Client::setNickname(const std::string& nick) {
-    if (nick.empty() || nick.length() > 9 || !std::isalpha(nick[0])) {
+    if (nick.empty() || nick.length() > 9) {
         return;
     }
-    // RFC 1459: caractères autorisés après le premier: lettres, chiffres, -, [, ], \, `, ^, {, }
-    const std::string specialChars = "-[]\\`^{}";
+    const std::string special = "[]\\`_^{|}";
+    if (!std::isalpha(static_cast<unsigned char>(nick[0])) && special.find(nick[0]) == std::string::npos) {
+        return;
+    }
     for (size_t i = 1; i < nick.length(); ++i) {
-        if (!std::isalnum(nick[i]) && specialChars.find(nick[i]) == std::string::npos) {
+        unsigned char c = static_cast<unsigned char>(nick[i]);
+        if (!std::isalnum(c) && special.find(nick[i]) == std::string::npos && nick[i] != '-') {
             return;
         }
     }
     this->nickname = nick;
-    // TODO: Check if already registered and send appropriate response to Channel
-    if (authenticated && !nickname.empty() && !username.empty()) {
-        registered = true;
-    }
 }
 
 void Client::setUsername(const std::string& user) {
     this->username = user;
-    if (authenticated && !nickname.empty() && !username.empty()) {
-        registered = true;
-        // TODO: Send welcome message to client
-    }
 }
 
 void Client::authenticate() {
     this->authenticated = true;
-    if (authenticated && !nickname.empty() && !username.empty()) {
-        registered = true;
-    }
+}
+
+void Client::unauthenticate() {
+    this->authenticated = false;
+}
+
+void Client::registerClient() {
+    this->registered = true;
 }
 
 void Client::addToChannel(Channel* channel) {
@@ -109,7 +133,6 @@ void Client::sendMessage(const std::string& msg) {
 
     std::string toSend = msg;
     
-    // S'assurer que le message se termine par "\r\n"
     if (toSend.length() < 2 || toSend.substr(toSend.length() - 2) != "\r\n") {
         toSend += "\r\n";
     }
@@ -124,19 +147,12 @@ void Client::sendMessage(const std::string& msg) {
         ssize_t sent = send(fd, toSend.c_str() + totalSent, remaining, 0);
         
         if (sent < 0) {
-            // Gérer les envois partiels (EAGAIN, EWOULDBLOCK)
-            if (errno == EAGAIN || errno == EWOULDBLOCK) {
-                if (++retryCount >= MAX_RETRIES) {
-                    std::cerr << "Error: max retries reached for client " << fd << std::endl;
-                    return;
-                }
-                continue;
+            if (++retryCount >= MAX_RETRIES) {
+                std::cerr << "Error: max retries reached for client " << fd << std::endl;
+                return;
             }
-            // Journaliser les erreurs mais ne pas lancer d'exceptions
-            std::cerr << "Error sending message to client " << fd << ": " << strerror(errno) << std::endl;
-            return;
+            continue;
         }
-        
         totalSent += sent;
         remaining -= sent;
     }
