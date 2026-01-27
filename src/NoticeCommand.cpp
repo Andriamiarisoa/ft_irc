@@ -12,7 +12,6 @@ NoticeCommand::~NoticeCommand() {
 }
 
 void NoticeCommand::execute() {
-    // NOTICE does not generate error replies (RFC 1459)
     if (params.size() < 2)
         return;
 
@@ -24,8 +23,7 @@ void NoticeCommand::execute() {
 
     std::string prefix = USER_PREFIX(client->getNickname(), client->getUsername(), client->getHostname());
     std::string noticeMsg = prefix + " NOTICE " + target + " " + message;
-
-    // Channel message
+    
     if (target[0] == '#' || target[0] == '&') {
         Channel* channel = server->getChannel(target);
         if (!channel)
@@ -33,9 +31,7 @@ void NoticeCommand::execute() {
         if (!channel->isMember(client))
             return;
         channel->broadcast(noticeMsg, client);
-    }
-    // Private message
-    else {
+    } else {
         Client* targetClient = server->getClientByNick(target);
         if (!targetClient)
             return;
