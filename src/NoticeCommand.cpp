@@ -21,7 +21,7 @@ void NoticeCommand::execute() {
     if (message.empty())
         return;
 
-    std::string prefix = USER_PREFIX(client->getNickname(), client->getUsername(), client->getHostname());
+    std::string prefix = USER_PREFIX(client->getNickname(), client->getUsername(), "unknown.host");
     std::string noticeMsg = prefix + " NOTICE " + target + " " + message + "\r\n";
     
     if (target[0] == '#' || target[0] == '&') {

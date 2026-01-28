@@ -295,7 +295,7 @@ void Server::disconnectClient(int fd) {
     if (nickname.empty())
         nickname = "Unkown";
 
-    std::string quitMess = ": " + nickname + " QUIT :Client disconnected\r\n";
+    std::string quitMess = client->getPrefix() + " QUIT :Client disconnected\r\n";
 
     std::vector<std::string> channelNames;
     std::map<std::string, Channel*>::iterator itc;

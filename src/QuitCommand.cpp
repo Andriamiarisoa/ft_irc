@@ -17,7 +17,7 @@ void QuitCommand::execute() {
 
     if (params.empty()) {
         quitMsg = USER_PREFIX(client->getNickname(), 
-                              client->getUsername(), "host") + " QUIT\r\n";
+                              client->getUsername(), "unknown.host") + " QUIT\r\n";
     }
     else {
         std::string msg = params[0];
@@ -25,7 +25,7 @@ void QuitCommand::execute() {
             msg = params[0].substr(1);
         }
         quitMsg = USER_PREFIX(client->getNickname(), 
-                              client->getUsername(), "host") + " QUIT :" + 
+                              client->getUsername(), "unknown.host") + " QUIT :" + 
                   msg + "\r\n";
     }    
     

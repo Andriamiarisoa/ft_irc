@@ -75,12 +75,14 @@ void ModeCommand::handleModeT(Channel* channel, bool adding, std::string& applie
 
 void ModeCommand::handleModeK(Channel* channel, bool adding, size_t& paramIndex,
                               std::string& appliedModes, std::string& appliedParams) {
+    std::string msg;
     if (adding) {
         if (paramIndex < params.size()) {
             channel->setKey(params[paramIndex]);
             appliedModes += "+k";
             appliedParams += " " + params[paramIndex];
             paramIndex++;
+            msg = client->getPrefix() + " MODE " + channel->getName() + " " + "+k" + appliedParams + "\r\n";
         }
         else {
             client->sendMessage(ERR_NEEDMOREPARAMS(client->getNickname(), "MODE +k") + "\r\n");
@@ -89,13 +91,7 @@ void ModeCommand::handleModeK(Channel* channel, bool adding, size_t& paramIndex,
     else {
         channel->setKey("");
         appliedModes += "-k";
-    }
-    std::string msg;
-    if (appliedModes == "+k") {
-        msg = client->getPrefix() + " MODE " + channel->getName() + " " + appliedModes + appliedParams + "\r\n";
-    }
-    else if (appliedModes == "-k") {
-        msg = client->getPrefix() + " MODE " + channel->getName() + " " + appliedModes + "\r\n";
+        msg = client->getPrefix() + " MODE " + channel->getName() + " " + "-k" + "\r\n";
     }
     channel->broadcast(msg, NULL);
 }

@@ -197,10 +197,7 @@ We chose `select()` for I/O multiplexing because:
 - Simpler to understand and implement for learning purposes
 
 ### Non-blocking I/O
-All file descriptors are set to non-blocking mode using:
-```cpp
-fcntl(fd, F_SETFL, O_NONBLOCK);
-```
+All file descriptors are set to non-blocking mode
 
 ### Message Buffering
 The server handles partial message reception by:

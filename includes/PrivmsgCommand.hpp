@@ -6,6 +6,8 @@
 #include "Server.hpp"
 
 class PrivmsgCommand : public Command {
+private:
+    void    executeSingle(const std::string &receptor);
 public:
     PrivmsgCommand(Server* srv, Client* cli, const std::vector<std::string>& params);
     ~PrivmsgCommand();

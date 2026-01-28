@@ -41,7 +41,7 @@ void Channel::setTopic(const std::string& topic, Client* client) {
     }
     this->topic = topic;
     std::string msg = USER_PREFIX(client->getNickname(), 
-                                  client->getUsername(), "host") + 
+                                  client->getUsername(), "unknown.host") + 
                       " TOPIC " + name + " :" + topic + "\r\n";
     broadcast(msg, NULL);
 }
@@ -269,7 +269,7 @@ void Channel::kickMember(Client* kicker, Client* client, const std::string& reas
     }
     
     std::string kickMsg = USER_PREFIX(kicker->getNickname(), 
-                                      kicker->getUsername(), "host") + 
+                                      kicker->getUsername(), "unknown.host") + 
                           " KICK " + name + " " + client->getNickname() + 
                           " :" + reason + "\r\n";
     
